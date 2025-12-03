@@ -1,113 +1,82 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 
 export default function TasksPage() {
   const [tasks, setTasks] = useState([]);
-  const [users, setUsers] = useState([]);
-  const [roles, setRoles] = useState([]);
-
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
-
-  const [creating, setCreating] = useState(false);
-  const [createError, setCreateError] = useState('');
   const [form, setForm] = useState({
     title: '',
     description: '',
-    assignee_id: '',
+    status: 'pending',
     priority: 'medium',
     due_date: ''
   });
 
-  const [statusSavingId, setStatusSavingId] = useState(null);
+  const API_BASE = 'http://localhost:5000';
 
-  const isAdminOrManager =
-    roles.includes('admin') || roles.includes('manager');
-
-  useEffect(() => {
-    // Load roles from localStorage
-    if (typeof window !== 'undefined') {
-      const rolesStr = window.localStorage.getItem('offisphere_roles');
-      if (rolesStr) {
-        try {
-          const parsed = JSON.parse(rolesStr);
-          if (Array.isArray(parsed)) {
-            setRoles(parsed);
-          }
-        } catch {
-          setRoles([]);
-        }
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = window.localStorage.getItem('offisphere_token');
-        if (!token) {
-          setError('Not authenticated');
-          setLoading(false);
-          return;
-        }
-
-        // Always fetch tasks
-        const tasksRes = await fetch('http://localhost:5000/api/tasks', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        const tasksData = await tasksRes.json();
-
-        if (!tasksRes.ok) {
-          setError(tasksData.message || 'Error fetching tasks');
-        } else {
-          setTasks(tasksData);
-          setError('');
-        }
-
-        // Only admin/manager need full user list for assignment
-        if (isAdminOrManager) {
-          const usersRes = await fetch('http://localhost:5000/api/users', {
-            headers: { Authorization: `Bearer ${token}` }
-          });
-          const usersData = await usersRes.json();
-
-          if (usersRes.ok && Array.isArray(usersData)) {
-            setUsers(usersData);
-          }
-        }
-      } catch (err) {
-        console.error('Tasks fetch error:', err);
-        setError('Error fetching tasks');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [isAdminOrManager]);
-
-  const handleFormChange = (field, value) => {
-    setForm((prev) => ({
-      ...prev,
-      [field]: value
-    }));
+  const triggerToast = (type, message) => {
+    window.dispatchEvent(
+      new CustomEvent('offisphere-toast', {
+        detail: { type, message }
+      })
+    );
   };
 
-  const handleCreateTask = async (e) => {
+  const fetchTasks = async () => {
+    try {
+      const token = window.localStorage.getItem('offisphere_token');
+      if (!token) {
+        setError('Not authenticated');
+        setLoading(false);
+        return;
+      }
+
+      const res = await fetch(`${API_BASE}/api/tasks`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message || 'Error fetching tasks');
+      } else {
+        setTasks(Array.isArray(data) ? data : []);
+        setError('');
+      }
+    } catch (err) {
+      console.error('Fetch tasks error:', err);
+      setError('Error connecting to server');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const handleChange = (field, value) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleCreate = async (e) => {
     e.preventDefault();
-    setCreateError('');
-    setCreating(true);
+    setSaving(true);
+    setError('');
 
     try {
       const token = window.localStorage.getItem('offisphere_token');
       if (!token) {
-        setCreateError('Not authenticated');
-        setCreating(false);
+        setError('Not authenticated');
+        setSaving(false);
         return;
       }
 
-      const res = await fetch('http://localhost:5000/api/tasks', {
+      const res = await fetch(`${API_BASE}/api/tasks`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -119,334 +88,243 @@ export default function TasksPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        setCreateError(data.message || 'Error creating task');
-        setCreating(false);
-        return;
+        setError(data.message || 'Error creating task');
+        triggerToast('error', data.message || 'Error creating task');
+      } else {
+        setTasks(Array.isArray(data) ? data : []);
+        triggerToast('success', 'Task created successfully ✅');
+        setForm({
+          title: '',
+          description: '',
+          status: 'pending',
+          priority: 'medium',
+          due_date: ''
+        });
       }
-
-      setTasks(data);
-      setForm({
-        title: '',
-        description: '',
-        assignee_id: '',
-        priority: 'medium',
-        due_date: ''
-      });
-      setCreateError('');
     } catch (err) {
       console.error('Create task error:', err);
-      setCreateError('Error creating task');
+      setError('Error connecting to server');
+      triggerToast('error', 'Error connecting to server');
     } finally {
-      setCreating(false);
+      setSaving(false);
     }
   };
 
   const handleStatusChange = async (taskId, newStatus) => {
-    setStatusSavingId(taskId);
     try {
       const token = window.localStorage.getItem('offisphere_token');
       if (!token) {
-        setError('Not authenticated');
-        setStatusSavingId(null);
+        triggerToast('error', 'Not authenticated');
         return;
       }
 
-      const res = await fetch(
-        `http://localhost:5000/api/tasks/${taskId}/status`,
-        {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-          },
-          body: JSON.stringify({ status: newStatus })
-        }
-      );
+      const res = await fetch(`${API_BASE}/api/tasks/${taskId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ status: newStatus })
+      });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || 'Error updating status');
-        setStatusSavingId(null);
-        return;
+        triggerToast('error', data.message || 'Error updating task');
+      } else {
+        setTasks(Array.isArray(data) ? data : []);
+        triggerToast('success', 'Task updated');
       }
-
-      setTasks(data);
-      setError('');
     } catch (err) {
-      console.error('Update status error:', err);
-      setError('Error updating status');
-    } finally {
-      setStatusSavingId(null);
+      console.error('Update task error:', err);
+      triggerToast('error', 'Error connecting to server');
     }
   };
 
-  const formatDate = (value) => {
-    if (!value) return '—';
-    return new Date(value).toLocaleDateString();
-  };
-
-  const formatCreated = (value) => {
-    if (!value) return '—';
-    const d = new Date(value);
-    return d.toLocaleString();
-  };
-
-  const statusBadge = (status) => {
-    const base =
-      'inline-flex items-center px-2 py-0.5 rounded-full text-[11px] border';
-    switch (status) {
-      case 'todo':
-        return `${base} bg-slate-50 text-slate-700 border-slate-200`;
-      case 'in_progress':
-        return `${base} bg-sky-50 text-sky-700 border-sky-200`;
-      case 'done':
-        return `${base} bg-emerald-50 text-emerald-700 border-emerald-200`;
-      case 'blocked':
-        return `${base} bg-rose-50 text-rose-700 border-rose-200`;
-      default:
-        return `${base} bg-slate-50 text-slate-600 border-slate-200`;
-    }
-  };
-
-  const priorityBadge = (priority) => {
-    const base =
-      'inline-flex items-center px-2 py-0.5 rounded-full text-[11px] border';
-    switch (priority) {
-      case 'high':
-        return `${base} bg-rose-50 text-rose-700 border-rose-200`;
-      case 'medium':
-        return `${base} bg-amber-50 text-amber-700 border-amber-200`;
-      case 'low':
-        return `${base} bg-emerald-50 text-emerald-700 border-emerald-200`;
-      default:
-        return `${base} bg-slate-50 text-slate-600 border-slate-200`;
-    }
-  };
+  const formatDate = (value) =>
+    value ? new Date(value).toLocaleDateString() : '—';
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-semibold text-slate-900">
-            Tasks
-          </h1>
-          <p className="text-sm text-slate-500">
-            Track and manage work across your team.
-          </p>
-        </div>
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.25 }}
+      className="space-y-6"
+    >
+      <div>
+        <h1 className="text-xl font-semibold text-slate-900">Tasks</h1>
+        <p className="text-sm text-slate-500">
+          Create and track tasks assigned to your team.
+        </p>
       </div>
 
-      {/* Create task form (only for admin/manager) */}
-      {isAdminOrManager && (
-        <div className="rounded-2xl bg-white border border-slate-100 shadow-sm p-4">
-          <h2 className="text-sm font-semibold text-slate-900 mb-3">
-            Create new task
-          </h2>
-
-          {createError && (
-            <div className="mb-3 text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-3 py-2">
-              {createError}
-            </div>
-          )}
-
-          <form
-            onSubmit={handleCreateTask}
-            className="grid grid-cols-1 md:grid-cols-4 gap-3 text-sm"
-          >
-            <div className="space-y-1 md:col-span-2">
-              <label className="text-xs text-slate-600">Title</label>
-              <input
-                type="text"
-                value={form.title}
-                onChange={(e) =>
-                  handleFormChange('title', e.target.value)
-                }
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                placeholder="Design dashboard, fix bug #123..."
-                required
-              />
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-xs text-slate-600">
-                Assignee
-              </label>
-              <select
-                value={form.assignee_id}
-                onChange={(e) =>
-                  handleFormChange('assignee_id', e.target.value)
-                }
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-              >
-                <option value="">Unassigned</option>
-                {users.map((u) => (
-                  <option key={u.id} value={u.id}>
-                    {u.full_name || u.email}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-xs text-slate-600">
-                Priority &amp; Due
-              </label>
-              <div className="flex gap-2">
-                <select
-                  value={form.priority}
-                  onChange={(e) =>
-                    handleFormChange('priority', e.target.value)
-                  }
-                  className="flex-1 px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-xs"
-                >
-                  <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high">High</option>
-                </select>
-                <input
-                  type="date"
-                  value={form.due_date}
-                  onChange={(e) =>
-                    handleFormChange('due_date', e.target.value)
-                  }
-                  className="flex-1 px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-xs"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-1 md:col-span-4">
-              <label className="text-xs text-slate-600">
-                Description
-              </label>
-              <textarea
-                value={form.description}
-                onChange={(e) =>
-                  handleFormChange('description', e.target.value)
-                }
-                rows={2}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-xs resize-none"
-                placeholder="Add more context, acceptance criteria, links..."
-              />
-            </div>
-
-            <div className="md:col-span-4 flex justify-end">
-              <button
-                type="submit"
-                disabled={creating}
-                className="px-5 py-2 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-500 shadow hover:opacity-90 disabled:opacity-60"
-              >
-                {creating ? 'Creating...' : 'Create task'}
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
-
-      {/* Tasks table */}
-      <div className="rounded-2xl bg-white border border-slate-100 shadow-sm p-4">
+      {/* Create task */}
+      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
         <h2 className="text-sm font-semibold text-slate-900 mb-3">
-          Tasks
+          Create task
         </h2>
 
         {error && (
-          <div className="mb-3 text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-3 py-2">
+          <div className="mb-3 text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-xl px-3 py-2">
             {error}
           </div>
         )}
+
+        <form
+          onSubmit={handleCreate}
+          className="grid grid-cols-1 md:grid-cols-5 gap-3 text-sm"
+        >
+          <div className="md:col-span-2 space-y-1">
+            <label className="text-xs text-slate-600">Title</label>
+            <input
+              type="text"
+              value={form.title}
+              onChange={(e) => handleChange('title', e.target.value)}
+              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              placeholder="Prepare monthly report"
+              required
+            />
+          </div>
+
+          <div className="md:col-span-2 space-y-1">
+            <label className="text-xs text-slate-600">
+              Description
+            </label>
+            <input
+              type="text"
+              value={form.description}
+              onChange={(e) =>
+                handleChange('description', e.target.value)
+              }
+              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              placeholder="What needs to be done?"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-xs text-slate-600">Due date</label>
+            <input
+              type="date"
+              value={form.due_date}
+              onChange={(e) =>
+                handleChange('due_date', e.target.value)
+              }
+              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-xs"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-xs text-slate-600">Status</label>
+            <select
+              value={form.status}
+              onChange={(e) =>
+                handleChange('status', e.target.value)
+              }
+              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-xs"
+            >
+              <option value="pending">Pending</option>
+              <option value="in_progress">In progress</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-xs text-slate-600">Priority</label>
+            <select
+              value={form.priority}
+              onChange={(e) =>
+                handleChange('priority', e.target.value)
+              }
+              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-xs"
+            >
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+
+          <div className="md:col-span-5 flex justify-end pt-1">
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              type="submit"
+              disabled={saving}
+              className="px-5 py-2 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-500 shadow hover:shadow-lg disabled:opacity-60"
+            >
+              {saving ? 'Saving…' : 'Create task'}
+            </motion.button>
+          </div>
+        </form>
+      </div>
+
+      {/* Task list */}
+      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-sm font-semibold text-slate-900">
+            Tasks list
+          </h2>
+        </div>
 
         <div className="overflow-x-auto text-sm">
           <table className="min-w-full border-separate border-spacing-y-2">
             <thead>
               <tr className="text-xs text-slate-400">
                 <th className="text-left px-3 py-1">Title</th>
-                <th className="text-left px-3 py-1">Assignee</th>
+                <th className="text-left px-3 py-1">Description</th>
                 <th className="text-left px-3 py-1">Status</th>
                 <th className="text-left px-3 py-1">Priority</th>
-                <th className="text-left px-3 py-1">Due</th>
-                <th className="text-left px-3 py-1">Created</th>
-                <th className="text-right px-3 py-1">Actions</th>
+                <th className="text-left px-3 py-1">Due date</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
                   <td
-                    colSpan={7}
+                    colSpan={5}
                     className="px-3 py-6 text-center text-xs text-slate-400"
                   >
-                    Loading tasks...
+                    Loading tasks…
                   </td>
                 </tr>
               ) : tasks.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={7}
+                    colSpan={5}
                     className="px-3 py-6 text-center text-xs text-slate-400"
                   >
-                    No tasks yet.
+                    No tasks found.
                   </td>
                 </tr>
               ) : (
                 tasks.map((task) => (
                   <tr
                     key={task.id}
-                    className="bg-slate-50 hover:bg-slate-100 rounded-xl align-top"
+                    className="bg-slate-50 rounded-xl hover:bg-slate-100"
                   >
-                    <td className="px-3 py-3 rounded-l-xl text-slate-900">
-                      <div className="text-sm font-medium">
-                        {task.title}
-                      </div>
-                      {task.description && (
-                        <div className="text-xs text-slate-500 mt-1 line-clamp-2">
-                          {task.description}
-                        </div>
-                      )}
+                    <td className="px-3 py-2 rounded-l-xl text-slate-900">
+                      {task.title}
                     </td>
-                    <td className="px-3 py-3 text-slate-600 text-xs">
-                      {task.assignee_name || 'Unassigned'}
-                      {task.created_by_name && (
-                        <div className="text-[11px] text-slate-400">
-                          Created by {task.created_by_name}
-                        </div>
-                      )}
+                    <td className="px-3 py-2 text-xs text-slate-600">
+                      {task.description || '—'}
                     </td>
-                    <td className="px-3 py-3 text-xs">
-                      <span className={statusBadge(task.status)}>
-                        {task.status.replace('_', ' ')}
-                      </span>
-                    </td>
-                    <td className="px-3 py-3 text-xs">
-                      <span className={priorityBadge(task.priority)}>
-                        {task.priority}
-                      </span>
-                    </td>
-                    <td className="px-3 py-3 text-xs text-slate-600">
-                      {formatDate(task.due_date)}
-                    </td>
-                    <td className="px-3 py-3 text-xs text-slate-500">
-                      {formatCreated(task.created_at)}
-                    </td>
-                    <td className="px-3 py-3 rounded-r-xl text-right text-xs">
+                    <td className="px-3 py-2 text-xs">
                       <select
                         value={task.status}
                         onChange={(e) =>
-                          handleStatusChange(
-                            task.id,
-                            e.target.value
-                          )
+                          handleStatusChange(task.id, e.target.value)
                         }
-                        disabled={statusSavingId === task.id}
-                        className="px-3 py-1 rounded-full border border-slate-200 bg-white focus:outline-none focus:ring-1 focus:ring-indigo-500 text-xs"
+                        className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs"
                       >
-                        <option value="todo">To do</option>
-                        <option value="in_progress">
-                          In progress
-                        </option>
-                        <option value="done">Done</option>
-                        <option value="blocked">Blocked</option>
+                        <option value="pending">Pending</option>
+                        <option value="in_progress">In progress</option>
+                        <option value="completed">Completed</option>
                       </select>
+                    </td>
+                    <td className="px-3 py-2 text-xs text-slate-600">
+                      {task.priority || '—'}
+                    </td>
+                    <td className="px-3 py-2 rounded-r-xl text-xs text-slate-600">
+                      {formatDate(task.due_date)}
                     </td>
                   </tr>
                 ))
@@ -455,6 +333,6 @@ export default function TasksPage() {
           </table>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

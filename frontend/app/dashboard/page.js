@@ -2,103 +2,49 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
 
 export default function DashboardHome() {
-  const [summary, setSummary] = useState({
-    users: 0,
-    leaves: { pending: 0, approved: 0 },
-    attendanceToday: 0
-  });
+  const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const [roles, setRoles] = useState([]);
-  const [recentAttendance, setRecentAttendance] = useState([]);
-  const [leaveBreakdown, setLeaveBreakdown] = useState({
-    CL: 0,
-    SL: 0,
-    EL: 0,
-    LOP: 0
-  });
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const storedRoles = window.localStorage.getItem('offisphere_roles');
-      if (storedRoles) {
-        try {
-          const parsed = JSON.parse(storedRoles);
-          if (Array.isArray(parsed)) setRoles(parsed);
-        } catch {
-          setRoles([]);
-        }
-      }
-    }
-  }, []);
+  const router = useRouter();
+  const API_BASE = 'http://localhost:5000'; // local dev
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const token = window.localStorage.getItem('offisphere_token');
+        const token =
+          typeof window !== 'undefined'
+            ? window.localStorage.getItem('offisphere_token')
+            : null;
+
         if (!token) {
-          setError('You are not logged in. Please sign in again.');
+          setError('Not authenticated');
           setLoading(false);
           return;
         }
 
-        const [summaryRes, attendanceRes, leavesRes] = await Promise.all([
-          fetch('http://localhost:5000/api/dashboard/summary', {
-            headers: { Authorization: `Bearer ${token}` }
-          }),
-          fetch('http://localhost:5000/api/attendance', {
-            headers: { Authorization: `Bearer ${token}` }
-          }),
-          fetch('http://localhost:5000/api/leaves', {
-            headers: { Authorization: `Bearer ${token}` }
-          })
-        ]);
-
-        const summaryData = await summaryRes.json();
-        const attendanceData = await attendanceRes.json();
-        const leavesData = await leavesRes.json();
-
-        if (!summaryRes.ok) {
-          setError(
-            summaryData.message || 'Failed to load dashboard data'
-          );
-        } else {
-          setSummary(summaryData);
-          setError('');
-        }
-
-        if (attendanceRes.ok && Array.isArray(attendanceData)) {
-          const sortedAttendance = [...attendanceData].sort((a, b) => {
-            const dA = new Date(
-              a.attendance_date || a.created_at || 0
-            );
-            const dB = new Date(
-              b.attendance_date || b.created_at || 0
-            );
-            return dB.getTime() - dA.getTime();
-          });
-          setRecentAttendance(sortedAttendance.slice(0, 5));
-        }
-
-        if (leavesRes.ok && Array.isArray(leavesData)) {
-          const breakdown = { CL: 0, SL: 0, EL: 0, LOP: 0 };
-          for (const leave of leavesData) {
-            if (
-              leave.leave_type &&
-              breakdown[leave.leave_type] !== undefined
-            ) {
-              breakdown[leave.leave_type] += Number(
-                leave.total_days || 0
-              );
-            }
+        const res = await fetch(`${API_BASE}/api/dashboard/summary`, {
+          headers: {
+            Authorization: `Bearer ${token}`
           }
-          setLeaveBreakdown(breakdown);
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          setError(data.message || 'Server error fetching dashboard summary');
+          setLoading(false);
+          return;
         }
+
+        setSummary(data);
+        setError('');
       } catch (err) {
-        console.error('Dashboard fetch error:', err);
+        console.error('Dashboard summary error:', err);
         setError('Error connecting to server');
       } finally {
         setLoading(false);
@@ -108,272 +54,572 @@ export default function DashboardHome() {
     fetchDashboardData();
   }, []);
 
-  const isAdmin = roles.includes('admin');
-  const isManager = roles.includes('manager');
-  const isEmployee = roles.includes('employee');
+  const formatDate = (date) =>
+    date ? new Date(date).toLocaleDateString() : '-';
 
-  const roleText = (() => {
-    if (isAdmin) return 'You have full admin access to Offisphere.';
-    if (isManager) return 'You can manage team attendance and review leaves.';
-    if (isEmployee) return 'You can check in, check out and apply for leaves.';
-    return 'Welcome to Offisphere.';
-  })();
+  const s = summary || {};
 
-  const formatDate = (value) => {
-    if (!value) return '-';
-    return new Date(value).toLocaleDateString();
+  const leaveSummary = s.leave_summary || {
+    cl_days: 0,
+    sl_days: 0,
+    el_days: 0,
+    lop_days: 0
   };
 
-  const formatTime = (value) => {
-    if (!value) return '-';
-    const d = new Date(value);
-    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const cardVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: 0.05 * i, duration: 0.25 }
+    })
+  };
+
+  const skeletonCard = (
+    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 animate-pulse">
+      <div className="h-3 w-20 bg-slate-200 rounded-full mb-4" />
+      <div className="h-7 w-16 bg-slate-200 rounded-full mb-2" />
+      <div className="h-3 w-24 bg-slate-100 rounded-full" />
+    </div>
+  );
+
+  const goToNotifications = () => {
+    router.push('/dashboard/notifications');
   };
 
   return (
-    <div className="space-y-6">
+    <motion.div
+      className="space-y-6"
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.25 }}
+    >
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900">Dashboard</h1>
+          <h1 className="text-xl font-semibold text-slate-900">
+            Dashboard
+          </h1>
           <p className="text-sm text-slate-500">
-            Overview of users, attendance and leave activity. {roleText}
+            Overview of users, attendance, leaves, tasks, devices and
+            documents. Welcome to Offisphere.
           </p>
         </div>
-        <div className="flex gap-2 text-xs text-slate-500">
-          <span className="px-3 py-1 rounded-full bg-white border border-slate-200 shadow-sm">
-            Today
-          </span>
-          <span className="px-3 py-1 rounded-full bg-slate-100 border border-slate-200">
-            This week
-          </span>
-        </div>
+
+        {/* Notification icon */}
+        <motion.button
+          whileHover={{ scale: 1.05, y: -1 }}
+          whileTap={{ scale: 0.95, y: 0 }}
+          onClick={goToNotifications}
+          className="relative flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-sm border border-slate-200 text-slate-500 hover:text-indigo-600 hover:shadow-md transition"
+          aria-label="Notifications"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-4 w-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+          {/* red dot indicator */}
+          <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-rose-500 rounded-full" />
+        </motion.button>
       </div>
 
+      {/* Error banner */}
       {error && (
-        <div className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-3">
+        <div className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-3 py-2">
           {error}
         </div>
       )}
 
-      {/* Top cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Users card – always visible */}
-        <div className="rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white p-4 shadow-lg">
-          <p className="text-xs uppercase tracking-wide text-indigo-100">
-            Total Users
-          </p>
-          <p className="mt-2 text-3xl font-semibold">
-            {loading ? '...' : summary.users}
-          </p>
-          <p className="mt-1 text-[11px] text-indigo-100/80">
-            Admins, managers & employees.
-          </p>
-        </div>
-
-        <div className="rounded-2xl bg-white p-4 shadow-sm border border-slate-100">
-          <p className="text-xs uppercase tracking-wide text-slate-400">Leaves</p>
-          <div className="mt-2 flex items-end gap-4">
-            <div>
-              <p className="text-xl font-semibold text-slate-900">
-                {loading ? '...' : summary.leaves.pending}
+      {/* Top row: Leaves + Attendance + Users + Leave Summary */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {loading ? (
+          <>
+            {skeletonCard}
+            {skeletonCard}
+            {skeletonCard}
+            {skeletonCard}
+          </>
+        ) : (
+          <>
+            {/* Leaves */}
+            <motion.div
+              custom={0}
+              variants={cardVariants}
+              initial="hidden"
+              animate="visible"
+              whileHover={{
+                y: -4,
+                boxShadow: '0 18px 40px rgba(79,70,229,0.18)'
+              }}
+              className="bg-gradient-to-br from-indigo-500/12 via-indigo-500/5 to-transparent rounded-2xl border border-indigo-100 shadow-sm p-4"
+            >
+              <p className="text-xs font-medium text-indigo-500 mb-2">
+                LEAVES
               </p>
-              <p className="text-[11px] text-slate-500">Pending requests</p>
-            </div>
-            <div>
-              <p className="text-lg font-semibold text-emerald-600">
-                {loading ? '...' : summary.leaves.approved}
-              </p>
-              <p className="text-[11px] text-slate-500">Approved</p>
-            </div>
-          </div>
-        </div>
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-3xl font-semibold text-slate-900">
+                    {s.leaves?.pending ?? 0}
+                  </div>
+                  <p className="text-xs text-slate-500">Pending requests</p>
+                </div>
+                <div className="text-right space-y-1 text-xs">
+                  <p>
+                    <span className="text-slate-400 mr-1">Approved</span>
+                    <span className="font-semibold text-emerald-600">
+                      {s.leaves?.approved ?? 0}
+                    </span>
+                  </p>
+                  <p>
+                    <span className="text-slate-400 mr-1">Rejected</span>
+                    <span className="font-semibold text-rose-600">
+                      {s.leaves?.rejected ?? 0}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </motion.div>
 
-        <div className="rounded-2xl bg-white p-4 shadow-sm border border-slate-100">
-          <p className="text-xs uppercase tracking-wide text-slate-400">
-            Attendance
-          </p>
-          <p className="mt-2 text-2xl font-semibold text-slate-900">
-            {loading ? '...' : summary.attendanceToday}
-          </p>
-          <p className="mt-1 text-[11px] text-slate-500">Check-ins today</p>
-        </div>
+            {/* Attendance */}
+            <motion.div
+              custom={1}
+              variants={cardVariants}
+              initial="hidden"
+              animate="visible"
+              whileHover={{
+                y: -4,
+                boxShadow: '0 18px 40px rgba(14,165,233,0.18)'
+              }}
+              className="bg-gradient-to-br from-sky-500/12 via-sky-500/5 to-transparent rounded-2xl border border-sky-100 shadow-sm p-4"
+            >
+              <p className="text-xs font-medium text-sky-500 mb-2">
+                ATTENDANCE
+              </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-3xl font-semibold text-slate-900">
+                    {s.attendance?.checkins_today ?? 0}
+                  </div>
+                  <p className="text-xs text-slate-500">Check-ins today</p>
+                </div>
+                <div className="text-right text-xs">
+                  <p>
+                    <span className="text-slate-400 mr-1">Users</span>
+                    <span className="font-semibold text-slate-800">
+                      {s.attendance?.total_users ?? 0}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Users */}
+            <motion.div
+              custom={2}
+              variants={cardVariants}
+              initial="hidden"
+              animate="visible"
+              whileHover={{
+                y: -4,
+                boxShadow: '0 18px 40px rgba(16,185,129,0.18)'
+              }}
+              className="bg-gradient-to-br from-emerald-500/12 via-emerald-500/5 to-transparent rounded-2xl border border-emerald-100 shadow-sm p-4"
+            >
+              <p className="text-xs font-medium text-emerald-600 mb-2">
+                USERS
+              </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-3xl font-semibold text-slate-900">
+                    {s.users?.total ?? 0}
+                  </div>
+                  <p className="text-xs text-slate-500">Total users</p>
+                </div>
+                <div className="text-right space-y-1 text-xs">
+                  <p>
+                    <span className="text-slate-400 mr-1">Active</span>
+                    <span className="font-semibold text-emerald-600">
+                      {s.users?.active ?? 0}
+                    </span>
+                  </p>
+                  <p>
+                    <span className="text-slate-400 mr-1">Admins</span>
+                    <span className="font-semibold text-indigo-600">
+                      {s.users?.admins ?? 0}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Leave summary */}
+            <motion.div
+              custom={3}
+              variants={cardVariants}
+              initial="hidden"
+              animate="visible"
+              whileHover={{
+                y: -4,
+                boxShadow: '0 18px 40px rgba(148,163,184,0.18)'
+              }}
+              className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
+            >
+              <p className="text-xs font-medium text-slate-400 mb-2">
+                LEAVE SUMMARY
+              </p>
+              <ul className="space-y-1 text-xs text-slate-600">
+                <li className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-indigo-500" />
+                    <span>Casual Leave (CL)</span>
+                  </div>
+                  <span className="font-semibold text-slate-900">
+                    {leaveSummary.cl_days} days
+                  </span>
+                </li>
+                <li className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                    <span>Sick Leave (SL)</span>
+                  </div>
+                  <span className="font-semibold text-slate-900">
+                    {leaveSummary.sl_days} days
+                  </span>
+                </li>
+                <li className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-purple-500" />
+                    <span>Earned Leave (EL)</span>
+                  </div>
+                  <span className="font-semibold text-slate-900">
+                    {leaveSummary.el_days} days
+                  </span>
+                </li>
+                <li className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-rose-500" />
+                    <span>Loss of Pay (LOP)</span>
+                  </div>
+                  <span className="font-semibold text-slate-900">
+                    {leaveSummary.lop_days} days
+                  </span>
+                </li>
+              </ul>
+              <p className="text-[11px] text-slate-400 mt-3">
+                Based on approved leave requests in the system.
+              </p>
+            </motion.div>
+          </>
+        )}
       </div>
 
-      {/* Quick actions + lower section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Left 2/3 */}
-        <div className="lg:col-span-2 space-y-4">
-          {/* Quick actions */}
-          <div className="rounded-2xl bg-white p-4 shadow-sm border border-slate-100">
-            <p className="text-sm font-semibold text-slate-900 mb-3">
-              Quick actions
-            </p>
-            <div className="flex flex-wrap gap-3 text-xs">
-              <Link
-                href="/dashboard/users"
-                className="px-4 py-2 rounded-xl bg-slate-900 text-white hover:bg-slate-700"
-              >
-                Manage users
-              </Link>
-
-              <Link
-                href="/dashboard/attendance"
-                className="px-4 py-2 rounded-xl bg-indigo-50 text-indigo-700 border border-indigo-100 hover:bg-indigo-100"
-              >
-                Open attendance
-              </Link>
-
-              <Link
-                href="/dashboard/timesheets"
-                className="px-4 py-2 rounded-xl bg-sky-50 text-sky-700 border border-sky-100 hover:bg-sky-100"
-              >
-                Log timesheets
-              </Link>
-
-              <Link
-                href="/dashboard/leaves"
-                className="px-4 py-2 rounded-xl bg-purple-50 text-purple-700 border border-purple-100 hover:bg-purple-100"
-              >
-                Apply / review leaves
-              </Link>
-            </div>
-          </div>
-
-          {/* Recent attendance */}
-          <div className="rounded-2xl bg-white p-4 shadow-sm border border-slate-100">
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-sm font-semibold text-slate-900">
-                Recent attendance
+      {/* Operations overview row */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {loading ? (
+          <>
+            {skeletonCard}
+            {skeletonCard}
+            {skeletonCard}
+            {skeletonCard}
+          </>
+        ) : (
+          <>
+            {/* Timesheets */}
+            <motion.div
+              custom={4}
+              variants={cardVariants}
+              initial="hidden"
+              animate="visible"
+              whileHover={{
+                y: -4,
+                boxShadow: '0 18px 40px rgba(148,163,184,0.18)'
+              }}
+              className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
+            >
+              <p className="text-xs font-medium text-slate-400 mb-2">
+                TIMESHEETS
               </p>
-              <Link
-                href="/dashboard/attendance"
-                className="text-[11px] text-indigo-600 hover:underline"
-              >
-                View all
-              </Link>
-            </div>
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-2xl font-semibold text-slate-900">
+                    {s.timesheets?.entries_today ?? 0}
+                  </div>
+                  <p className="text-xs text-slate-500">Entries today</p>
+                </div>
+                <div className="text-right text-xs text-slate-500">
+                  <p>
+                    Hours:{' '}
+                    <span className="font-semibold text-slate-900">
+                      {s.timesheets?.hours_today ?? 0}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </motion.div>
 
-            <div className="overflow-x-auto text-xs">
-              <table className="min-w-full border-separate border-spacing-y-2">
-                <thead>
-                  <tr className="text-[11px] text-slate-400">
-                    <th className="text-left px-2 py-1">Employee</th>
-                    <th className="text-left px-2 py-1">Date</th>
-                    <th className="text-left px-2 py-1">Check in</th>
-                    <th className="text-left px-2 py-1">Check out</th>
-                    <th className="text-left px-2 py-1">Status</th>
+            {/* Tasks */}
+            <motion.div
+              custom={5}
+              variants={cardVariants}
+              initial="hidden"
+              animate="visible"
+              whileHover={{
+                y: -4,
+                boxShadow: '0 18px 40px rgba(251,191,36,0.25)'
+              }}
+              className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
+            >
+              <p className="text-xs font-medium text-slate-400 mb-2">
+                TASKS
+              </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-2xl font-semibold text-slate-900">
+                    {s.tasks?.open ?? 0}
+                  </div>
+                  <p className="text-xs text-slate-500">Open tasks</p>
+                </div>
+                <div className="text-right text-xs space-y-1">
+                  <p className="text-slate-500">
+                    In progress:{' '}
+                    <span className="font-semibold text-sky-600">
+                      {s.tasks?.in_progress ?? 0}
+                    </span>
+                  </p>
+                  <p className="text-slate-500">
+                    Completed:{' '}
+                    <span className="font-semibold text-emerald-600">
+                      {s.tasks?.completed ?? 0}
+                    </span>
+                  </p>
+                  <p className="text-slate-500">
+                    Overdue:{' '}
+                    <span className="font-semibold text-rose-600">
+                      {s.tasks?.overdue ?? 0}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Devices */}
+            <motion.div
+              custom={6}
+              variants={cardVariants}
+              initial="hidden"
+              animate="visible"
+              whileHover={{
+                y: -4,
+                boxShadow: '0 18px 40px rgba(244,63,94,0.22)'
+              }}
+              className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
+            >
+              <p className="text-xs font-medium text-slate-400 mb-2">
+                DEVICES
+              </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-2xl font-semibold text-slate-900">
+                    {s.devices?.total ?? 0}
+                  </div>
+                  <p className="text-xs text-slate-500">Total devices</p>
+                </div>
+                <div className="text-right text-xs space-y-1">
+                  <p className="text-slate-500">
+                    Assigned:{' '}
+                    <span className="font-semibold text-sky-600">
+                      {s.devices?.assigned ?? 0}
+                    </span>
+                  </p>
+                  <p className="text-slate-500">
+                    Available:{' '}
+                    <span className="font-semibold text-emerald-600">
+                      {s.devices?.available ?? 0}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Documents */}
+            <motion.div
+              custom={7}
+              variants={cardVariants}
+              initial="hidden"
+              animate="visible"
+              whileHover={{
+                y: -4,
+                boxShadow: '0 18px 40px rgba(129,140,248,0.22)'
+              }}
+              className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
+            >
+              <p className="text-xs font-medium text-slate-400 mb-2">
+                DOCUMENTS
+              </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-2xl font-semibold text-slate-900">
+                    {s.documents?.total ?? 0}
+                  </div>
+                  <p className="text-xs text-slate-500">
+                    Documents in library
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </div>
+
+      {/* Quick actions */}
+      <motion.div
+        custom={8}
+        variants={cardVariants}
+        initial="hidden"
+        animate="visible"
+        className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
+      >
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-sm font-semibold text-slate-900">
+            Quick actions
+          </h2>
+          <span className="text-[11px] text-slate-400">
+            Jump to common workflows
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 text-xs">
+          {[
+            {
+              href: '/dashboard/users',
+              title: 'Add user',
+              desc: 'Create a new employee',
+              gradient: 'from-indigo-500/90 to-purple-500/90'
+            },
+            {
+              href: '/dashboard/attendance',
+              title: 'Record attendance',
+              desc: 'Check-in / Check-out',
+              gradient: 'from-sky-500/90 to-cyan-500/90'
+            },
+            {
+              href: '/dashboard/leaves',
+              title: 'Review leaves',
+              desc: 'Approve / reject requests',
+              gradient: 'from-emerald-500/90 to-teal-500/90'
+            },
+            {
+              href: '/dashboard/tasks',
+              title: 'Create task',
+              desc: 'Assign work to team',
+              gradient: 'from-amber-500/90 to-orange-500/90'
+            },
+            {
+              href: '/dashboard/devices',
+              title: 'Assign device',
+              desc: 'Laptop / phone / assets',
+              gradient: 'from-rose-500/90 to-pink-500/90'
+            }
+          ].map((item) => (
+            <motion.div
+              key={item.href}
+              whileHover={{ y: -3, scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.15 }}
+            >
+              <Link
+                href={item.href}
+                className={`flex flex-col gap-1 px-3 py-2 rounded-2xl bg-gradient-to-br ${item.gradient} text-white shadow hover:shadow-lg transition`}
+              >
+                <span className="font-semibold text-xs">{item.title}</span>
+                <span className="text-[11px] text-indigo-50/90">
+                  {item.desc}
+                </span>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Recent attendance */}
+      <motion.div
+        custom={9}
+        variants={cardVariants}
+        initial="hidden"
+        animate="visible"
+        className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
+      >
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-sm font-semibold text-slate-900">
+            Recent attendance
+          </h2>
+          <Link
+            href="/dashboard/attendance"
+            className="text-xs text-indigo-600 hover:underline"
+          >
+            View all
+          </Link>
+        </div>
+        <div className="overflow-x-auto text-sm">
+          <table className="min-w-full border-separate border-spacing-y-2">
+            <thead>
+              <tr className="text-xs text-slate-400">
+                <th className="text-left px-3 py-1">Employee</th>
+                <th className="text-left px-3 py-1">Date</th>
+                <th className="text-left px-3 py-1">Check in</th>
+                <th className="text-left px-3 py-1">Check out</th>
+                <th className="text-left px-3 py-1">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {s.recent_attendance?.length ? (
+                s.recent_attendance.map((row) => (
+                  <tr
+                    key={row.id}
+                    className="bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors"
+                  >
+                    <td className="px-3 py-2 rounded-l-xl text-slate-900">
+                      {row.employee_name || '—'}
+                    </td>
+                    <td className="px-3 py-2 text-slate-600 text-xs">
+                      {formatDate(row.date)}
+                    </td>
+                    <td className="px-3 py-2 text-xs text-slate-600">
+                      {row.check_in || '--'}
+                    </td>
+                    <td className="px-3 py-2 text-xs text-slate-600">
+                      {row.check_out || '--'}
+                    </td>
+                    <td className="px-3 py-2 rounded-r-xl text-xs">
+                      <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
+                        {row.status || 'On_time'}
+                      </span>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {loading ? (
-                    <tr>
-                      <td
-                        colSpan={5}
-                        className="px-2 py-4 text-center text-[11px] text-slate-400"
-                      >
-                        Loading attendance...
-                      </td>
-                    </tr>
-                  ) : recentAttendance.length === 0 ? (
-                    <tr>
-                      <td
-                        colSpan={5}
-                        className="px-2 py-4 text-center text-[11px] text-slate-400"
-                      >
-                        No attendance records yet.
-                      </td>
-                    </tr>
-                  ) : (
-                    recentAttendance.map((item) => (
-                      <tr
-                        key={item.id}
-                        className="bg-slate-50 hover:bg-slate-100 transition rounded-xl"
-                      >
-                        <td className="px-2 py-2 rounded-l-xl text-slate-800">
-                          {item.full_name}
-                        </td>
-                        <td className="px-2 py-2 text-slate-600">
-                          {formatDate(item.attendance_date)}
-                        </td>
-                        <td className="px-2 py-2 text-slate-600">
-                          {formatTime(item.check_in)}
-                        </td>
-                        <td className="px-2 py-2 text-slate-600">
-                          {formatTime(item.check_out)}
-                        </td>
-                        <td className="px-2 py-2 rounded-r-xl text-[11px]">
-                          <span className="px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100 capitalize">
-                            {item.status || 'n/a'}
-                          </span>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={5}
+                    className="px-3 py-6 text-center text-xs text-slate-400"
+                  >
+                    No recent attendance records.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
-
-        {/* Right 1/3: Leave summary */}
-        <div className="rounded-2xl bg-white p-4 shadow-sm border border-slate-100">
-          <p className="text-sm font-semibold text-slate-900 mb-3">
-            Leave summary
-          </p>
-
-          {loading ? (
-            <p className="text-xs text-slate-500">Loading leave summary...</p>
-          ) : (
-            <div className="space-y-2 text-xs text-slate-700">
-              <div className="flex items-center justify-between">
-                <span className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-indigo-500" />
-                  <span>Casual Leave (CL)</span>
-                </span>
-                <span className="font-semibold text-slate-900">
-                  {leaveBreakdown.CL} days
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <span className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                  <span>Sick Leave (SL)</span>
-                </span>
-                <span className="font-semibold text-slate-900">
-                  {leaveBreakdown.SL} days
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <span className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-purple-500" />
-                  <span>Earned Leave (EL)</span>
-                </span>
-                <span className="font-semibold text-slate-900">
-                  {leaveBreakdown.EL} days
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <span className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-rose-500" />
-                  <span>Loss of Pay (LOP)</span>
-                </span>
-                <span className="font-semibold text-slate-900">
-                  {leaveBreakdown.LOP} days
-                </span>
-              </div>
-
-              <p className="mt-3 text-[11px] text-slate-500">
-                Based on all leave requests in the system (approved, rejected and
-                pending).
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
