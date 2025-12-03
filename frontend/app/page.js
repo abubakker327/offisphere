@@ -145,11 +145,10 @@ export default function LoginPage() {
             <p className="text-4xl xl:text-5xl font-bold text-white leading-tight">
               Welcome
               <br />
-              Back!
+              to Offisphere
             </p>
             <p className="text-sm text-indigo-50/90 max-w-xs">
-              Sign in to continue managing users, attendance, devices and
-              projects from one clean workspace.
+              Sign in to access your all-in-one office management workspace.
             </p>
           </motion.div>
 
@@ -160,7 +159,7 @@ export default function LoginPage() {
             transition={{ delay: 0.45 }}
             className="text-[11px] text-indigo-100"
           >
-            Offisphere &mdash; Office OS for distance &amp; hybrid teams.
+            Powered by TechMatrix AI
           </motion.p>
         </div>
       </div>
@@ -180,7 +179,7 @@ export default function LoginPage() {
               transition={{ delay: 0.2 }}
               className="text-2xl sm:text-3xl font-bold text-slate-900"
             >
-              Login
+              Welcome Back! ✨
             </motion.h1>
             <motion.p
               initial={{ y: 10, opacity: 0 }}
@@ -188,7 +187,7 @@ export default function LoginPage() {
               transition={{ delay: 0.28 }}
               className="text-xs sm:text-sm text-slate-500 mt-2"
             >
-              Welcome back! Please login to your account.
+            Please login to your account.
             </motion.p>
           </div>
 
