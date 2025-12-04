@@ -57,7 +57,7 @@ export default function NotificationsPage() {
       className="space-y-6"
     >
       <div>
-        <h1 className="text-xl font-semibold">Notifications</h1>
+        <h1 className="text-xl text-slate-900 font-semibold">Notifications</h1>
         <p className="text-sm text-slate-500">
           All system alerts and updates
         </p>
@@ -67,7 +67,7 @@ export default function NotificationsPage() {
         {loading ? (
           <p className="text-sm text-slate-400">Loading...</p>
         ) : notifications.length === 0 ? (
-          <p className="text-sm text-slate-400">No notifications yet.</p>
+          <p className="text-sm text-slate-900">No notifications yet.</p>
         ) : (
           notifications.map((n) => (
             <div
@@ -79,7 +79,7 @@ export default function NotificationsPage() {
               }`}
             >
               <div>
-                <p className="text-sm font-semibold">{n.title}</p>
+                <p className="text-sm text-slate-700 font-medium">{n.title}</p>
                 <p className="text-xs text-slate-600">{n.message}</p>
               </div>
 
