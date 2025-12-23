@@ -1,4 +1,3 @@
-// backend/src/middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
 
 const authenticate = (req, res, next) => {
@@ -12,22 +11,31 @@ const authenticate = (req, res, next) => {
   }
 
   try {
-    const payload = jwt.verify(
-      token,
-      process.env.SUPABASE_JWT_SECRET
-    );
-
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
     req.user = {
-      id: payload.sub,
-      email: payload.email,
-      role: payload.role
+      id: payload.id,
+      roles: payload.roles || []
     };
-
     next();
   } catch (err) {
-    console.error('JWT error:', err.message);
+    console.error('Auth error:', err.message);
     return res.status(401).json({ message: 'Invalid or expired token' });
   }
 };
 
-module.exports = { authenticate };
+const authorize = (allowedRoles = []) => (req, res, next) => {
+  if (!allowedRoles.length) {
+    return next();
+  }
+
+  const userRoles = req.user?.roles || [];
+  const hasRole = userRoles.some((role) => allowedRoles.includes(role));
+
+  if (!hasRole) {
+    return res.status(403).json({ message: 'Forbidden: insufficient permissions' });
+  }
+
+  next();
+};
+
+module.exports = { authenticate, authorize };
