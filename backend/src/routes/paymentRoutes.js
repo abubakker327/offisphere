@@ -11,6 +11,12 @@ function isAdminOrManager(user) {
   return roles.includes('admin') || roles.includes('manager');
 }
 
+const toNumericLeadId = (value) => {
+  if (value === null || value === undefined || value === '') return null;
+  const num = Number(value);
+  return Number.isNaN(num) ? null : num;
+};
+
 /**
  * GET /api/payments
  * Admin/Manager: all payments
@@ -25,23 +31,7 @@ router.get('/', authenticate, authorize([]), async (req, res) => {
 
     let query = supabase
       .from('payments')
-      .select(
-        `
-        id,
-        lead_id,
-        user_id,
-        amount,
-        currency,
-        status,
-        method,
-        reference,
-        notes,
-        paid_at,
-        created_at,
-        leads!payments_lead_id_fkey(name),
-        users!payments_user_id_fkey(full_name)
-      `
-      )
+      .select('*')
       .order('created_at', { ascending: false });
 
     if (!adminManager) {
@@ -59,13 +49,8 @@ router.get('/', authenticate, authorize([]), async (req, res) => {
       return res.status(500).json({ message: 'Error fetching payments' });
     }
 
-    const rows = (data || []).map((row) => ({
-      ...row,
-      lead_name: row.leads?.name || '',
-      recorded_by_name: row.users?.full_name || ''
-    }));
-
-    res.json(rows);
+    // Return raw payments without joining lead/user names
+    res.json(data || []);
   } catch (err) {
     console.error('List payments catch error:', err);
     res.status(500).json({ message: 'Error fetching payments' });
@@ -97,7 +82,7 @@ router.post('/', authenticate, authorize([]), async (req, res) => {
     }
 
     const insertPayload = {
-      lead_id: lead_id || null,
+      lead_id: toNumericLeadId(lead_id),
       user_id: user.id,
       amount,
       currency: currency || 'INR',
@@ -117,57 +102,11 @@ router.post('/', authenticate, authorize([]), async (req, res) => {
       return res.status(500).json({ message: 'Error recording payment' });
     }
 
-    // If tied to a lead, notify lead owner (if any)
-    if (lead_id) {
-      const { data: leadData, error: leadError } = await supabase
-        .from('leads')
-        .select('id, name, owner_id')
-        .eq('id', lead_id)
-        .single();
-
-      if (!leadError && leadData?.owner_id) {
-        const { error: notifError } = await supabase
-          .from('notifications')
-          .insert(
-            [
-              {
-                user_id: leadData.owner_id,
-                title: 'Payment recorded',
-                message: `Payment of ${amount} ${
-                  insertPayload.currency
-                } recorded for lead "${leadData.name}".`,
-                type: 'system'
-              }
-            ],
-            { returning: 'minimal' }
-          );
-        if (notifError) {
-          console.error('Payment notify error:', notifError);
-        }
-      }
-    }
-
     // Reload list for user / admin
     const adminManager = isAdminOrManager(user);
     let reloadQuery = supabase
       .from('payments')
-      .select(
-        `
-        id,
-        lead_id,
-        user_id,
-        amount,
-        currency,
-        status,
-        method,
-        reference,
-        notes,
-        paid_at,
-        created_at,
-        leads!payments_lead_id_fkey(name),
-        users!payments_user_id_fkey(full_name)
-      `
-      )
+      .select('*')
       .order('created_at', { ascending: false });
 
     if (!adminManager) {
@@ -181,13 +120,7 @@ router.post('/', authenticate, authorize([]), async (req, res) => {
       return res.json([]);
     }
 
-    const rows = (list || []).map((row) => ({
-      ...row,
-      lead_name: row.leads?.name || '',
-      recorded_by_name: row.users?.full_name || ''
-    }));
-
-    res.status(201).json(rows);
+    res.status(201).json(list || []);
   } catch (err) {
     console.error('Create payment catch error:', err);
     res.status(500).json({ message: 'Error recording payment' });
@@ -228,23 +161,7 @@ router.put(
 
       const { data, error } = await supabase
         .from('payments')
-        .select(
-          `
-          id,
-          lead_id,
-          user_id,
-          amount,
-          currency,
-          status,
-          method,
-          reference,
-          notes,
-          paid_at,
-          created_at,
-          leads!payments_lead_id_fkey(name),
-          users!payments_user_id_fkey(full_name)
-        `
-        )
+        .select('*')
         .order('created_at', { ascending: false });
 
       if (error) {
@@ -252,13 +169,7 @@ router.put(
         return res.json([]);
       }
 
-      const rows = (data || []).map((row) => ({
-        ...row,
-        lead_name: row.leads?.name || '',
-        recorded_by_name: row.users?.full_name || ''
-      }));
-
-      res.json(rows);
+      res.json(data || []);
     } catch (err) {
       console.error('Update payment catch error:', err);
       res.status(500).json({ message: 'Error updating payment' });

@@ -139,7 +139,7 @@ export default function PaymentsPage() {
         amount:
           form.amount !== '' ? parseFloat(form.amount) : null,
         lead_id:
-          form.lead_id !== '' ? parseInt(form.lead_id, 10) : null
+          form.lead_id !== '' ? form.lead_id : null
       };
 
       const res = await fetch(`${API_BASE}/api/payments`, {
@@ -183,6 +183,12 @@ export default function PaymentsPage() {
     setFilterStatus(status);
     setLoading(true);
     fetchPayments(status);
+  };
+
+  const leadNameById = (id) => {
+    const key = id != null ? String(id) : '';
+    const match = leads.find((l) => String(l.id) === key);
+    return match?.name || null;
   };
 
   const handleStatusChange = async (id, newStatus) => {
@@ -439,7 +445,7 @@ export default function PaymentsPage() {
                     className="bg-slate-50 rounded-xl hover:bg-slate-100"
                   >
                     <td className="px-3 py-2 rounded-l-xl text-slate-900">
-                      {p.lead_name || '—'}
+                      {p.lead_name || leadNameById(p.lead_id) || '—'}
                     </td>
                     <td className="px-3 py-2 text-xs text-slate-600">
                       {p.amount} {p.currency}
@@ -463,7 +469,17 @@ export default function PaymentsPage() {
                           ))}
                         </select>
                       ) : (
-                        <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
+                        <span
+                          className={`px-3 py-1 rounded-full border text-xs font-medium ${
+                            p.status === 'received'
+                              ? 'bg-emerald-50 text-emerald-700 border-emerald-100'
+                              : p.status === 'pending'
+                              ? 'bg-amber-50 text-amber-700 border-amber-100'
+                              : p.status === 'failed'
+                              ? 'bg-rose-50 text-rose-700 border-rose-100'
+                              : 'bg-slate-50 text-slate-700 border-slate-200'
+                          }`}
+                        >
                           {p.status}
                         </span>
                       )}

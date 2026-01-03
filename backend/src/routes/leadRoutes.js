@@ -6,6 +6,24 @@ const { authenticate, authorize } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
+// Map UI stage values to DB-allowed values (per check constraint)
+const uiToDbStage = (stage) => {
+  const normalized = (stage || '').toLowerCase();
+  if (normalized === 'hot') return 'Hot';
+  if (normalized === 'warm') return 'Warm';
+  if (normalized === 'cold') return 'Cold';
+  return null;
+};
+
+// Map DB stage values back to UI tokens
+const dbToUiStage = (stage) => {
+  const normalized = (stage || '').toLowerCase();
+  if (normalized === 'hot') return 'hot';
+  if (normalized === 'warm') return 'warm';
+  if (normalized === 'cold') return 'cold';
+  return 'cold';
+};
+
 /**
  * Helper: check if user is admin or manager
  */
@@ -20,40 +38,41 @@ function isAdminOrManager(user) {
  * - Others: only leads they own (owner_id = user.id)
  * Optional query params:
  *   ?status=new|contacted|qualified|proposal|won|lost|all
+ *   ?start_date=YYYY-MM-DD
+ *   ?end_date=YYYY-MM-DD
  */
 router.get('/', authenticate, authorize([]), async (req, res) => {
   try {
-    const { status } = req.query;
+    const { status, start_date, end_date, startDate, endDate } = req.query;
     const user = req.user;
     const adminManager = isAdminOrManager(user);
 
-    let query = supabase
-      .from('leads')
-      .select(
-        `
-        id,
-        name,
-        email,
-        phone,
-        company,
-        source,
-        status,
-        owner_id,
-        expected_value,
-        currency,
-        created_at,
-        updated_at,
-        users!leads_owner_id_fkey(full_name)
-      `
-      )
-      .order('created_at', { ascending: false });
+    let query = supabase.from('leads').select('*');
 
     if (!adminManager) {
       query = query.eq('owner_id', user.id);
     }
 
-    if (status && status !== 'all') {
-      query = query.eq('status', status);
+    // Date range filter (created_at)
+    const startDateStr = start_date || startDate;
+    const endDateStr = end_date || endDate;
+
+    const parseDate = (value) => {
+      if (!value) return null;
+      const parsed = new Date(value);
+      return Number.isNaN(parsed.getTime()) ? null : parsed;
+    };
+
+    const startAt = parseDate(startDateStr);
+    const endAt = parseDate(endDateStr);
+
+    if (startAt) {
+      query = query.gte('created_at', startAt.toISOString());
+    }
+    if (endAt) {
+      const endOfDay = new Date(endAt);
+      endOfDay.setHours(23, 59, 59, 999);
+      query = query.lte('created_at', endOfDay.toISOString());
     }
 
     const { data, error } = await query;
@@ -65,7 +84,7 @@ router.get('/', authenticate, authorize([]), async (req, res) => {
 
     const rows = (data || []).map((row) => ({
       ...row,
-      owner_name: row.users?.full_name || ''
+      stage: dbToUiStage(row.stage)
     }));
 
     res.json(rows);
@@ -83,17 +102,8 @@ router.get('/', authenticate, authorize([]), async (req, res) => {
 router.post('/', authenticate, authorize([]), async (req, res) => {
   try {
     const user = req.user;
-    const {
-      name,
-      email,
-      phone,
-      company,
-      source,
-      status,
-      expected_value,
-      currency,
-      owner_id
-    } = req.body;
+    const { name, email, phone, company, source, expected_value, stage, owner_id } =
+      req.body;
 
     if (!name) {
       return res.status(400).json({ message: 'Lead name is required' });
@@ -107,12 +117,12 @@ router.post('/', authenticate, authorize([]), async (req, res) => {
       phone: phone || null,
       company: company || null,
       source: source || null,
-      status: status || 'new',
       expected_value:
         expected_value !== undefined && expected_value !== null
           ? expected_value
           : null,
-      currency: currency || 'INR',
+      stage: uiToDbStage(stage) || 'Cold',
+      // default owner is current user unless admin explicitly sets another
       owner_id: adminManager && owner_id ? owner_id : user.id
     };
 
@@ -146,26 +156,7 @@ router.post('/', authenticate, authorize([]), async (req, res) => {
 
     // Return updated list for this user
     const adminReload = adminManager;
-    let reloadQuery = supabase
-      .from('leads')
-      .select(
-        `
-        id,
-        name,
-        email,
-        phone,
-        company,
-        source,
-        status,
-        owner_id,
-        expected_value,
-        currency,
-        created_at,
-        updated_at,
-        users!leads_owner_id_fkey(full_name)
-      `
-      )
-      .order('created_at', { ascending: false });
+    let reloadQuery = supabase.from('leads').select('*');
 
     if (!adminReload) {
       reloadQuery = reloadQuery.eq('owner_id', user.id);
@@ -180,7 +171,7 @@ router.post('/', authenticate, authorize([]), async (req, res) => {
 
     const rows = (list || []).map((row) => ({
       ...row,
-      owner_name: row.users?.full_name || ''
+      stage: dbToUiStage(row.stage)
     }));
 
     res.status(201).json(rows);
@@ -207,9 +198,8 @@ router.put(
         phone,
         company,
         source,
-        status,
         expected_value,
-        currency,
+        stage,
         owner_id
       } = req.body;
 
@@ -222,11 +212,13 @@ router.put(
       if (phone !== undefined) updatePayload.phone = phone || null;
       if (company !== undefined) updatePayload.company = company || null;
       if (source !== undefined) updatePayload.source = source || null;
-      if (status !== undefined) updatePayload.status = status;
       if (expected_value !== undefined)
         updatePayload.expected_value =
           expected_value !== null ? expected_value : null;
-      if (currency !== undefined) updatePayload.currency = currency || 'INR';
+      if (stage !== undefined) {
+        const mappedStage = uiToDbStage(stage) || 'Cold';
+        updatePayload.stage = mappedStage;
+      }
       if (owner_id !== undefined) updatePayload.owner_id = owner_id || null;
 
       const { error: updateError } = await supabase
@@ -257,7 +249,7 @@ router.put(
                   user_id: leadData.owner_id,
                   title:
                     status === 'won'
-                      ? 'Lead won 🎉'
+                      ? 'Lead won ĐYZ%'
                       : 'Lead lost',
                   message:
                     status === 'won'
@@ -276,24 +268,7 @@ router.put(
 
       const { data, error } = await supabase
         .from('leads')
-        .select(
-          `
-          id,
-          name,
-          email,
-          phone,
-          company,
-          source,
-          status,
-          owner_id,
-          expected_value,
-          currency,
-          created_at,
-          updated_at,
-          users!leads_owner_id_fkey(full_name)
-        `
-        )
-        .order('created_at', { ascending: false });
+        .select('*');
 
       if (error) {
         console.error('Reload leads error:', error);
@@ -302,7 +277,7 @@ router.put(
 
       const rows = (data || []).map((row) => ({
         ...row,
-        owner_name: row.users?.full_name || ''
+        stage: dbToUiStage(row.stage)
       }));
 
       res.json(rows);

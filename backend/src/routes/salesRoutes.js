@@ -21,10 +21,10 @@ router.get(
   authorize([]), // allow all logged-in for now; change to ['admin','manager'] if you want to restrict
   async (req, res) => {
     try {
-      // 1) Load all leads (for aggregates)
+      // 1) Load all leads (for aggregates) – only select existing columns
       const { data: leadsData, error: leadsError } = await supabase
         .from('leads')
-        .select('id, status, expected_value, currency, created_at');
+        .select('id, stage, expected_value, created_at');
 
       if (leadsError) {
         console.error('Sales summary leads error:', leadsError);
@@ -90,27 +90,22 @@ router.get(
 
       const totalLeads = leads.length;
 
-      // Pipeline value: expected value of all non-lost leads
+      // Pipeline value: treat Hot/Warm as active, Cold as lost
       let totalPipelineValue = 0;
-      let totalWonValue = 0;
+      let totalWonValue = 0; // no explicit "won" stage currently
       let wonCount = 0;
       let lostCount = 0;
       const leadsByStatus = {};
 
       for (const lead of leads) {
         const val = Number(lead.expected_value || 0);
-        const status = lead.status || 'new';
+        const stage = (lead.stage || '').toLowerCase();
 
-        leadsByStatus[status] = (leadsByStatus[status] || 0) + 1;
+        leadsByStatus[stage] = (leadsByStatus[stage] || 0) + 1;
 
-        if (status !== 'lost') {
+        if (stage !== 'cold') {
           totalPipelineValue += val;
-        }
-        if (status === 'won') {
-          totalWonValue += val;
-          wonCount += 1;
-        }
-        if (status === 'lost') {
+        } else {
           lostCount += 1;
         }
       }
