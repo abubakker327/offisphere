@@ -23,6 +23,7 @@ const recognitionRoutes = require('./routes/recognitionRoutes');
 const emailRoutes = require('./routes/emailRoutes');
 const exportRoutes = require('./routes/exportRoutes');
 const reportRoutes = require('./routes/reportRoutes');
+const salesAccountsRoutes = require('./routes/salesAccountsRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -58,6 +59,7 @@ app.use('/api/recognitions', recognitionRoutes);
 app.use('/api/email', emailRoutes);
 app.use('/api/exports', exportRoutes);
 app.use('/api/reports', reportRoutes);
+app.use('/api/sa', salesAccountsRoutes);
 
 // generic error handler
 app.use((err, req, res, next) => {

@@ -79,27 +79,33 @@ router.post(
       });
     }
 
-    try {
-      const password_hash = await bcrypt.hash(password, 10);
+  try {
+    const password_hash = await bcrypt.hash(password, 10);
+    const normalizedEmail = (email || '').trim().toLowerCase();
 
-      const cleanRoles = Array.isArray(roles) ? roles : [];
-      const { error: userError } = await supabase
-        .from('users')
-        .insert({
-          full_name,
-          email,
-          password_hash,
-          is_active: true,
-          roles: cleanRoles
-        });
+    const cleanRoles = Array.isArray(roles) ? roles : [];
+    const { error: userError } = await supabase
+      .from('users')
+      .insert({
+        full_name,
+        email: normalizedEmail,
+        password_hash,
+        is_active: true,
+        roles: cleanRoles
+      });
 
-      if (userError) {
-        console.error('Create user error:', userError);
-        return res.status(400).json({
-          message:
-            userError.message || 'Error creating user (users insert)'
+    if (userError) {
+      console.error('Create user error:', userError);
+      if (userError.code === '23505') {
+        return res.status(409).json({
+          message: 'A user with that email already exists'
         });
       }
+      return res.status(400).json({
+        message:
+          userError.message || 'Error creating user (users insert)'
+      });
+    }
 
       const users = await fetchUsersWithRoles();
       res.status(201).json(users);

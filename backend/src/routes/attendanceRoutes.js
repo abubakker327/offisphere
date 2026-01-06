@@ -25,12 +25,14 @@ async function attachUserNames(records) {
 
   const map = {};
   (users || []).forEach((u) => {
-    map[u.id] = u.full_name;
+    map[u.id] = u.full_name || u.email || '';
   });
 
   return records.map((r) => ({
     ...r,
-    full_name: map[r.user_id] || ''
+    full_name: map[r.user_id] || '',
+    employee_name: map[r.user_id] || '',
+    user_name: map[r.user_id] || ''
   }));
 }
 

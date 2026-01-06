@@ -37,6 +37,19 @@ const navGroups = [
     ]
   },
   {
+    id: 'sales-accounts',
+    label: 'Sales & Accounts',
+    items: [
+      { href: '/dashboard/sales-accounts', label: 'Overview' },
+      { href: '/dashboard/sales-accounts/procurement', label: 'Procurement' },
+      { href: '/dashboard/sales-accounts/sales', label: 'Sales' },
+      { href: '/dashboard/sales-accounts/inventory', label: 'Inventory' },
+      { href: '/dashboard/sales-accounts/payments', label: 'Payments' },
+      { href: '/dashboard/sales-accounts/accounting', label: 'Accounting' },
+      { href: '/dashboard/sales-accounts/prints', label: 'Print Docs' }
+    ]
+  },
+  {
     id: 'finance',
     label: 'Finance & Admin',
     items: [

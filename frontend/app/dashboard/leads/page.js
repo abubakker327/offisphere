@@ -41,10 +41,16 @@ const apiFetch = async (path, options = {}) => {
 
 const mapApiLeadToUi = (lead) => {
   const stage = (lead.stage || '').toLowerCase();
+  const telecallerName =
+    lead.telecaller_name ||
+    lead.owner_name ||
+    lead.owner_full_name ||
+    null;
   return {
     ...lead,
     stage: stage || 'cold',
-    expected_value: lead.expected_value ?? lead.value ?? null
+    expected_value: lead.expected_value ?? lead.value ?? null,
+    telecaller_name: telecallerName
   };
 };
 
@@ -163,6 +169,7 @@ export default function LeadsPage() {
     stageFilter === 'all'
       ? leads
       : leads.filter((l) => l.stage === stageFilter);
+  const columnCount = 7;
 
   return (
     <motion.div
@@ -362,6 +369,7 @@ export default function LeadsPage() {
                 <th className="text-left px-3 py-1">Lead</th>
                 <th className="text-left px-3 py-1">Company</th>
                 <th className="text-left px-3 py-1">Source</th>
+                <th className="text-left px-3 py-1">Telecaller</th>
                 <th className="text-left px-3 py-1">Value</th>
                 <th className="text-left px-3 py-1">Stage</th>
                 <th className="text-left px-3 py-1">Created</th>
@@ -371,7 +379,7 @@ export default function LeadsPage() {
               {loading ? (
                 <tr>
                   <td
-                    colSpan={6}
+                    colSpan={columnCount}
                     className="px-3 py-6 text-center text-xs text-slate-400"
                   >
                     Loading leads...
@@ -380,7 +388,7 @@ export default function LeadsPage() {
               ) : filteredLeads.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={6}
+                    colSpan={columnCount}
                     className="px-3 py-6 text-center text-xs text-slate-400"
                   >
                     No leads found.
@@ -400,6 +408,9 @@ export default function LeadsPage() {
                     </td>
                     <td className="px-3 py-2 text-xs text-slate-600">
                       {lead.source || '-'}
+                    </td>
+                    <td className="px-3 py-2 text-xs text-slate-600">
+                      {lead.telecaller_name || '-'}
                     </td>
                     <td className="px-3 py-2 text-xs text-slate-600">
                       {lead.expected_value != null

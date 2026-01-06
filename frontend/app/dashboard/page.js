@@ -56,6 +56,13 @@ export default function DashboardHome() {
 
   const formatDate = (date) =>
     date ? new Date(date).toLocaleDateString() : '-';
+  const formatTime = (value) =>
+    value
+      ? new Date(value).toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+      : '--';
 
   const s = summary || {};
 
@@ -74,6 +81,35 @@ export default function DashboardHome() {
       transition: { delay: 0.05 * i, duration: 0.25 }
     })
   };
+
+  const GlowCard = ({ title, accent, index = 0, children }) => (
+    <motion.div
+      custom={index}
+      variants={cardVariants}
+      initial="hidden"
+      animate="visible"
+      whileHover={{ y: -8, scale: 1.01 }}
+      className={`relative overflow-hidden rounded-3xl border shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 ${accent.border} ${accent.bg}`}
+    >
+      <div className="absolute inset-0 pointer-events-none">
+        <div
+          className={`absolute -top-10 -left-6 h-28 w-28 blur-3xl ${accent.glowA}`}
+        />
+        <div
+          className={`absolute -bottom-8 right-0 h-24 w-24 blur-2xl ${accent.glowB}`}
+        />
+      </div>
+      <div className="relative flex flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <p className={`text-xs font-semibold tracking-wide ${accent.title}`}>
+            {title}
+          </p>
+          <span className={`h-2 w-8 rounded-full ${accent.pill}`} />
+        </div>
+        {children}
+      </div>
+    </motion.div>
+  );
 
   const skeletonCard = (
     <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 animate-pulse">
@@ -151,20 +187,18 @@ export default function DashboardHome() {
         ) : (
           <>
             {/* Leaves */}
-            <motion.div
-              custom={0}
-              variants={cardVariants}
-              initial="hidden"
-              animate="visible"
-              whileHover={{
-                y: -4,
-                boxShadow: '0 18px 40px rgba(79,70,229,0.18)'
+            <GlowCard
+              index={0}
+              title="LEAVES"
+              accent={{
+                border: 'border-indigo-100/70',
+                bg: 'bg-gradient-to-br from-indigo-400/15 via-indigo-200/10 to-white',
+                glowA: 'bg-indigo-400/15',
+                glowB: 'bg-purple-300/15',
+                title: 'text-indigo-600',
+                pill: 'bg-indigo-500/60'
               }}
-              className="bg-gradient-to-br from-indigo-500/12 via-indigo-500/5 to-transparent rounded-2xl border border-indigo-100 shadow-sm p-4"
             >
-              <p className="text-xs font-medium text-indigo-500 mb-2">
-                LEAVES
-              </p>
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-3xl font-semibold text-slate-900">
@@ -173,37 +207,37 @@ export default function DashboardHome() {
                   <p className="text-xs text-slate-500">Pending requests</p>
                 </div>
                 <div className="text-right space-y-1 text-xs">
-                  <p>
-                    <span className="text-slate-400 mr-1">Approved</span>
-                    <span className="font-semibold text-emerald-600">
+                  <p className="flex items-center justify-end gap-1">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-slate-500">Approved</span>
+                    <span className="font-semibold text-emerald-700">
                       {s.leaves?.approved ?? 0}
                     </span>
                   </p>
-                  <p>
-                    <span className="text-slate-400 mr-1">Rejected</span>
-                    <span className="font-semibold text-rose-600">
+                  <p className="flex items-center justify-end gap-1">
+                    <span className="h-1.5 w-1.5 rounded-full bg-rose-500 animate-pulse" />
+                    <span className="text-slate-500">Rejected</span>
+                    <span className="font-semibold text-rose-700">
                       {s.leaves?.rejected ?? 0}
                     </span>
                   </p>
                 </div>
               </div>
-            </motion.div>
+            </GlowCard>
 
             {/* Attendance */}
-            <motion.div
-              custom={1}
-              variants={cardVariants}
-              initial="hidden"
-              animate="visible"
-              whileHover={{
-                y: -4,
-                boxShadow: '0 18px 40px rgba(14,165,233,0.18)'
+            <GlowCard
+              index={1}
+              title="ATTENDANCE"
+              accent={{
+                border: 'border-sky-100/70',
+                bg: 'bg-gradient-to-br from-sky-400/15 via-cyan-200/10 to-white',
+                glowA: 'bg-cyan-400/18',
+                glowB: 'bg-sky-300/14',
+                title: 'text-sky-600',
+                pill: 'bg-sky-400/60'
               }}
-              className="bg-gradient-to-br from-sky-500/12 via-sky-500/5 to-transparent rounded-2xl border border-sky-100 shadow-sm p-4"
             >
-              <p className="text-xs font-medium text-sky-500 mb-2">
-                ATTENDANCE
-              </p>
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-3xl font-semibold text-slate-900">
@@ -212,31 +246,30 @@ export default function DashboardHome() {
                   <p className="text-xs text-slate-500">Check-ins today</p>
                 </div>
                 <div className="text-right text-xs">
-                  <p>
-                    <span className="text-slate-400 mr-1">Users</span>
-                    <span className="font-semibold text-slate-800">
+                  <p className="flex items-center justify-end gap-1">
+                    <span className="h-1.5 w-1.5 rounded-full bg-sky-500 animate-pulse" />
+                    <span className="text-slate-500">Users</span>
+                    <span className="font-semibold text-slate-900">
                       {s.attendance?.total_users ?? 0}
                     </span>
                   </p>
                 </div>
               </div>
-            </motion.div>
+            </GlowCard>
 
             {/* Users */}
-            <motion.div
-              custom={2}
-              variants={cardVariants}
-              initial="hidden"
-              animate="visible"
-              whileHover={{
-                y: -4,
-                boxShadow: '0 18px 40px rgba(16,185,129,0.18)'
+            <GlowCard
+              index={2}
+              title="USERS"
+              accent={{
+                border: 'border-emerald-100/70',
+                bg: 'bg-gradient-to-br from-emerald-400/14 via-teal-200/10 to-white',
+                glowA: 'bg-emerald-300/16',
+                glowB: 'bg-teal-300/14',
+                title: 'text-emerald-600',
+                pill: 'bg-emerald-400/60'
               }}
-              className="bg-gradient-to-br from-emerald-500/12 via-emerald-500/5 to-transparent rounded-2xl border border-emerald-100 shadow-sm p-4"
             >
-              <p className="text-xs font-medium text-emerald-600 mb-2">
-                USERS
-              </p>
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-3xl font-semibold text-slate-900">
@@ -245,79 +278,67 @@ export default function DashboardHome() {
                   <p className="text-xs text-slate-500">Total users</p>
                 </div>
                 <div className="text-right space-y-1 text-xs">
-                  <p>
-                    <span className="text-slate-400 mr-1">Active</span>
-                    <span className="font-semibold text-emerald-600">
+                  <p className="flex items-center justify-end gap-1">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-slate-500">Active</span>
+                    <span className="font-semibold text-emerald-700">
                       {s.users?.active ?? 0}
                     </span>
                   </p>
-                  <p>
-                    <span className="text-slate-400 mr-1">Admins</span>
-                    <span className="font-semibold text-indigo-600">
+                  <p className="flex items-center justify-end gap-1">
+                    <span className="h-1.5 w-1.5 rounded-full bg-indigo-500 animate-pulse" />
+                    <span className="text-slate-500">Admins</span>
+                    <span className="font-semibold text-indigo-700">
                       {s.users?.admins ?? 0}
                     </span>
                   </p>
                 </div>
               </div>
-            </motion.div>
+            </GlowCard>
 
             {/* Leave summary */}
-            <motion.div
-              custom={3}
-              variants={cardVariants}
-              initial="hidden"
-              animate="visible"
-              whileHover={{
-                y: -4,
-                boxShadow: '0 18px 40px rgba(148,163,184,0.18)'
+            <GlowCard
+              index={3}
+              title="WORKFORCE PULSE"
+              accent={{
+                border: 'border-cyan-100/70',
+                bg: 'bg-gradient-to-br from-cyan-300/14 via-teal-200/12 to-white',
+                glowA: 'bg-cyan-300/16',
+                glowB: 'bg-teal-200/14',
+                title: 'text-cyan-600',
+                pill: 'bg-cyan-400/70'
               }}
-              className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
             >
-              <p className="text-xs font-medium text-slate-400 mb-2">
-                LEAVE SUMMARY
-              </p>
-              <ul className="space-y-1 text-xs text-slate-600">
-                <li className="flex items-center justify-between">
+              <div className="grid grid-cols-1 gap-2 text-xs text-slate-700">
+                <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-indigo-500" />
-                    <span>Casual Leave (CL)</span>
+                    <span className="h-2 w-2 rounded-full bg-sky-500 animate-pulse" />
+                    <span>Hours logged today</span>
                   </div>
                   <span className="font-semibold text-slate-900">
-                    {leaveSummary.cl_days} days
+                    {s.timesheets?.hours_today ?? 0}
                   </span>
-                </li>
-                <li className="flex items-center justify-between">
+                </div>
+                <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                    <span>Sick Leave (SL)</span>
+                    <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
+                    <span>Open tasks</span>
                   </div>
                   <span className="font-semibold text-slate-900">
-                    {leaveSummary.sl_days} days
+                    {s.tasks?.open ?? 0}
                   </span>
-                </li>
-                <li className="flex items-center justify-between">
+                </div>
+                <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-purple-500" />
-                    <span>Earned Leave (EL)</span>
+                    <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>Devices available</span>
                   </div>
                   <span className="font-semibold text-slate-900">
-                    {leaveSummary.el_days} days
+                    {s.devices?.available ?? 0}
                   </span>
-                </li>
-                <li className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-rose-500" />
-                    <span>Loss of Pay (LOP)</span>
-                  </div>
-                  <span className="font-semibold text-slate-900">
-                    {leaveSummary.lop_days} days
-                  </span>
-                </li>
-              </ul>
-              <p className="text-[11px] text-slate-400 mt-3">
-                Based on approved leave requests in the system.
-              </p>
-            </motion.div>
+                </div>
+              </div>
+            </GlowCard>
           </>
         )}
       </div>
@@ -334,20 +355,18 @@ export default function DashboardHome() {
         ) : (
           <>
             {/* Timesheets */}
-            <motion.div
-              custom={4}
-              variants={cardVariants}
-              initial="hidden"
-              animate="visible"
-              whileHover={{
-                y: -4,
-                boxShadow: '0 18px 40px rgba(148,163,184,0.18)'
+            <GlowCard
+              index={4}
+              title="TIMESHEETS"
+              accent={{
+                border: 'border-slate-100/70',
+                bg: 'bg-gradient-to-br from-white via-slate-50 to-sky-50/50',
+                glowA: 'bg-slate-300/20',
+                glowB: 'bg-sky-200/16',
+                title: 'text-slate-600',
+                pill: 'bg-slate-300/70'
               }}
-              className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
             >
-              <p className="text-xs font-medium text-slate-400 mb-2">
-                TIMESHEETS
-              </p>
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-2xl font-semibold text-slate-900">
@@ -364,23 +383,21 @@ export default function DashboardHome() {
                   </p>
                 </div>
               </div>
-            </motion.div>
+            </GlowCard>
 
             {/* Tasks */}
-            <motion.div
-              custom={5}
-              variants={cardVariants}
-              initial="hidden"
-              animate="visible"
-              whileHover={{
-                y: -4,
-                boxShadow: '0 18px 40px rgba(251,191,36,0.25)'
+            <GlowCard
+              index={5}
+              title="TASKS"
+              accent={{
+                border: 'border-amber-100/70',
+                bg: 'bg-gradient-to-br from-amber-400/14 via-orange-200/12 to-white',
+                glowA: 'bg-orange-300/16',
+                glowB: 'bg-amber-200/12',
+                title: 'text-amber-600',
+                pill: 'bg-amber-400/70'
               }}
-              className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
             >
-              <p className="text-xs font-medium text-slate-400 mb-2">
-                TASKS
-              </p>
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-2xl font-semibold text-slate-900">
@@ -389,19 +406,19 @@ export default function DashboardHome() {
                   <p className="text-xs text-slate-500">Open tasks</p>
                 </div>
                 <div className="text-right text-xs space-y-1">
-                  <p className="text-slate-500">
+                  <p className="text-slate-600">
                     In progress:{' '}
                     <span className="font-semibold text-sky-600">
                       {s.tasks?.in_progress ?? 0}
                     </span>
                   </p>
-                  <p className="text-slate-500">
+                  <p className="text-slate-600">
                     Completed:{' '}
                     <span className="font-semibold text-emerald-600">
                       {s.tasks?.completed ?? 0}
                     </span>
                   </p>
-                  <p className="text-slate-500">
+                  <p className="text-slate-600">
                     Overdue:{' '}
                     <span className="font-semibold text-rose-600">
                       {s.tasks?.overdue ?? 0}
@@ -409,23 +426,21 @@ export default function DashboardHome() {
                   </p>
                 </div>
               </div>
-            </motion.div>
+            </GlowCard>
 
             {/* Devices */}
-            <motion.div
-              custom={6}
-              variants={cardVariants}
-              initial="hidden"
-              animate="visible"
-              whileHover={{
-                y: -4,
-                boxShadow: '0 18px 40px rgba(244,63,94,0.22)'
+            <GlowCard
+              index={6}
+              title="DEVICES"
+              accent={{
+                border: 'border-rose-100/70',
+                bg: 'bg-gradient-to-br from-rose-400/14 via-rose-200/12 to-white',
+                glowA: 'bg-rose-300/18',
+                glowB: 'bg-pink-200/14',
+                title: 'text-rose-600',
+                pill: 'bg-rose-400/70'
               }}
-              className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
             >
-              <p className="text-xs font-medium text-slate-400 mb-2">
-                DEVICES
-              </p>
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-2xl font-semibold text-slate-900">
@@ -434,13 +449,13 @@ export default function DashboardHome() {
                   <p className="text-xs text-slate-500">Total devices</p>
                 </div>
                 <div className="text-right text-xs space-y-1">
-                  <p className="text-slate-500">
+                  <p className="text-slate-600">
                     Assigned:{' '}
                     <span className="font-semibold text-sky-600">
                       {s.devices?.assigned ?? 0}
                     </span>
                   </p>
-                  <p className="text-slate-500">
+                  <p className="text-slate-600">
                     Available:{' '}
                     <span className="font-semibold text-emerald-600">
                       {s.devices?.available ?? 0}
@@ -448,23 +463,21 @@ export default function DashboardHome() {
                   </p>
                 </div>
               </div>
-            </motion.div>
+            </GlowCard>
 
             {/* Documents */}
-            <motion.div
-              custom={7}
-              variants={cardVariants}
-              initial="hidden"
-              animate="visible"
-              whileHover={{
-                y: -4,
-                boxShadow: '0 18px 40px rgba(129,140,248,0.22)'
+            <GlowCard
+              index={7}
+              title="DOCUMENTS"
+              accent={{
+                border: 'border-indigo-100/70',
+                bg: 'bg-gradient-to-br from-indigo-400/12 via-indigo-200/10 to-white',
+                glowA: 'bg-indigo-300/16',
+                glowB: 'bg-blue-200/12',
+                title: 'text-indigo-600',
+                pill: 'bg-indigo-400/70'
               }}
-              className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
             >
-              <p className="text-xs font-medium text-slate-400 mb-2">
-                DOCUMENTS
-              </p>
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-2xl font-semibold text-slate-900">
@@ -475,7 +488,7 @@ export default function DashboardHome() {
                   </p>
                 </div>
               </div>
-            </motion.div>
+            </GlowCard>
           </>
         )}
       </div>
@@ -588,16 +601,16 @@ export default function DashboardHome() {
                     className="bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors"
                   >
                     <td className="px-3 py-2 rounded-l-xl text-slate-900">
-                      {row.employee_name || '—'}
+                      {row.employee_name || row.user_name || '--'}
                     </td>
                     <td className="px-3 py-2 text-slate-600 text-xs">
                       {formatDate(row.date)}
                     </td>
                     <td className="px-3 py-2 text-xs text-slate-600">
-                      {row.check_in || '--'}
+                      {formatTime(row.check_in)}
                     </td>
                     <td className="px-3 py-2 text-xs text-slate-600">
-                      {row.check_out || '--'}
+                      {formatTime(row.check_out)}
                     </td>
                     <td className="px-3 py-2 rounded-r-xl text-xs">
                       <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
@@ -623,3 +636,4 @@ export default function DashboardHome() {
     </motion.div>
   );
 }
+

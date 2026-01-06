@@ -33,9 +33,55 @@ function isAdminOrManager(user) {
 }
 
 /**
+ * Helper: map user ids -> user full name/email for display
+ */
+async function buildUserNameMap(userIds) {
+  const uniqueIds = Array.from(
+    new Set((userIds || []).filter((id) => id !== null && id !== undefined))
+  );
+
+  if (!uniqueIds.length) return {};
+
+  const { data, error } = await supabase
+    .from('users')
+    .select('id, full_name, email')
+    .in('id', uniqueIds);
+
+  if (error) {
+    console.error('User name lookup error:', error);
+    return {};
+  }
+
+  return (data || []).reduce((acc, user) => {
+    const key = String(user.id);
+    acc[key] = user.full_name || user.email || '';
+    return acc;
+  }, {});
+}
+
+/**
+ * Helper: format leads with UI stage + telecaller name (assigned_to, fallback owner)
+ */
+async function mapLeadsWithTelecaller(leads) {
+  const userMap = await buildUserNameMap(
+    (leads || []).flatMap((row) => [row.assigned_to, row.owner_id])
+  );
+
+  return (leads || []).map((row) => ({
+    ...row,
+    stage: dbToUiStage(row.stage),
+    telecaller_name:
+      userMap[String(row.assigned_to)] ||
+      userMap[String(row.owner_id)] ||
+      null,
+    assigned_to_name: userMap[String(row.assigned_to)] || null
+  }));
+}
+
+/**
  * GET /api/leads
  * - Admin/Manager: see all leads
- * - Others: only leads they own (owner_id = user.id)
+ * - Others: only leads they own or are assigned (owner_id/assigned_to = user.id)
  * Optional query params:
  *   ?status=new|contacted|qualified|proposal|won|lost|all
  *   ?start_date=YYYY-MM-DD
@@ -50,7 +96,9 @@ router.get('/', authenticate, authorize([]), async (req, res) => {
     let query = supabase.from('leads').select('*');
 
     if (!adminManager) {
-      query = query.eq('owner_id', user.id);
+      query = query.or(
+        `owner_id.eq.${user.id},assigned_to.eq.${user.id}`
+      );
     }
 
     // Date range filter (created_at)
@@ -82,10 +130,7 @@ router.get('/', authenticate, authorize([]), async (req, res) => {
       return res.status(500).json({ message: 'Error fetching leads' });
     }
 
-    const rows = (data || []).map((row) => ({
-      ...row,
-      stage: dbToUiStage(row.stage)
-    }));
+    const rows = await mapLeadsWithTelecaller(data);
 
     res.json(rows);
   } catch (err) {
@@ -102,14 +147,26 @@ router.get('/', authenticate, authorize([]), async (req, res) => {
 router.post('/', authenticate, authorize([]), async (req, res) => {
   try {
     const user = req.user;
-    const { name, email, phone, company, source, expected_value, stage, owner_id } =
-      req.body;
+    const {
+      name,
+      email,
+      phone,
+      company,
+      source,
+      expected_value,
+      stage,
+      owner_id,
+      assigned_to
+    } = req.body;
 
     if (!name) {
       return res.status(400).json({ message: 'Lead name is required' });
     }
 
     const adminManager = isAdminOrManager(user);
+    const defaultOwnerId = adminManager && owner_id ? owner_id : user.id;
+    const assignedToId =
+      adminManager && assigned_to ? assigned_to : defaultOwnerId;
 
     const insertPayload = {
       name,
@@ -123,7 +180,8 @@ router.post('/', authenticate, authorize([]), async (req, res) => {
           : null,
       stage: uiToDbStage(stage) || 'Cold',
       // default owner is current user unless admin explicitly sets another
-      owner_id: adminManager && owner_id ? owner_id : user.id
+      owner_id: defaultOwnerId,
+      assigned_to: assignedToId
     };
 
     const { error: insertError } = await supabase
@@ -135,13 +193,13 @@ router.post('/', authenticate, authorize([]), async (req, res) => {
       return res.status(500).json({ message: 'Error creating lead' });
     }
 
-    // Notification to owner
-    const ownerId = insertPayload.owner_id;
-    if (ownerId) {
+    // Notification to assigned user (fallback owner)
+    const notifyUserId = insertPayload.assigned_to || insertPayload.owner_id;
+    if (notifyUserId) {
       const { error: notifError } = await supabase.from('notifications').insert(
         [
           {
-            user_id: ownerId,
+            user_id: notifyUserId,
             title: 'New lead assigned',
             message: `Lead "${name}" has been added to your pipeline.`,
             type: 'system'
@@ -159,7 +217,9 @@ router.post('/', authenticate, authorize([]), async (req, res) => {
     let reloadQuery = supabase.from('leads').select('*');
 
     if (!adminReload) {
-      reloadQuery = reloadQuery.eq('owner_id', user.id);
+      reloadQuery = reloadQuery.or(
+        `owner_id.eq.${user.id},assigned_to.eq.${user.id}`
+      );
     }
 
     const { data: list, error: listError } = await reloadQuery;
@@ -169,10 +229,7 @@ router.post('/', authenticate, authorize([]), async (req, res) => {
       return res.json([]);
     }
 
-    const rows = (list || []).map((row) => ({
-      ...row,
-      stage: dbToUiStage(row.stage)
-    }));
+    const rows = await mapLeadsWithTelecaller(list);
 
     res.status(201).json(rows);
   } catch (err) {
@@ -200,7 +257,9 @@ router.put(
         source,
         expected_value,
         stage,
-        owner_id
+        status,
+        owner_id,
+        assigned_to
       } = req.body;
 
       const updatePayload = {
@@ -220,6 +279,8 @@ router.put(
         updatePayload.stage = mappedStage;
       }
       if (owner_id !== undefined) updatePayload.owner_id = owner_id || null;
+      if (assigned_to !== undefined)
+        updatePayload.assigned_to = assigned_to || null;
 
       const { error: updateError } = await supabase
         .from('leads')
@@ -231,22 +292,22 @@ router.put(
         return res.status(500).json({ message: 'Error updating lead' });
       }
 
-      // If status is updated to won/lost, notify owner
+      // If status is updated to won/lost, notify owner/assignee
       if (status && ['won', 'lost'].includes(status)) {
-        // Fetch lead with owner
+        // Fetch lead with owner/assignee
         const { data: leadData, error: leadError } = await supabase
           .from('leads')
-          .select('name, owner_id')
+          .select('name, owner_id, assigned_to')
           .eq('id', id)
           .single();
 
-        if (!leadError && leadData?.owner_id) {
+        if (!leadError && (leadData?.owner_id || leadData?.assigned_to)) {
           const { error: notifError } = await supabase
             .from('notifications')
             .insert(
               [
                 {
-                  user_id: leadData.owner_id,
+                  user_id: leadData.assigned_to || leadData.owner_id,
                   title:
                     status === 'won'
                       ? 'Lead won ĐYZ%'
@@ -275,10 +336,7 @@ router.put(
         return res.json([]);
       }
 
-      const rows = (data || []).map((row) => ({
-        ...row,
-        stage: dbToUiStage(row.stage)
-      }));
+      const rows = await mapLeadsWithTelecaller(data);
 
       res.json(rows);
     } catch (err) {
