@@ -186,20 +186,30 @@ export default function LeavesPage() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-gradient-to-br from-slate-50 via-indigo-50/70 to-cyan-50/60 p-1 rounded-3xl">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-semibold text-slate-900">Leave Management</h1>
-          <p className="text-sm text-slate-500">
-            Apply for leave and track approvals. Admins can review and approve requests.
-          </p>
+        <div className="space-y-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 text-white text-[11px] font-semibold shadow-sm shadow-indigo-200">
+            <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
+            <span>Leave desk</span>
+          </div>
+          <div>
+            <h1 className="text-xl font-semibold text-slate-900">Leave Management</h1>
+            <p className="text-sm text-slate-600">
+              Apply for leave and track approvals. Admins can review and approve requests.
+            </p>
+          </div>
         </div>
       </div>
 
       {/* Apply leave card */}
-      <div className="rounded-2xl bg-white p-5 shadow-sm border border-slate-100">
-        <h2 className="text-sm font-semibold text-slate-900 mb-3">
+      <div className="relative overflow-hidden rounded-2xl bg-white/90 p-5 shadow-[0_14px_36px_rgba(0,0,0,0.06)] border border-indigo-100/60 backdrop-blur">
+        <div
+          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+          aria-hidden="true"
+        />
+        <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-3">
           Apply for leave
         </h2>
 
@@ -278,8 +288,12 @@ export default function LeavesPage() {
       </div>
 
       {/* Filters */}
-      <div className="rounded-2xl bg-white p-4 shadow-sm border border-slate-100">
-        <h2 className="text-sm font-semibold text-slate-900 mb-3">Filters</h2>
+      <div className="relative overflow-hidden rounded-2xl bg-white p-4 shadow-sm border border-slate-100">
+        <div
+          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+          aria-hidden="true"
+        />
+        <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-3">Filters</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
           <div className="space-y-1">
             <label className="font-medium text-slate-700">Status</label>
@@ -315,9 +329,13 @@ export default function LeavesPage() {
       </div>
 
       {/* Leave list */}
-      <div className="rounded-2xl bg-white p-5 shadow-sm border border-slate-100">
+      <div className="relative overflow-hidden rounded-2xl bg-white p-5 shadow-sm border border-slate-100">
+        <div
+          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+          aria-hidden="true"
+        />
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-slate-900">Leave requests</h2>
+          <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">Leave requests</h2>
           {isAdmin && (
             <span className="text-[11px] text-slate-500">
               As admin you can approve or reject pending requests.
@@ -333,15 +351,15 @@ export default function LeavesPage() {
 
         <div className="overflow-x-auto text-sm">
           <table className="min-w-full border-separate border-spacing-y-2">
-            <thead>
-              <tr className="text-xs text-slate-400">
-                <th className="text-left px-2 py-1">Employee</th>
-                <th className="text-left px-2 py-1">Type</th>
-                <th className="text-left px-2 py-1">From</th>
-                <th className="text-left px-2 py-1">To</th>
-                <th className="text-left px-2 py-1">Days</th>
-                <th className="text-left px-2 py-1">Status</th>
-                {isAdmin && <th className="text-left px-2 py-1">Actions</th>}
+            <thead className="text-xs text-white">
+              <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
+                <th className="text-left px-2 py-2 font-semibold first:rounded-l-xl">Employee</th>
+                <th className="text-left px-2 py-2 font-semibold">Type</th>
+                <th className="text-left px-2 py-2 font-semibold">From</th>
+                <th className="text-left px-2 py-2 font-semibold">To</th>
+                <th className="text-left px-2 py-2 font-semibold">Days</th>
+                <th className="text-left px-2 py-2 font-semibold">Status</th>
+                {isAdmin && <th className="text-left px-2 py-2 font-semibold last:rounded-r-xl">Actions</th>}
               </tr>
             </thead>
             <tbody>
@@ -364,10 +382,10 @@ export default function LeavesPage() {
                   </td>
                 </tr>
               ) : (
-                filteredLeaves.map((leave) => (
+                filteredLeaves.map((leave, idx) => (
                   <tr
                     key={leave.id}
-                    className="bg-slate-50 hover:bg-slate-100 transition rounded-xl"
+                    className={`transition rounded-xl shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}
                   >
                     <td className="px-2 py-2 rounded-l-xl text-slate-800">
                       {leave.full_name}

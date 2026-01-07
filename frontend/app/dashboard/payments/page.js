@@ -230,22 +230,32 @@ export default function PaymentsPage() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
-      className="space-y-6"
+      className="space-y-6 bg-gradient-to-br from-slate-50 via-indigo-50/70 to-cyan-50/60 p-1 rounded-3xl"
     >
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-semibold text-slate-900">
-            Payments
-          </h1>
-          <p className="text-sm text-slate-500">
-            Track incoming payments against leads.
-          </p>
+        <div className="space-y-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 text-white text-[11px] font-semibold shadow-sm shadow-indigo-200">
+            <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
+            <span>Payment log</span>
+          </div>
+          <div>
+            <h1 className="text-xl font-semibold text-slate-900">
+              Payments
+            </h1>
+            <p className="text-sm text-slate-600">
+              Track incoming payments against leads.
+            </p>
+          </div>
         </div>
       </div>
 
       {/* Record payment */}
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
-        <h2 className="text-sm font-semibold text-slate-900 mb-3">
+      <div className="relative overflow-hidden bg-white/90 rounded-2xl border border-indigo-100/60 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 backdrop-blur">
+        <div
+          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+          aria-hidden="true"
+        />
+        <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-3">
           Record payment
         </h2>
 
@@ -393,9 +403,13 @@ export default function PaymentsPage() {
       </div>
 
       {/* Payments list */}
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
+      <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
+        <div
+          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+          aria-hidden="true"
+        />
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-slate-900">
+          <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
             Payment history
           </h2>
           {isAdminManager && (
@@ -407,16 +421,16 @@ export default function PaymentsPage() {
 
         <div className="overflow-x-auto text-sm">
           <table className="min-w-full border-separate border-spacing-y-2">
-            <thead>
-              <tr className="text-xs text-slate-400">
-                <th className="text-left px-3 py-1">Lead</th>
-                <th className="text-left px-3 py-1">Amount</th>
-                <th className="text-left px-3 py-1">Method</th>
-                <th className="text-left px-3 py-1">Status</th>
-                <th className="text-left px-3 py-1">Reference</th>
-                <th className="text-left px-3 py-1">Recorded by</th>
-                <th className="text-left px-3 py-1">Paid date</th>
-                <th className="text-left px-3 py-1">Created</th>
+            <thead className="text-xs text-white">
+              <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
+                <th className="text-left px-3 py-2 font-semibold first:rounded-l-xl">Lead</th>
+                <th className="text-left px-3 py-2 font-semibold">Amount</th>
+                <th className="text-left px-3 py-2 font-semibold">Method</th>
+                <th className="text-left px-3 py-2 font-semibold">Status</th>
+                <th className="text-left px-3 py-2 font-semibold">Reference</th>
+                <th className="text-left px-3 py-2 font-semibold">Recorded by</th>
+                <th className="text-left px-3 py-2 font-semibold">Paid date</th>
+                <th className="text-left px-3 py-2 font-semibold last:rounded-r-xl">Created</th>
               </tr>
             </thead>
             <tbody>
@@ -439,10 +453,10 @@ export default function PaymentsPage() {
                   </td>
                 </tr>
               ) : (
-                payments.map((p) => (
+                payments.map((p, idx) => (
                   <tr
                     key={p.id}
-                    className="bg-slate-50 rounded-xl hover:bg-slate-100"
+                    className={`rounded-xl shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}
                   >
                     <td className="px-3 py-2 rounded-l-xl text-slate-900">
                       {p.lead_name || leadNameById(p.lead_id) || '—'}
@@ -460,7 +474,7 @@ export default function PaymentsPage() {
                           onChange={(e) =>
                             handleStatusChange(p.id, e.target.value)
                           }
-                          className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs"
+                          className="rounded-full border border-indigo-100 bg-white px-3 py-1 text-xs shadow-sm hover:border-indigo-200"
                         >
                           {STATUS_OPTIONS.map((s) => (
                             <option key={s.value} value={s.value}>

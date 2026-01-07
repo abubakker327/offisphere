@@ -73,6 +73,161 @@ export default function DashboardHome() {
     lop_days: 0
   };
 
+  const renderKpiIcon = (name, color = '#0f172a') => {
+    const base = 'w-4 h-4';
+    const props = { fill: 'none', stroke: color, strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' };
+    switch (name) {
+      case 'leaf':
+        return (
+          <svg className={base} viewBox="0 0 24 24" {...props}>
+            <path d="M5 21c8 0 14-6 14-14 0 0-12 0-14 12" />
+            <path d="M9 15c-2.5 0-4-1.5-4-4" />
+          </svg>
+        );
+      case 'clock':
+        return (
+          <svg className={base} viewBox="0 0 24 24" {...props}>
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 6v6l3 3" />
+          </svg>
+        );
+      case 'users':
+        return (
+          <svg className={base} viewBox="0 0 24 24" {...props}>
+            <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
+        );
+      case 'pulse':
+        return (
+          <svg className={base} viewBox="0 0 24 24" {...props}>
+            <path d="M2 12h4l2 7 4-14 2 7h6" />
+          </svg>
+        );
+      case 'calendar':
+        return (
+          <svg className={base} viewBox="0 0 24 24" {...props}>
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <path d="M16 2v4" />
+            <path d="M8 2v4" />
+            <path d="M3 10h18" />
+          </svg>
+        );
+      case 'list':
+        return (
+          <svg className={base} viewBox="0 0 24 24" {...props}>
+            <path d="M9 6h12" />
+            <path d="M9 12h12" />
+            <path d="M9 18h12" />
+            <path d="M5 6h.01" />
+            <path d="M5 12h.01" />
+            <path d="M5 18h.01" />
+          </svg>
+        );
+      case 'monitor':
+        return (
+          <svg className={base} viewBox="0 0 24 24" {...props}>
+            <rect x="2" y="3" width="20" height="14" rx="2" />
+            <path d="M12 17v4" />
+            <path d="M8 21h8" />
+          </svg>
+        );
+      case 'file':
+        return (
+          <svg className={base} viewBox="0 0 24 24" {...props}>
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
+            <path d="M14 2v6h6" />
+          </svg>
+        );
+      case 'quote':
+        return (
+          <svg className={base} viewBox="0 0 24 24" {...props}>
+            <path d="M7 7h10" />
+            <path d="M7 12h10" />
+            <path d="M7 17h6" />
+            <path d="M17 17h0" />
+          </svg>
+        );
+      case 'truck':
+        return (
+          <svg className={base} viewBox="0 0 24 24" {...props}>
+            <path d="M10 17h4" />
+            <path d="M3 17h2" />
+            <path d="M17 17h2" />
+            <path d="M3 13V6a1 1 0 0 1 1-1h11v12H4a1 1 0 0 1-1-1Z" />
+            <path d="M14 8h4l3 3v6a1 1 0 0 1-1 1h-2" />
+            <circle cx="5.5" cy="17.5" r="1.5" />
+            <circle cx="17.5" cy="17.5" r="1.5" />
+          </svg>
+        );
+      case 'cash':
+        return (
+          <svg className={base} viewBox="0 0 24 24" {...props}>
+            <rect x="2" y="5" width="20" height="14" rx="2" />
+            <circle cx="12" cy="12" r="3" />
+            <path d="M7 10h.01M17 14h.01" />
+          </svg>
+        );
+      default:
+        return <span className={base}>•</span>;
+    }
+  };
+  const renderQAIcon = (name) => {
+    const common = 'w-4 h-4 text-white';
+    switch (name) {
+      case 'user':
+        return (
+          <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+          </svg>
+        );
+      case 'clock':
+        return (
+          <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 6v6l3 3" />
+          </svg>
+        );
+      case 'check':
+        return (
+          <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M20 6 9 17l-5-5" />
+          </svg>
+        );
+      case 'tasks':
+        return (
+          <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 6h11" />
+            <path d="M9 12h11" />
+            <path d="M9 18h11" />
+            <path d="m3 6 1.5 1.5L6 6" />
+            <path d="m3 12 1.5 1.5L6 12" />
+            <path d="m3 18 1.5 1.5L6 18" />
+          </svg>
+        );
+      case 'device':
+        return (
+          <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="4" width="18" height="14" rx="2" />
+            <path d="M8 20h8" />
+          </svg>
+        );
+      case 'money':
+        return (
+          <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v10" />
+            <path d="M8.5 9.5A3.5 3.5 0 0 1 12 7h1a3 3 0 1 1 0 6h-2a3 3 0 1 0 0 6h1.5a3.5 3.5 0 0 0 3.5-3.5" />
+          </svg>
+        );
+      default:
+        return <span className={common}>•</span>;
+    }
+  };
+
   const cardVariants = {
     hidden: { opacity: 0, y: 10 },
     visible: (i) => ({
@@ -82,7 +237,7 @@ export default function DashboardHome() {
     })
   };
 
-  const GlowCard = ({ title, accent, index = 0, children }) => (
+  const GlowCard = ({ title, accent, index = 0, children, cardKey }) => (
     <motion.div
       custom={index}
       variants={cardVariants}
@@ -104,7 +259,9 @@ export default function DashboardHome() {
           <p className={`text-xs font-semibold tracking-wide ${accent.title}`}>
             {title}
           </p>
-          <span className={`h-2 w-8 rounded-full ${accent.pill}`} />
+          <div className="h-8 w-8 rounded-full bg-white/30 border border-white/40 flex items-center justify-center">
+            {renderKpiIcon(accent.icon || 'pulse', accent.iconColor || '#0f172a')}
+          </div>
         </div>
         {children}
       </div>
@@ -175,8 +332,9 @@ export default function DashboardHome() {
         </div>
       )}
 
-      {/* Top row: Leaves + Attendance + Users + Leave Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="space-y-4">
+        {/* Top row: Leaves + Attendance + Users + Leave Summary */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {loading ? (
           <>
             {skeletonCard}
@@ -189,6 +347,7 @@ export default function DashboardHome() {
             {/* Leaves */}
             <GlowCard
               index={0}
+              cardKey="leaves"
               title="LEAVES"
               accent={{
                 border: 'border-indigo-100/70',
@@ -196,7 +355,9 @@ export default function DashboardHome() {
                 glowA: 'bg-indigo-400/15',
                 glowB: 'bg-purple-300/15',
                 title: 'text-indigo-600',
-                pill: 'bg-indigo-500/60'
+                pill: 'bg-indigo-500/60',
+                icon: 'leaf',
+                iconColor: '#4f46e5'
               }}
             >
               <div className="flex items-center justify-between">
@@ -228,6 +389,7 @@ export default function DashboardHome() {
             {/* Attendance */}
             <GlowCard
               index={1}
+              cardKey="attendance"
               title="ATTENDANCE"
               accent={{
                 border: 'border-sky-100/70',
@@ -235,7 +397,9 @@ export default function DashboardHome() {
                 glowA: 'bg-cyan-400/18',
                 glowB: 'bg-sky-300/14',
                 title: 'text-sky-600',
-                pill: 'bg-sky-400/60'
+                pill: 'bg-sky-400/60',
+                icon: 'clock',
+                iconColor: '#0ea5e9'
               }}
             >
               <div className="flex items-center justify-between">
@@ -260,6 +424,7 @@ export default function DashboardHome() {
             {/* Users */}
             <GlowCard
               index={2}
+              cardKey="users"
               title="USERS"
               accent={{
                 border: 'border-emerald-100/70',
@@ -267,7 +432,9 @@ export default function DashboardHome() {
                 glowA: 'bg-emerald-300/16',
                 glowB: 'bg-teal-300/14',
                 title: 'text-emerald-600',
-                pill: 'bg-emerald-400/60'
+                pill: 'bg-emerald-400/60',
+                icon: 'users',
+                iconColor: '#10b981'
               }}
             >
               <div className="flex items-center justify-between">
@@ -299,6 +466,7 @@ export default function DashboardHome() {
             {/* Leave summary */}
             <GlowCard
               index={3}
+              cardKey="workforce"
               title="WORKFORCE PULSE"
               accent={{
                 border: 'border-cyan-100/70',
@@ -306,7 +474,9 @@ export default function DashboardHome() {
                 glowA: 'bg-cyan-300/16',
                 glowB: 'bg-teal-200/14',
                 title: 'text-cyan-600',
-                pill: 'bg-cyan-400/70'
+                pill: 'bg-cyan-400/70',
+                icon: 'pulse',
+                iconColor: '#06b6d4'
               }}
             >
               <div className="grid grid-cols-1 gap-2 text-xs text-slate-700">
@@ -357,6 +527,7 @@ export default function DashboardHome() {
             {/* Timesheets */}
             <GlowCard
               index={4}
+              cardKey="timesheets"
               title="TIMESHEETS"
               accent={{
                 border: 'border-slate-100/70',
@@ -364,7 +535,9 @@ export default function DashboardHome() {
                 glowA: 'bg-slate-300/20',
                 glowB: 'bg-sky-200/16',
                 title: 'text-slate-600',
-                pill: 'bg-slate-300/70'
+                pill: 'bg-slate-300/70',
+                icon: 'calendar',
+                iconColor: '#64748b'
               }}
             >
               <div className="flex items-center justify-between">
@@ -388,6 +561,7 @@ export default function DashboardHome() {
             {/* Tasks */}
             <GlowCard
               index={5}
+              cardKey="tasks"
               title="TASKS"
               accent={{
                 border: 'border-amber-100/70',
@@ -395,7 +569,9 @@ export default function DashboardHome() {
                 glowA: 'bg-orange-300/16',
                 glowB: 'bg-amber-200/12',
                 title: 'text-amber-600',
-                pill: 'bg-amber-400/70'
+                pill: 'bg-amber-400/70',
+                icon: 'list',
+                iconColor: '#f59e0b'
               }}
             >
               <div className="flex items-center justify-between">
@@ -431,6 +607,7 @@ export default function DashboardHome() {
             {/* Devices */}
             <GlowCard
               index={6}
+              cardKey="devices"
               title="DEVICES"
               accent={{
                 border: 'border-rose-100/70',
@@ -438,7 +615,9 @@ export default function DashboardHome() {
                 glowA: 'bg-rose-300/18',
                 glowB: 'bg-pink-200/14',
                 title: 'text-rose-600',
-                pill: 'bg-rose-400/70'
+                pill: 'bg-rose-400/70',
+                icon: 'monitor',
+                iconColor: '#e11d48'
               }}
             >
               <div className="flex items-center justify-between">
@@ -468,6 +647,7 @@ export default function DashboardHome() {
             {/* Documents */}
             <GlowCard
               index={7}
+              cardKey="documents"
               title="DOCUMENTS"
               accent={{
                 border: 'border-indigo-100/70',
@@ -475,7 +655,9 @@ export default function DashboardHome() {
                 glowA: 'bg-indigo-300/16',
                 glowB: 'bg-blue-200/12',
                 title: 'text-indigo-600',
-                pill: 'bg-indigo-400/70'
+                pill: 'bg-indigo-400/70',
+                icon: 'file',
+                iconColor: '#4f46e5'
               }}
             >
               <div className="flex items-center justify-between">
@@ -492,6 +674,132 @@ export default function DashboardHome() {
           </>
         )}
       </div>
+
+      {/* Sales & Accounts snapshots */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {loading ? (
+          <>
+            {skeletonCard}
+            {skeletonCard}
+            {skeletonCard}
+          </>
+        ) : (
+          <>
+            <GlowCard
+              index={8}
+              cardKey="sales_quotes"
+              title="SALES QUOTES"
+              accent={{
+                border: 'border-fuchsia-100/70',
+                bg: 'bg-gradient-to-br from-fuchsia-400/14 via-pink-200/12 to-white',
+                glowA: 'bg-fuchsia-300/16',
+                glowB: 'bg-pink-200/14',
+                title: 'text-fuchsia-600',
+                pill: 'bg-fuchsia-400/70',
+                icon: 'quote',
+                iconColor: '#c026d3'
+              }}
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-2xl font-semibold text-slate-900">
+                    {s.sales?.quotations ?? 0}
+                  </div>
+                  <p className="text-xs text-slate-500">Quotations created</p>
+                </div>
+                <div className="text-right text-xs text-slate-600">
+                  <p>
+                    Open:{' '}
+                    <span className="font-semibold text-fuchsia-600">
+                      {s.sales?.quotations_open ?? 0}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </GlowCard>
+
+            <GlowCard
+              index={9}
+              cardKey="orders_delivery"
+              title="ORDERS & DELIVERY"
+              accent={{
+                border: 'border-sky-100/70',
+                bg: 'bg-gradient-to-br from-sky-400/14 via-blue-200/12 to-white',
+                glowA: 'bg-blue-300/16',
+                glowB: 'bg-sky-200/14',
+                title: 'text-sky-600',
+                pill: 'bg-sky-400/70',
+                icon: 'truck',
+                iconColor: '#0ea5e9'
+              }}
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-2xl font-semibold text-slate-900">
+                    {s.sales?.orders ?? 0}
+                  </div>
+                  <p className="text-xs text-slate-500">Sales orders</p>
+                </div>
+                <div className="text-right text-xs text-slate-600 space-y-1">
+                  <p>
+                    Deliveries:{' '}
+                    <span className="font-semibold text-sky-600">
+                      {s.sales?.deliveries ?? 0}
+                    </span>
+                  </p>
+                  <p>
+                    Pending:{' '}
+                    <span className="font-semibold text-amber-600">
+                      {s.sales?.orders_pending ?? 0}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </GlowCard>
+
+            <GlowCard
+              index={10}
+              cardKey="invoices_cash"
+              title="INVOICES & CASH"
+              accent={{
+                border: 'border-emerald-100/70',
+                bg: 'bg-gradient-to-br from-emerald-400/14 via-teal-200/12 to-white',
+                glowA: 'bg-emerald-300/16',
+                glowB: 'bg-teal-200/14',
+                title: 'text-emerald-600',
+                pill: 'bg-emerald-400/70',
+                icon: 'cash',
+                iconColor: '#059669'
+              }}
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-2xl font-semibold text-slate-900">
+                    {s.sales?.invoices ?? 0}
+                  </div>
+                  <p className="text-xs text-slate-500">Invoices posted</p>
+                </div>
+                <div className="text-right text-xs text-slate-600 space-y-1">
+                  <p>
+                    Cash in:{' '}
+                    <span className="font-semibold text-emerald-600">
+                      {s.sales?.payments_in ?? 0}
+                    </span>
+                  </p>
+                  <p>
+                    Cash out:{' '}
+                    <span className="font-semibold text-rose-600">
+                      {s.sales?.payments_out ?? 0}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </GlowCard>
+          </>
+        )}
+      </div>
+
+      </div> {/* end drag container */}
 
       {/* Quick actions */}
       <motion.div
@@ -510,129 +818,78 @@ export default function DashboardHome() {
           </span>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
           {[
             {
               href: '/dashboard/users',
               title: 'Add user',
               desc: 'Create a new employee',
-              gradient: 'from-indigo-500/90 to-purple-500/90'
+              gradient: 'from-indigo-500 to-purple-500',
+              icon: 'user'
             },
             {
               href: '/dashboard/attendance',
               title: 'Record attendance',
               desc: 'Check-in / Check-out',
-              gradient: 'from-sky-500/90 to-cyan-500/90'
+              gradient: 'from-sky-500 to-cyan-500',
+              icon: 'clock'
             },
             {
               href: '/dashboard/leaves',
               title: 'Review leaves',
               desc: 'Approve / reject requests',
-              gradient: 'from-emerald-500/90 to-teal-500/90'
+              gradient: 'from-emerald-500 to-teal-500',
+              icon: 'check'
             },
             {
               href: '/dashboard/tasks',
               title: 'Create task',
               desc: 'Assign work to team',
-              gradient: 'from-amber-500/90 to-orange-500/90'
+              gradient: 'from-amber-500 to-orange-500',
+              icon: 'tasks'
             },
             {
               href: '/dashboard/devices',
               title: 'Assign device',
               desc: 'Laptop / phone / assets',
-              gradient: 'from-rose-500/90 to-pink-500/90'
+              gradient: 'from-rose-500 to-pink-500',
+              icon: 'device'
+            },
+            {
+              href: '/dashboard/sales-accounts',
+              title: 'Sales & Accounts',
+              desc: 'Quotes, orders, invoices, payments',
+              gradient: 'from-fuchsia-500 to-violet-500',
+              icon: 'money'
             }
           ].map((item) => (
             <motion.div
               key={item.href}
-              whileHover={{ y: -3, scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              whileHover={{ y: -4, scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
               transition={{ duration: 0.15 }}
             >
               <Link
                 href={item.href}
-                className={`flex flex-col gap-1 px-3 py-2 rounded-2xl bg-gradient-to-br ${item.gradient} text-white shadow hover:shadow-lg transition`}
+                className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-white shadow hover:shadow-lg transition bg-gradient-to-r ${item.gradient}`}
               >
-                <span className="font-semibold text-xs">{item.title}</span>
-                <span className="text-[11px] text-indigo-50/90">
-                  {item.desc}
-                </span>
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 border border-white/10">
+                  {renderQAIcon(item.icon)}
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-semibold text-sm">
+                    {item.title}
+                  </span>
+                  <span className="text-[11px] text-white/90">
+                    {item.desc}
+                  </span>
+                </div>
               </Link>
             </motion.div>
           ))}
         </div>
       </motion.div>
 
-      {/* Recent attendance */}
-      <motion.div
-        custom={9}
-        variants={cardVariants}
-        initial="hidden"
-        animate="visible"
-        className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
-      >
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-slate-900">
-            Recent attendance
-          </h2>
-          <Link
-            href="/dashboard/attendance"
-            className="text-xs text-indigo-600 hover:underline"
-          >
-            View all
-          </Link>
-        </div>
-        <div className="overflow-x-auto text-sm">
-          <table className="min-w-full border-separate border-spacing-y-2">
-            <thead>
-              <tr className="text-xs text-slate-400">
-                <th className="text-left px-3 py-1">Employee</th>
-                <th className="text-left px-3 py-1">Date</th>
-                <th className="text-left px-3 py-1">Check in</th>
-                <th className="text-left px-3 py-1">Check out</th>
-                <th className="text-left px-3 py-1">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {s.recent_attendance?.length ? (
-                s.recent_attendance.map((row) => (
-                  <tr
-                    key={row.id}
-                    className="bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors"
-                  >
-                    <td className="px-3 py-2 rounded-l-xl text-slate-900">
-                      {row.employee_name || row.user_name || '--'}
-                    </td>
-                    <td className="px-3 py-2 text-slate-600 text-xs">
-                      {formatDate(row.date)}
-                    </td>
-                    <td className="px-3 py-2 text-xs text-slate-600">
-                      {formatTime(row.check_in)}
-                    </td>
-                    <td className="px-3 py-2 text-xs text-slate-600">
-                      {formatTime(row.check_out)}
-                    </td>
-                    <td className="px-3 py-2 rounded-r-xl text-xs">
-                      <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
-                        {row.status || 'On_time'}
-                      </span>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan={5}
-                    className="px-3 py-6 text-center text-xs text-slate-400"
-                  >
-                    No recent attendance records.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </motion.div>
     </motion.div>
   );
 }

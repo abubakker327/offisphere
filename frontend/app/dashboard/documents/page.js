@@ -219,20 +219,30 @@ export default function DocumentsPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-semibold text-slate-900">
-          Documents
-        </h1>
-        <p className="text-sm text-slate-500">
-          Store links to policies, SOPs, contracts and other important
-          documents.
-        </p>
+    <div className="space-y-6 bg-gradient-to-br from-slate-50 via-indigo-50/70 to-cyan-50/60 p-1 rounded-3xl">
+      <div className="space-y-2">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 text-white text-[11px] font-semibold shadow-sm shadow-indigo-200">
+          <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
+          <span>Document hub</span>
+        </div>
+        <div>
+          <h1 className="text-xl font-semibold text-slate-900">
+            Documents
+          </h1>
+          <p className="text-sm text-slate-600">
+            Store links to policies, SOPs, contracts and other important
+            documents.
+          </p>
+        </div>
       </div>
 
       {/* Create document */}
-      <div className="rounded-2xl bg-white border border-slate-100 shadow-sm p-4">
-        <h2 className="text-sm font-semibold text-slate-900 mb-3">
+      <div className="relative overflow-hidden rounded-2xl bg-white/90 border border-indigo-100/60 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 backdrop-blur">
+        <div
+          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+          aria-hidden="true"
+        />
+        <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-3">
           Add new document
         </h2>
 
@@ -335,8 +345,12 @@ export default function DocumentsPage() {
       </div>
 
       {/* Documents list */}
-      <div className="rounded-2xl bg-white border border-slate-100 shadow-sm p-4">
-        <h2 className="text-sm font-semibold text-slate-900 mb-3">
+      <div className="relative overflow-hidden rounded-2xl bg-white border border-slate-100 shadow-sm p-4">
+        <div
+          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+          aria-hidden="true"
+        />
+        <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-3">
           Documents library
         </h2>
 
@@ -348,14 +362,14 @@ export default function DocumentsPage() {
 
         <div className="overflow-x-auto text-sm">
           <table className="min-w-full border-separate border-spacing-y-2">
-            <thead>
-              <tr className="text-xs text-slate-400">
-                <th className="text-left px-3 py-1">Title</th>
-                <th className="text-left px-3 py-1">Category</th>
-                <th className="text-left px-3 py-1">Visibility</th>
-                <th className="text-left px-3 py-1">Link</th>
-                <th className="text-left px-3 py-1">Created</th>
-                <th className="text-right px-3 py-1">Actions</th>
+            <thead className="text-xs text-white">
+              <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
+                <th className="text-left px-3 py-2 font-semibold first:rounded-l-xl">Title</th>
+                <th className="text-left px-3 py-2 font-semibold">Category</th>
+                <th className="text-left px-3 py-2 font-semibold">Visibility</th>
+                <th className="text-left px-3 py-2 font-semibold">Link</th>
+                <th className="text-left px-3 py-2 font-semibold">Created</th>
+                <th className="text-right px-3 py-2 font-semibold last:rounded-r-xl">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -378,10 +392,10 @@ export default function DocumentsPage() {
                   </td>
                 </tr>
               ) : (
-                documents.map((doc) => (
+                documents.map((doc, idx) => (
                   <tr
                     key={doc.id}
-                    className="bg-slate-50 hover:bg-slate-100 rounded-xl"
+                    className={`rounded-xl shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}
                   >
                     <td className="px-3 py-3 rounded-l-xl text-slate-900">
                       {doc.title}

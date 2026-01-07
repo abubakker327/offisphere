@@ -229,13 +229,18 @@ export default function SalesFlowPage() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
-      className="space-y-6"
-    >
-      <div>
-        <h1 className="text-xl font-semibold text-slate-900">Sales Flow</h1>
-        <p className="text-sm text-slate-500">
-          Quotations → Orders → Delivery → Invoice with GST, serials for panels/projectors.
-        </p>
+      className="space-y-6 bg-gradient-to-br from-slate-50 via-indigo-50/70 to-cyan-50/60 p-1 rounded-3xl"
+    >      <div className="space-y-2">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 text-white text-[11px] font-semibold shadow-sm shadow-indigo-200">
+          <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
+          <span>Sales pipeline</span>
+        </div>
+        <div>
+          <h1 className="text-xl font-semibold text-slate-900">Sales Flow</h1>
+          <p className="text-sm text-slate-600">
+            Quotations - Orders - Delivery - Invoice with GST, serials for panels/projectors.
+          </p>
+        </div>
       </div>
 
       {error && (
@@ -255,8 +260,12 @@ export default function SalesFlowPage() {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="rounded-2xl border border-slate-100 bg-white shadow-sm p-4 space-y-2">
-          <h3 className="text-sm font-semibold text-slate-900">Quotation / Sales Order</h3>
+        <div className="relative overflow-hidden rounded-2xl border border-indigo-100/60 bg-white/90 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 space-y-2 backdrop-blur">
+          <div
+            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+            aria-hidden="true"
+          />
+          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">Quotation / Sales Order</h3>
           <div className="grid grid-cols-1 gap-2 text-xs">
             <div className="space-y-1">
               <label className="text-[11px] text-slate-500">Customer</label>
@@ -334,8 +343,12 @@ export default function SalesFlowPage() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-100 bg-white shadow-sm p-4 space-y-2">
-          <h3 className="text-sm font-semibold text-slate-900">Delivery & Invoice</h3>
+        <div className="relative overflow-hidden rounded-2xl border border-indigo-100/60 bg-white/90 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 space-y-2 backdrop-blur">
+          <div
+            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+            aria-hidden="true"
+          />
+          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">Delivery & Invoice</h3>
           <div className="grid grid-cols-1 gap-2 text-xs">
             <div className="space-y-1">
               <label className="text-[11px] text-slate-500">Sales Order ID</label>
@@ -480,15 +493,19 @@ export default function SalesFlowPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
-          <h3 className="text-sm font-semibold text-slate-900 mb-2">Recent Quotations</h3>
+        <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
+          <div
+            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+            aria-hidden="true"
+          />
+          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-2">Recent Quotations</h3>
           <div className="overflow-x-auto text-xs">
             <table className="min-w-full border-separate border-spacing-y-1">
-              <thead>
-                <tr className="text-[11px] text-slate-400">
-                  <th className="text-left px-2 py-1">Quote #</th>
-                  <th className="text-left px-2 py-1">Customer</th>
-                  <th className="text-left px-2 py-1">Status</th>
+              <thead className="text-[11px] text-white">
+                <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
+                  <th className="text-left px-2 py-2 font-semibold first:rounded-l-xl">Quote #</th>
+                  <th className="text-left px-2 py-2 font-semibold">Customer</th>
+                  <th className="text-left px-2 py-2 font-semibold last:rounded-r-xl">Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -499,8 +516,8 @@ export default function SalesFlowPage() {
                     </td>
                   </tr>
                 ) : (
-                  quotations.slice(0, 8).map((q) => (
-                    <tr key={q.id} className="bg-slate-50 rounded">
+                  quotations.slice(0, 8).map((q, idx) => (
+                    <tr key={q.id} className={`rounded shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}>
                       <td className="px-2 py-2 text-slate-900">{q.quote_number || q.id}</td>
                       <td className="px-2 py-2 text-slate-600">{customerName(q.customer_id)}</td>
                       <td className="px-2 py-2 text-slate-600">{q.status || '-'}</td>
@@ -512,15 +529,19 @@ export default function SalesFlowPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
-          <h3 className="text-sm font-semibold text-slate-900 mb-2">Recent Orders</h3>
+        <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
+          <div
+            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+            aria-hidden="true"
+          />
+          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-2">Recent Orders</h3>
           <div className="overflow-x-auto text-xs">
             <table className="min-w-full border-separate border-spacing-y-1">
-              <thead>
-                <tr className="text-[11px] text-slate-400">
-                  <th className="text-left px-2 py-1">SO #</th>
-                  <th className="text-left px-2 py-1">Customer</th>
-                  <th className="text-left px-2 py-1">Status</th>
+              <thead className="text-[11px] text-white">
+                <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
+                  <th className="text-left px-2 py-2 font-semibold first:rounded-l-xl">SO #</th>
+                  <th className="text-left px-2 py-2 font-semibold">Customer</th>
+                  <th className="text-left px-2 py-2 font-semibold last:rounded-r-xl">Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -531,8 +552,8 @@ export default function SalesFlowPage() {
                     </td>
                   </tr>
                 ) : (
-                  orders.slice(0, 8).map((o) => (
-                    <tr key={o.id} className="bg-slate-50 rounded">
+                  orders.slice(0, 8).map((o, idx) => (
+                    <tr key={o.id} className={`rounded shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}>
                       <td className="px-2 py-2 text-slate-900">{o.so_number || o.id}</td>
                       <td className="px-2 py-2 text-slate-600">{customerName(o.customer_id)}</td>
                       <td className="px-2 py-2 text-slate-600">{o.status || '-'}</td>
@@ -544,15 +565,19 @@ export default function SalesFlowPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
-          <h3 className="text-sm font-semibold text-slate-900 mb-2">Recent Invoices</h3>
+        <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
+          <div
+            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+            aria-hidden="true"
+          />
+          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-2">Recent Invoices</h3>
           <div className="overflow-x-auto text-xs">
             <table className="min-w-full border-separate border-spacing-y-1">
-              <thead>
-                <tr className="text-[11px] text-slate-400">
-                  <th className="text-left px-2 py-1">Invoice #</th>
-                  <th className="text-left px-2 py-1">Customer</th>
-                  <th className="text-left px-2 py-1">Status</th>
+              <thead className="text-[11px] text-white">
+                <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
+                  <th className="text-left px-2 py-2 font-semibold first:rounded-l-xl">Invoice #</th>
+                  <th className="text-left px-2 py-2 font-semibold">Customer</th>
+                  <th className="text-left px-2 py-2 font-semibold last:rounded-r-xl">Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -563,8 +588,8 @@ export default function SalesFlowPage() {
                     </td>
                   </tr>
                 ) : (
-                  invoices.slice(0, 8).map((inv) => (
-                    <tr key={inv.id} className="bg-slate-50 rounded">
+                  invoices.slice(0, 8).map((inv, idx) => (
+                    <tr key={inv.id} className={`rounded shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}>
                       <td className="px-2 py-2 text-slate-900">{inv.invoice_number || inv.id}</td>
                       <td className="px-2 py-2 text-slate-600">{customerName(inv.customer_id)}</td>
                       <td className="px-2 py-2 text-slate-600">{inv.status || '-'}</td>
@@ -576,16 +601,20 @@ export default function SalesFlowPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
-          <h3 className="text-sm font-semibold text-slate-900 mb-2">Recent deliveries (from stock ledger)</h3>
+        <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
+          <div
+            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+            aria-hidden="true"
+          />
+          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-2">Recent deliveries (from stock ledger)</h3>
           <div className="overflow-x-auto text-xs">
             <table className="min-w-full border-separate border-spacing-y-1">
-              <thead>
-                <tr className="text-[11px] text-slate-400">
-                  <th className="text-left px-2 py-1">Ref</th>
-                  <th className="text-left px-2 py-1">Product</th>
-                  <th className="text-left px-2 py-1">Warehouse</th>
-                  <th className="text-left px-2 py-1">Qty</th>
+              <thead className="text-[11px] text-white">
+                <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
+                  <th className="text-left px-2 py-2 font-semibold first:rounded-l-xl">Ref</th>
+                  <th className="text-left px-2 py-2 font-semibold">Product</th>
+                  <th className="text-left px-2 py-2 font-semibold">Warehouse</th>
+                  <th className="text-left px-2 py-2 font-semibold last:rounded-r-xl">Qty</th>
                 </tr>
               </thead>
               <tbody>
@@ -596,8 +625,8 @@ export default function SalesFlowPage() {
                     </td>
                   </tr>
                 ) : (
-                  deliveries.map((row) => (
-                    <tr key={row.id} className="bg-slate-50 rounded">
+                  deliveries.map((row, idx) => (
+                    <tr key={row.id} className={`rounded shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}>
                       <td className="px-2 py-2 text-slate-900">
                         {row.ref_type} #{row.ref_id}
                       </td>

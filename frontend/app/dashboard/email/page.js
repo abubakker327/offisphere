@@ -143,18 +143,24 @@ export default function EmailPage() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
-      className="space-y-6"
+      className="space-y-6 bg-gradient-to-br from-slate-50 via-indigo-50/70 to-cyan-50/60 p-1 rounded-3xl"
     >
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-semibold text-slate-900">
-            Email templates
-          </h1>
-          <p className="text-sm text-slate-500">
-            Manage subjects and bodies for automated emails like leaves,
-            tasks and payroll.
-          </p>
+        <div className="space-y-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 text-white text-[11px] font-semibold shadow-sm shadow-indigo-200">
+            <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
+            <span>Template studio</span>
+          </div>
+          <div>
+            <h1 className="text-xl font-semibold text-slate-900">
+              Email templates
+            </h1>
+            <p className="text-sm text-slate-600">
+              Manage subjects and bodies for automated emails like leaves,
+              tasks and payroll.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -170,10 +176,14 @@ export default function EmailPage() {
         {/* Templates list */}
         <motion.div
           whileHover={{ y: -2 }}
-          className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 lg:col-span-2"
+          className="relative overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-sm p-4 lg:col-span-2"
         >
+          <div
+            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+            aria-hidden="true"
+          />
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-semibold text-slate-900">
+            <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
               Templates
             </h2>
           </div>
@@ -235,10 +245,14 @@ export default function EmailPage() {
         {/* Form */}
         <motion.div
           whileHover={{ y: -2 }}
-          className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
+          className="relative overflow-hidden bg-white/90 rounded-2xl border border-indigo-100/60 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 backdrop-blur"
         >
+          <div
+            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+            aria-hidden="true"
+          />
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-semibold text-slate-900">
+            <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
               {editingId ? 'Edit template' : 'New template'}
             </h2>
             {editingId && (

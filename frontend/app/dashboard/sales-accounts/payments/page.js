@@ -133,13 +133,19 @@ export default function PaymentsSAPage() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
-      className="space-y-6"
+      className="space-y-6 bg-gradient-to-br from-slate-50 via-indigo-50/70 to-cyan-50/60 p-1 rounded-3xl"
     >
-      <div>
-        <h1 className="text-xl font-semibold text-slate-900">Payments</h1>
-        <p className="text-sm text-slate-500">
-          Cash in (customers) and cash out (vendors) with balanced ledger enforcement.
-        </p>
+      <div className="space-y-2">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 text-white text-[11px] font-semibold shadow-sm shadow-indigo-200">
+          <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
+          <span>Cash desk</span>
+        </div>
+        <div>
+          <h1 className="text-xl font-semibold text-slate-900">Payments</h1>
+          <p className="text-sm text-slate-600">
+            Cash in (customers) and cash out (vendors) with balanced ledger enforcement.
+          </p>
+        </div>
       </div>
 
       {error && (
@@ -149,8 +155,12 @@ export default function PaymentsSAPage() {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="rounded-2xl border border-slate-100 bg-white shadow-sm p-4 space-y-2">
-          <h3 className="text-sm font-semibold text-slate-900">Customer Receipts</h3>
+        <div className="relative overflow-hidden rounded-2xl border border-indigo-100/60 bg-white/90 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 space-y-2 backdrop-blur">
+          <div
+            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+            aria-hidden="true"
+          />
+          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">Customer Receipts</h3>
           <div className="grid grid-cols-1 gap-2 text-xs">
             <input
               className="px-3 py-2 rounded-xl border border-slate-200"
@@ -207,8 +217,12 @@ export default function PaymentsSAPage() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-100 bg-white shadow-sm p-4 space-y-2">
-          <h3 className="text-sm font-semibold text-slate-900">Vendor Payments</h3>
+        <div className="relative overflow-hidden rounded-2xl border border-indigo-100/60 bg-white/90 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 space-y-2 backdrop-blur">
+          <div
+            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+            aria-hidden="true"
+          />
+          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">Vendor Payments</h3>
           <div className="grid grid-cols-1 gap-2 text-xs">
             <input
               className="px-3 py-2 rounded-xl border border-slate-200"
@@ -267,17 +281,21 @@ export default function PaymentsSAPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
-          <h3 className="text-sm font-semibold text-slate-900 mb-2">Recent Customer Payments</h3>
+        <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
+          <div
+            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+            aria-hidden="true"
+          />
+          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-2">Recent Customer Payments</h3>
           <div className="overflow-x-auto text-xs">
             <table className="min-w-full border-separate border-spacing-y-1">
-              <thead>
-                <tr className="text-[11px] text-slate-400">
-                  <th className="text-left px-2 py-1">Ref</th>
-                  <th className="text-left px-2 py-1">Customer</th>
-                  <th className="text-left px-2 py-1">Amount</th>
-                  <th className="text-left px-2 py-1">Method</th>
-                  <th className="text-left px-2 py-1">Status</th>
+              <thead className="text-[11px] text-white">
+                <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
+                  <th className="text-left px-2 py-2 font-semibold first:rounded-l-xl">Ref</th>
+                  <th className="text-left px-2 py-2 font-semibold">Customer</th>
+                  <th className="text-left px-2 py-2 font-semibold">Amount</th>
+                  <th className="text-left px-2 py-2 font-semibold">Method</th>
+                  <th className="text-left px-2 py-2 font-semibold last:rounded-r-xl">Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -291,8 +309,8 @@ export default function PaymentsSAPage() {
                   payments
                     .filter((p) => p.type === 'in')
                     .slice(0, 8)
-                    .map((p) => (
-                      <tr key={p.id} className="bg-slate-50 rounded">
+                    .map((p, idx) => (
+                      <tr key={p.id} className={`rounded shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}>
                         <td className="px-2 py-2 text-slate-900">{formatRef(p)}</td>
                         <td className="px-2 py-2 text-slate-600">{customerName(p.customer_id)}</td>
                         <td className="px-2 py-2 text-slate-900 font-semibold">{p.amount ?? '-'}</td>
@@ -306,17 +324,21 @@ export default function PaymentsSAPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
-          <h3 className="text-sm font-semibold text-slate-900 mb-2">Recent Vendor Payments</h3>
+        <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
+          <div
+            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+            aria-hidden="true"
+          />
+          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-2">Recent Vendor Payments</h3>
           <div className="overflow-x-auto text-xs">
             <table className="min-w-full border-separate border-spacing-y-1">
-              <thead>
-                <tr className="text-[11px] text-slate-400">
-                  <th className="text-left px-2 py-1">Ref</th>
-                  <th className="text-left px-2 py-1">Vendor</th>
-                  <th className="text-left px-2 py-1">Amount</th>
-                  <th className="text-left px-2 py-1">Method</th>
-                  <th className="text-left px-2 py-1">Status</th>
+              <thead className="text-[11px] text-white">
+                <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
+                  <th className="text-left px-2 py-2 font-semibold first:rounded-l-xl">Ref</th>
+                  <th className="text-left px-2 py-2 font-semibold">Vendor</th>
+                  <th className="text-left px-2 py-2 font-semibold">Amount</th>
+                  <th className="text-left px-2 py-2 font-semibold">Method</th>
+                  <th className="text-left px-2 py-2 font-semibold last:rounded-r-xl">Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -330,8 +352,8 @@ export default function PaymentsSAPage() {
                   payments
                     .filter((p) => p.type === 'out')
                     .slice(0, 8)
-                    .map((p) => (
-                      <tr key={p.id} className="bg-slate-50 rounded">
+                    .map((p, idx) => (
+                      <tr key={p.id} className={`rounded shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}>
                         <td className="px-2 py-2 text-slate-900">{formatRef(p)}</td>
                         <td className="px-2 py-2 text-slate-600">{vendorName(p.vendor_id)}</td>
                         <td className="px-2 py-2 text-slate-900 font-semibold">{p.amount ?? '-'}</td>

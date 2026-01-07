@@ -8,43 +8,43 @@ const tiles = [
     title: 'Masters',
     desc: 'Products, Vendors, Customers, GST',
     href: '/dashboard/sales-accounts/masters',
-    accent: 'from-[#8d7bff] via-[#7ab2ff] to-[#c6d3ff]',
-    emoji: '🗂️'
+    color: '#0fb472',
+    icon: '🗂️'
   },
   {
     title: 'Procurement',
     desc: 'PO, GRN, Vendor Bills',
     href: '/dashboard/sales-accounts/procurement',
-    accent: 'from-[#7ad7c4] via-[#59c9a5] to-[#b8f3e1]',
-    emoji: '📦'
+    color: '#f61b63',
+    icon: '📦'
   },
   {
     title: 'Inventory',
     desc: 'Stock Ledger, Serials, Warehouses',
     href: '/dashboard/sales-accounts/inventory',
-    accent: 'from-[#8ad8ff] via-[#69b7ff] to-[#bde5ff]',
-    emoji: '🏬'
+    color: '#1a7dff',
+    icon: '📊'
   },
   {
     title: 'Sales',
     desc: 'Quotations, Orders, Delivery, Invoices',
     href: '/dashboard/sales-accounts/sales',
-    accent: 'from-[#ff9fb2] via-[#f878a9] to-[#ffc7d9]',
-    emoji: '🧾'
+    color: '#f48c06',
+    icon: '🧾'
   },
   {
     title: 'Payments',
     desc: 'Cash In (customers) & Out (vendors)',
     href: '/dashboard/sales-accounts/payments',
-    accent: 'from-[#7fd1ff] via-[#5fb3ff] to-[#b3e4ff]',
-    emoji: '💸'
+    color: '#00b3d8',
+    icon: '💸'
   },
   {
     title: 'Accounting',
     desc: 'Ledger entries, Profit & Loss',
     href: '/dashboard/sales-accounts/accounting',
-    accent: 'from-[#96f2a9] via-[#6fdd8c] to-[#c4ffcf]',
-    emoji: '📊'
+    color: '#7c4dff',
+    icon: '📈'
   }
 ];
 
@@ -81,34 +81,40 @@ export default function SalesAccountsHome() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {tiles.map((tile, idx) => (
-          <motion.div
-            key={tile.href}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.05 * idx, duration: 0.25 }}
-            whileHover={{ y: -6, scale: 1.01 }}
-            className="relative overflow-hidden rounded-3xl shadow-[0_16px_30px_rgba(0,0,0,0.12)] p-4"
-          >
-            <div className={`absolute inset-0 bg-gradient-to-br ${tile.accent}`} />
-            <div className="absolute inset-0 bg-white/20 mix-blend-overlay" />
-            <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute -left-10 top-4 h-40 w-40 rounded-full bg-white/12 blur-2xl" />
-              <div className="absolute -right-6 -bottom-6 h-24 w-24 rounded-full bg-white/18 blur-2xl" />
-            </div>
-            <div className="relative flex flex-col gap-3 text-white drop-shadow-sm">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold">{tile.title}</h3>
-                <span className="text-lg">{tile.emoji}</span>
+          <Link key={tile.href} href={tile.href} className="block h-full">
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05 * idx, duration: 0.25 }}
+              whileHover={{
+                rotateX: 2,
+                rotateY: -2,
+                y: -4,
+                transformPerspective: 900,
+                transition: { type: 'spring', stiffness: 140, damping: 16 }
+              }}
+              whileTap={{ scale: 0.99 }}
+              className="tilt-card relative overflow-hidden rounded-[32px] shadow-[0_20px_40px_rgba(0,0,0,0.18)] p-6 border border-white/25 backdrop-blur-sm h-56"
+              style={{ background: tile.color }}
+            >
+              <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute -left-6 top-3 h-36 w-36 rounded-full bg-white/12 blur-2xl" />
+                <div className="absolute right-2 -bottom-10 h-32 w-32 rounded-full bg-white/18 blur-2xl" />
+                <div className="absolute right-8 top-10 h-20 w-20 rounded-full bg-white/14 blur-xl" />
               </div>
-              <p className="text-xs text-white/90">{tile.desc}</p>
-              <Link
-                href={tile.href}
-                className="inline-flex items-center gap-1 text-[11px] font-semibold text-white hover:translate-x-0.5 transition-transform"
-              >
-                Open →
-              </Link>
-            </div>
-          </motion.div>
+              <div className="relative flex h-full flex-col justify-between text-white drop-shadow-sm">
+                <div className="flex items-start justify-between">
+                  <div className="flex flex-col gap-1">
+                    <h3 className="text-lg font-semibold tracking-tight leading-none">{tile.title}</h3>
+                    <p className="text-xs text-white/90 leading-snug max-w-xs">{tile.desc}</p>
+                  </div>
+                </div>
+                <div className="flex justify-center pb-1">
+                  <span className="text-[3.5rem] drop-shadow">{tile.icon}</span>
+                </div>
+              </div>
+            </motion.div>
+          </Link>
         ))}
       </div>
     </motion.div>

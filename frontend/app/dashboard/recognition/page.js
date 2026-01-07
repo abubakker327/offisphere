@@ -113,17 +113,23 @@ export default function RecognitionPage() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
-      className="space-y-6"
+      className="space-y-6 bg-gradient-to-br from-slate-50 via-indigo-50/70 to-cyan-50/60 p-1 rounded-3xl"
     >
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-semibold text-slate-900">
-            Recognition
-          </h1>
-          <p className="text-sm text-slate-500">
-            Send kudos to teammates and view recent recognitions.
-          </p>
+        <div className="space-y-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 text-white text-[11px] font-semibold shadow-sm shadow-indigo-200">
+            <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
+            <span>Team kudos</span>
+          </div>
+          <div>
+            <h1 className="text-xl font-semibold text-slate-900">
+              Recognition
+            </h1>
+            <p className="text-sm text-slate-600">
+              Send kudos to teammates and view recent recognitions.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -137,10 +143,14 @@ export default function RecognitionPage() {
       {/* Create recognition card */}
       <motion.div
         whileHover={{ y: -2 }}
-        className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
+        className="relative overflow-hidden bg-white/90 rounded-2xl border border-indigo-100/60 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 backdrop-blur"
       >
+        <div
+          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+          aria-hidden="true"
+        />
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-slate-900">
+          <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
             Give recognition
           </h2>
           <span className="text-[11px] text-slate-400">
@@ -225,10 +235,14 @@ export default function RecognitionPage() {
       {/* Recent recognitions list */}
       <motion.div
         whileHover={{ y: -2 }}
-        className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
+        className="relative overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
       >
+        <div
+          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+          aria-hidden="true"
+        />
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-slate-900">
+          <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
             Recent recognitions
           </h2>
         </div>
@@ -243,10 +257,10 @@ export default function RecognitionPage() {
           </div>
         ) : (
           <div className="space-y-3">
-            {recognitions.map((r) => (
+            {recognitions.map((r, idx) => (
               <div
                 key={r.id}
-                className="flex flex-col md:flex-row md:items-center justify-between gap-2 bg-slate-50 rounded-2xl px-3 py-2"
+                className={`flex flex-col md:flex-row md:items-center justify-between gap-2 rounded-2xl px-3 py-2 shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}
               >
                 <div className="flex-1">
                   <div className="flex items-center gap-2">

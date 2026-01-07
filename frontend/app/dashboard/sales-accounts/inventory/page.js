@@ -61,16 +61,26 @@ export default function InventoryPage() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
-      className="space-y-6"
+      className="space-y-6 bg-gradient-to-br from-slate-50 via-indigo-50/70 to-cyan-50/60 p-1 rounded-3xl"
     >
-      <div>
-        <h1 className="text-xl font-semibold text-slate-900">Inventory & Stock Ledger</h1>
-        <p className="text-sm text-slate-500">
-          Single source of truth for stock movements with warehouse and serial tracking.
-        </p>
+      <div className="space-y-2">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 text-white text-[11px] font-semibold shadow-sm shadow-indigo-200">
+          <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
+          <span>Stock ledger</span>
+        </div>
+        <div>
+          <h1 className="text-xl font-semibold text-slate-900">Inventory & Stock Ledger</h1>
+          <p className="text-sm text-slate-600">
+            Single source of truth for stock movements with warehouse and serial tracking.
+          </p>
+        </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 space-y-3">
+      <div className="relative overflow-hidden bg-white/90 rounded-2xl border border-indigo-100/60 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 space-y-3 backdrop-blur">
+        <div
+          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+          aria-hidden="true"
+        />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
           <input
             className="px-3 py-2 rounded-xl border border-slate-200"
@@ -111,13 +121,13 @@ export default function InventoryPage() {
 
         <div className="overflow-x-auto text-xs">
           <table className="min-w-full border-separate border-spacing-y-1">
-            <thead>
-              <tr className="text-[11px] text-slate-400">
-                <th className="text-left px-2 py-1">Ref</th>
-                <th className="text-left px-2 py-1">Product</th>
-                <th className="text-left px-2 py-1">Warehouse</th>
-                <th className="text-left px-2 py-1">Qty</th>
-                <th className="text-left px-2 py-1">Serials</th>
+            <thead className="text-[11px] text-white">
+              <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
+                <th className="text-left px-2 py-2 font-semibold first:rounded-l-xl">Ref</th>
+                <th className="text-left px-2 py-2 font-semibold">Product</th>
+                <th className="text-left px-2 py-2 font-semibold">Warehouse</th>
+                <th className="text-left px-2 py-2 font-semibold">Qty</th>
+                <th className="text-left px-2 py-2 font-semibold last:rounded-r-xl">Serials</th>
               </tr>
             </thead>
             <tbody>
@@ -134,8 +144,8 @@ export default function InventoryPage() {
                   </td>
                 </tr>
               ) : (
-                rows.map((row) => (
-                  <tr key={row.id} className="bg-slate-50 rounded">
+                rows.map((row, idx) => (
+                  <tr key={row.id} className={`rounded shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}>
                     <td className="px-2 py-2 text-slate-900">
                       {row.ref_type} #{row.ref_id}
                     </td>

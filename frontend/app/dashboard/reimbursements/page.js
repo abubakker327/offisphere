@@ -170,20 +170,30 @@ export default function ReimbursementsPage() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
-      className="space-y-6"
+      className="space-y-6 bg-gradient-to-br from-slate-50 via-indigo-50/70 to-cyan-50/60 p-1 rounded-3xl"
     >
-      <div>
-        <h1 className="text-xl font-semibold text-slate-900">
-          Reimbursements
-        </h1>
-        <p className="text-sm text-slate-500">
-          Submit and review expense reimbursements.
-        </p>
+      <div className="space-y-2">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 text-white text-[11px] font-semibold shadow-sm shadow-indigo-200">
+          <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
+          <span>Expense desk</span>
+        </div>
+        <div>
+          <h1 className="text-xl font-semibold text-slate-900">
+            Reimbursements
+          </h1>
+          <p className="text-sm text-slate-600">
+            Submit and review expense reimbursements.
+          </p>
+        </div>
       </div>
 
       {/* Create reimbursement */}
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
-        <h2 className="text-sm font-semibold text-slate-900 mb-3">
+      <div className="relative overflow-hidden bg-white/90 rounded-2xl border border-indigo-100/60 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 backdrop-blur">
+        <div
+          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+          aria-hidden="true"
+        />
+        <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-3">
           Submit reimbursement
         </h2>
 
@@ -288,9 +298,13 @@ export default function ReimbursementsPage() {
       </div>
 
       {/* List */}
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
+      <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
+        <div
+          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+          aria-hidden="true"
+        />
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-slate-900">
+          <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
             Reimbursement list
           </h2>
           {isAdminOrManager && (
@@ -302,14 +316,14 @@ export default function ReimbursementsPage() {
 
         <div className="overflow-x-auto text-sm">
           <table className="min-w-full border-separate border-spacing-y-2">
-            <thead>
-              <tr className="text-xs text-slate-400">
-                <th className="text-left px-3 py-1">Employee</th>
-                <th className="text-left px-3 py-1">Title</th>
-                <th className="text-left px-3 py-1">Category</th>
-                <th className="text-left px-3 py-1">Amount</th>
-                <th className="text-left px-3 py-1">Date</th>
-                <th className="text-left px-3 py-1">Status</th>
+            <thead className="text-xs text-white">
+              <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
+                <th className="text-left px-3 py-2 font-semibold first:rounded-l-xl">Employee</th>
+                <th className="text-left px-3 py-2 font-semibold">Title</th>
+                <th className="text-left px-3 py-2 font-semibold">Category</th>
+                <th className="text-left px-3 py-2 font-semibold">Amount</th>
+                <th className="text-left px-3 py-2 font-semibold">Date</th>
+                <th className="text-left px-3 py-2 font-semibold last:rounded-r-xl">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -332,10 +346,10 @@ export default function ReimbursementsPage() {
                   </td>
                 </tr>
               ) : (
-                reimbursements.map((r) => (
+                reimbursements.map((r, idx) => (
                   <tr
                     key={r.id}
-                    className="bg-slate-50 rounded-xl hover:bg-slate-100"
+                    className={`rounded-xl shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}
                   >
                     <td className="px-3 py-2 rounded-l-xl text-slate-900">
                       {r.employee_name || '—'}
@@ -359,7 +373,7 @@ export default function ReimbursementsPage() {
                           onChange={(e) =>
                             handleStatusChange(r.id, e.target.value)
                           }
-                          className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs"
+                          className="rounded-full border border-indigo-100 bg-white px-3 py-1 text-xs shadow-sm hover:border-indigo-200"
                         >
                           <option value="pending">Pending</option>
                           <option value="approved">Approved</option>
