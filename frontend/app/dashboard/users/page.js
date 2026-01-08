@@ -267,7 +267,7 @@ export default function UsersPage() {
   };
 
   return (
-    <div className="space-y-6 bg-gradient-to-br from-slate-50 via-indigo-50/70 to-cyan-50/60 p-1 rounded-3xl">
+    <div className="space-y-6 bg-gradient-to-br from-slate-50 via-indigo-50/70 to-cyan-50/60 p-1 rounded-2xl">
       <div className="space-y-2">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 text-white text-[11px] font-semibold shadow-sm shadow-indigo-200">
           <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
@@ -282,7 +282,7 @@ export default function UsersPage() {
       </div>
 
       {/* Create user form */}
-      <div className="relative overflow-hidden rounded-2xl bg-white/90 backdrop-blur border border-indigo-100/60 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4">
+      <div className="relative overflow-hidden rounded-xl bg-white/90 backdrop-blur border border-indigo-100/60 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4">
         <div
           className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
           aria-hidden="true"
@@ -382,7 +382,7 @@ export default function UsersPage() {
       </div>
 
       {/* Users table */}
-      <div className="relative overflow-hidden rounded-2xl bg-white border border-slate-100 shadow-sm p-4">
+      <div className="relative overflow-hidden rounded-xl bg-white border border-slate-100 shadow-sm p-4">
         <div
           className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
           aria-hidden="true"
@@ -469,7 +469,7 @@ export default function UsersPage() {
       {/* Edit modal */}
       {editingUser && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg p-5">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-lg p-5">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-semibold text-slate-900">
                 Edit user

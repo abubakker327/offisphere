@@ -27,15 +27,21 @@ const fetchWithAuth = async (path, options = {}) => {
 };
 
 const EntityCard = ({ title, description, list, fields, onSubmit, loading, saving, error }) => (
-  <div className="rounded-2xl border border-slate-100 bg-white shadow-sm p-4 space-y-3">
+  <div className="relative overflow-hidden rounded-2xl border border-indigo-100/60 bg-white/90 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 space-y-3 backdrop-blur">
+    <div
+      className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
+      aria-hidden="true"
+    />
     <div className="flex items-center justify-between">
       <div>
-        <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
+        <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
+          {title}
+        </h3>
         <p className="text-xs text-slate-500">{description}</p>
       </div>
     </div>
     {error && (
-      <div className="text-[11px] text-rose-600 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">
+      <div className="text-[11px] text-rose-600 bg-rose-50 border border-rose-100 rounded-xl px-3 py-2">
         {error}
       </div>
     )}
@@ -46,13 +52,13 @@ const EntityCard = ({ title, description, list, fields, onSubmit, loading, savin
           <input
             value={f.value}
             onChange={(e) => f.onChange(e.target.value)}
-            className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white"
+            className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             placeholder={f.placeholder}
           />
         </div>
       ))}
     </div>
-    <div className="flex justify-end">
+    <div className="flex justify-end pt-1">
       <motion.button
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.97 }}
@@ -63,12 +69,12 @@ const EntityCard = ({ title, description, list, fields, onSubmit, loading, savin
         {saving ? 'Saving…' : 'Save'}
       </motion.button>
     </div>
-    <div className="overflow-x-auto text-xs">
+    <div className="overflow-x-auto text-xs pt-1">
       <table className="min-w-full border-separate border-spacing-y-1">
-        <thead>
-          <tr className="text-[11px] text-slate-400">
-            <th className="text-left px-2 py-1">Name</th>
-            <th className="text-left px-2 py-1">Email / GSTIN</th>
+        <thead className="text-[11px] text-white">
+          <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
+            <th className="text-left px-2 py-2 font-semibold first:rounded-l-xl">Name</th>
+            <th className="text-left px-2 py-2 font-semibold last:rounded-r-xl">Email / GSTIN</th>
           </tr>
         </thead>
         <tbody>
@@ -85,9 +91,12 @@ const EntityCard = ({ title, description, list, fields, onSubmit, loading, savin
               </td>
             </tr>
           ) : (
-            list.map((row) => (
-              <tr key={row.id} className="bg-slate-50 rounded">
-                <td className="px-2 py-2 text-slate-900">{row.name || row.full_name || '-'}</td>
+            list.map((row, idx) => (
+              <tr 
+                key={row.id} 
+                className={`rounded shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}
+              >
+                <td className="px-2 py-2 text-slate-900 font-medium">{row.name || row.full_name || '-'}</td>
                 <td className="px-2 py-2 text-slate-600">
                   {row.email || row.gstin || row.phone || '-'}
                 </td>
@@ -183,16 +192,21 @@ export default function MastersPage() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
-      className="space-y-6"
+      className="space-y-6 bg-gradient-to-br from-slate-50 via-indigo-50/70 to-cyan-50/60 p-1 rounded-3xl"
     >
-      <div>
-        <h1 className="text-xl font-semibold text-slate-900">Masters</h1>
-        <p className="text-sm text-slate-500">
-          Manage products, vendors, customers, and GST slabs.
-        </p>
+      <div className="space-y-2">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 text-white text-[11px] font-semibold shadow-sm shadow-indigo-200">
+          <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
+          <span>Masters desk</span>
+        </div>
+        <div>
+          <h1 className="text-xl font-semibold text-slate-900">Masters</h1>
+          <p className="text-sm text-slate-600">
+            Manage products, vendors, customers, and GST slabs.
+          </p>
+        </div>
       </div>
 
-      {/* Products component */}
       <ProductsPage />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

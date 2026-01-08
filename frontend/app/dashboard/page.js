@@ -237,33 +237,32 @@ export default function DashboardHome() {
     })
   };
 
-  const GlowCard = ({ title, accent, index = 0, children, cardKey }) => (
+  const GlowCard = ({ title, accent, index = 0, children }) => (
     <motion.div
       custom={index}
       variants={cardVariants}
       initial="hidden"
       animate="visible"
-      whileHover={{ y: -8, scale: 1.01 }}
-      className={`relative overflow-hidden rounded-3xl border shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 ${accent.border} ${accent.bg}`}
+      whileHover={{ y: -5, boxShadow: "0 20px 40px rgba(0,0,0,0.08)" }}
+      className="relative flex items-center justify-between rounded-2xl bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-5 border-l-[6px] transition-all duration-300 h-full"
+      style={{ borderLeftColor: accent.iconColor || accent.color }}
     >
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className={`absolute -top-10 -left-6 h-28 w-28 blur-3xl ${accent.glowA}`}
-        />
-        <div
-          className={`absolute -bottom-8 right-0 h-24 w-24 blur-2xl ${accent.glowB}`}
-        />
-      </div>
-      <div className="relative flex flex-col gap-3">
-        <div className="flex items-center justify-between">
-          <p className={`text-xs font-semibold tracking-wide ${accent.title}`}>
-            {title}
-          </p>
-          <div className="h-8 w-8 rounded-full bg-white/30 border border-white/40 flex items-center justify-center">
-            {renderKpiIcon(accent.icon || 'pulse', accent.iconColor || '#0f172a')}
-          </div>
+      <div className="flex-1 min-w-0 pr-4">
+        <p className="text-[11px] font-bold tracking-wider text-slate-400 uppercase mb-1 drop-shadow-sm">
+          {title}
+        </p>
+        <div className="relative">
+          {children}
         </div>
-        {children}
+      </div>
+      
+      <div 
+        className="flex-shrink-0 h-14 w-14 rounded-2xl bg-white shadow-[0_10px_25px_rgba(0,0,0,0.06)] border border-slate-50 flex items-center justify-center overflow-hidden"
+        style={{ color: accent.iconColor }}
+      >
+        <div className="opacity-90">
+          {renderKpiIcon(accent.icon || 'pulse', accent.iconColor || '#0f172a')}
+        </div>
       </div>
     </motion.div>
   );
@@ -347,41 +346,23 @@ export default function DashboardHome() {
             {/* Leaves */}
             <GlowCard
               index={0}
-              cardKey="leaves"
-              title="LEAVES"
+              title="Leaves"
               accent={{
-                border: 'border-indigo-100/70',
-                bg: 'bg-gradient-to-br from-indigo-400/15 via-indigo-200/10 to-white',
-                glowA: 'bg-indigo-400/15',
-                glowB: 'bg-purple-300/15',
-                title: 'text-indigo-600',
-                pill: 'bg-indigo-500/60',
                 icon: 'leaf',
-                iconColor: '#4f46e5'
+                iconColor: '#6366f1'
               }}
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-3xl font-semibold text-slate-900">
-                    {s.leaves?.pending ?? 0}
-                  </div>
-                  <p className="text-xs text-slate-500">Pending requests</p>
+              <div>
+                <div className="text-3xl font-bold text-slate-900 tracking-tight">
+                  {s.leaves?.pending ?? 0}
                 </div>
-                <div className="text-right space-y-1 text-xs">
-                  <p className="flex items-center justify-end gap-1">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-slate-500">Approved</span>
-                    <span className="font-semibold text-emerald-700">
-                      {s.leaves?.approved ?? 0}
-                    </span>
-                  </p>
-                  <p className="flex items-center justify-end gap-1">
-                    <span className="h-1.5 w-1.5 rounded-full bg-rose-500 animate-pulse" />
-                    <span className="text-slate-500">Rejected</span>
-                    <span className="font-semibold text-rose-700">
-                      {s.leaves?.rejected ?? 0}
-                    </span>
-                  </p>
+                <div className="flex items-center gap-3 mt-1 text-[10px] font-medium uppercase tracking-wider">
+                  <span className="text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-md border border-emerald-100/50">
+                    Appr: {s.leaves?.approved ?? 0}
+                  </span>
+                  <span className="text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded-md border border-rose-100/50">
+                    Rej: {s.leaves?.rejected ?? 0}
+                  </span>
                 </div>
               </div>
             </GlowCard>
@@ -389,123 +370,57 @@ export default function DashboardHome() {
             {/* Attendance */}
             <GlowCard
               index={1}
-              cardKey="attendance"
-              title="ATTENDANCE"
+              title="Attendance"
               accent={{
-                border: 'border-sky-100/70',
-                bg: 'bg-gradient-to-br from-sky-400/15 via-cyan-200/10 to-white',
-                glowA: 'bg-cyan-400/18',
-                glowB: 'bg-sky-300/14',
-                title: 'text-sky-600',
-                pill: 'bg-sky-400/60',
                 icon: 'clock',
                 iconColor: '#0ea5e9'
               }}
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-3xl font-semibold text-slate-900">
-                    {s.attendance?.checkins_today ?? 0}
-                  </div>
-                  <p className="text-xs text-slate-500">Check-ins today</p>
+              <div>
+                <div className="text-3xl font-bold text-slate-900 tracking-tight">
+                  {s.attendance?.checkins_today ?? 0}
                 </div>
-                <div className="text-right text-xs">
-                  <p className="flex items-center justify-end gap-1">
-                    <span className="h-1.5 w-1.5 rounded-full bg-sky-500 animate-pulse" />
-                    <span className="text-slate-500">Users</span>
-                    <span className="font-semibold text-slate-900">
-                      {s.attendance?.total_users ?? 0}
-                    </span>
-                  </p>
-                </div>
+                <p className="text-xs text-slate-400 font-medium mt-0.5">Check-ins today</p>
               </div>
             </GlowCard>
 
             {/* Users */}
             <GlowCard
               index={2}
-              cardKey="users"
-              title="USERS"
+              title="Users"
               accent={{
-                border: 'border-emerald-100/70',
-                bg: 'bg-gradient-to-br from-emerald-400/14 via-teal-200/10 to-white',
-                glowA: 'bg-emerald-300/16',
-                glowB: 'bg-teal-300/14',
-                title: 'text-emerald-600',
-                pill: 'bg-emerald-400/60',
                 icon: 'users',
                 iconColor: '#10b981'
               }}
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-3xl font-semibold text-slate-900">
-                    {s.users?.total ?? 0}
-                  </div>
-                  <p className="text-xs text-slate-500">Total users</p>
+              <div>
+                <div className="text-3xl font-bold text-slate-900 tracking-tight">
+                  {s.users?.total ?? 0}
                 </div>
-                <div className="text-right space-y-1 text-xs">
-                  <p className="flex items-center justify-end gap-1">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-slate-500">Active</span>
-                    <span className="font-semibold text-emerald-700">
-                      {s.users?.active ?? 0}
-                    </span>
-                  </p>
-                  <p className="flex items-center justify-end gap-1">
-                    <span className="h-1.5 w-1.5 rounded-full bg-indigo-500 animate-pulse" />
-                    <span className="text-slate-500">Admins</span>
-                    <span className="font-semibold text-indigo-700">
-                      {s.users?.admins ?? 0}
-                    </span>
-                  </p>
+                <div className="flex items-center gap-3 mt-1 text-[10px] font-medium uppercase tracking-wider text-slate-500">
+                  <span>Active: <span className="text-emerald-600">{s.users?.active ?? 0}</span></span>
+                  <span>Admins: <span className="text-indigo-600">{s.users?.admins ?? 0}</span></span>
                 </div>
               </div>
             </GlowCard>
 
-            {/* Leave summary */}
+            {/* Pulse */}
             <GlowCard
               index={3}
-              cardKey="workforce"
-              title="WORKFORCE PULSE"
+              title="Workforce Pulse"
               accent={{
-                border: 'border-cyan-100/70',
-                bg: 'bg-gradient-to-br from-cyan-300/14 via-teal-200/12 to-white',
-                glowA: 'bg-cyan-300/16',
-                glowB: 'bg-teal-200/14',
-                title: 'text-cyan-600',
-                pill: 'bg-cyan-400/70',
                 icon: 'pulse',
                 iconColor: '#06b6d4'
               }}
             >
-              <div className="grid grid-cols-1 gap-2 text-xs text-slate-700">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-sky-500 animate-pulse" />
-                    <span>Hours logged today</span>
-                  </div>
-                  <span className="font-semibold text-slate-900">
-                    {s.timesheets?.hours_today ?? 0}
-                  </span>
+              <div className="space-y-1.5 mt-1">
+                <div className="flex items-center justify-between text-[11px] font-medium">
+                  <span className="text-slate-500">Hours Today</span>
+                  <span className="text-slate-900 font-bold">{s.timesheets?.hours_today ?? 0}h</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
-                    <span>Open tasks</span>
-                  </div>
-                  <span className="font-semibold text-slate-900">
-                    {s.tasks?.open ?? 0}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span>Devices available</span>
-                  </div>
-                  <span className="font-semibold text-slate-900">
-                    {s.devices?.available ?? 0}
-                  </span>
+                <div className="flex items-center justify-between text-[11px] font-medium">
+                  <span className="text-slate-500">Open Tasks</span>
+                  <span className="text-amber-600 font-bold">{s.tasks?.open ?? 0}</span>
                 </div>
               </div>
             </GlowCard>
@@ -527,79 +442,39 @@ export default function DashboardHome() {
             {/* Timesheets */}
             <GlowCard
               index={4}
-              cardKey="timesheets"
-              title="TIMESHEETS"
+              title="Timesheets"
               accent={{
-                border: 'border-slate-100/70',
-                bg: 'bg-gradient-to-br from-white via-slate-50 to-sky-50/50',
-                glowA: 'bg-slate-300/20',
-                glowB: 'bg-sky-200/16',
-                title: 'text-slate-600',
-                pill: 'bg-slate-300/70',
                 icon: 'calendar',
                 iconColor: '#64748b'
               }}
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-2xl font-semibold text-slate-900">
-                    {s.timesheets?.entries_today ?? 0}
-                  </div>
-                  <p className="text-xs text-slate-500">Entries today</p>
+              <div>
+                <div className="text-3xl font-bold text-slate-900 tracking-tight">
+                  {s.timesheets?.entries_today ?? 0}
                 </div>
-                <div className="text-right text-xs text-slate-500">
-                  <p>
-                    Hours:{' '}
-                    <span className="font-semibold text-slate-900">
-                      {s.timesheets?.hours_today ?? 0}
-                    </span>
-                  </p>
-                </div>
+                <p className="text-xs text-slate-400 font-medium mt-0.5">
+                  {s.timesheets?.hours_today ?? 0}h logged today
+                </p>
               </div>
             </GlowCard>
 
             {/* Tasks */}
             <GlowCard
               index={5}
-              cardKey="tasks"
-              title="TASKS"
+              title="Tasks"
               accent={{
-                border: 'border-amber-100/70',
-                bg: 'bg-gradient-to-br from-amber-400/14 via-orange-200/12 to-white',
-                glowA: 'bg-orange-300/16',
-                glowB: 'bg-amber-200/12',
-                title: 'text-amber-600',
-                pill: 'bg-amber-400/70',
                 icon: 'list',
                 iconColor: '#f59e0b'
               }}
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-2xl font-semibold text-slate-900">
-                    {s.tasks?.open ?? 0}
-                  </div>
-                  <p className="text-xs text-slate-500">Open tasks</p>
+              <div>
+                <div className="text-3xl font-bold text-slate-900 tracking-tight">
+                  {s.tasks?.open ?? 0}
                 </div>
-                <div className="text-right text-xs space-y-1">
-                  <p className="text-slate-600">
-                    In progress:{' '}
-                    <span className="font-semibold text-sky-600">
-                      {s.tasks?.in_progress ?? 0}
-                    </span>
-                  </p>
-                  <p className="text-slate-600">
-                    Completed:{' '}
-                    <span className="font-semibold text-emerald-600">
-                      {s.tasks?.completed ?? 0}
-                    </span>
-                  </p>
-                  <p className="text-slate-600">
-                    Overdue:{' '}
-                    <span className="font-semibold text-rose-600">
-                      {s.tasks?.overdue ?? 0}
-                    </span>
-                  </p>
+                <div className="flex items-center gap-2 mt-1 px-2 py-0.5 bg-rose-50 border border-rose-100/60 rounded-full w-fit">
+                  <span className="text-[9px] font-bold text-rose-600 uppercase tracking-tighter">
+                    {s.tasks?.overdue ?? 0} Overdue
+                  </span>
                 </div>
               </div>
             </GlowCard>
@@ -607,40 +482,19 @@ export default function DashboardHome() {
             {/* Devices */}
             <GlowCard
               index={6}
-              cardKey="devices"
-              title="DEVICES"
+              title="Devices"
               accent={{
-                border: 'border-rose-100/70',
-                bg: 'bg-gradient-to-br from-rose-400/14 via-rose-200/12 to-white',
-                glowA: 'bg-rose-300/18',
-                glowB: 'bg-pink-200/14',
-                title: 'text-rose-600',
-                pill: 'bg-rose-400/70',
-                icon: 'monitor',
-                iconColor: '#e11d48'
+                icon: 'device',
+                iconColor: '#ec4899'
               }}
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-2xl font-semibold text-slate-900">
-                    {s.devices?.total ?? 0}
-                  </div>
-                  <p className="text-xs text-slate-500">Total devices</p>
+              <div>
+                <div className="text-3xl font-bold text-slate-900 tracking-tight">
+                  {s.devices?.total ?? 0}
                 </div>
-                <div className="text-right text-xs space-y-1">
-                  <p className="text-slate-600">
-                    Assigned:{' '}
-                    <span className="font-semibold text-sky-600">
-                      {s.devices?.assigned ?? 0}
-                    </span>
-                  </p>
-                  <p className="text-slate-600">
-                    Available:{' '}
-                    <span className="font-semibold text-emerald-600">
-                      {s.devices?.available ?? 0}
-                    </span>
-                  </p>
-                </div>
+                <p className="text-xs text-slate-400 font-medium mt-0.5">
+                  {s.devices?.available ?? 0} available
+                </p>
               </div>
             </GlowCard>
 
@@ -807,7 +661,7 @@ export default function DashboardHome() {
         variants={cardVariants}
         initial="hidden"
         animate="visible"
-        className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
+        className="bg-white rounded-xl border border-slate-100 shadow-sm p-4"
       >
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-sm font-semibold text-slate-900">
@@ -818,71 +672,111 @@ export default function DashboardHome() {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[
             {
               href: '/dashboard/users',
               title: 'Add user',
               desc: 'Create a new employee',
-              gradient: 'from-indigo-500 to-purple-500',
+              color: '#a855f7',
               icon: 'user'
             },
             {
               href: '/dashboard/attendance',
               title: 'Record attendance',
               desc: 'Check-in / Check-out',
-              gradient: 'from-sky-500 to-cyan-500',
+              color: '#06b6d4',
               icon: 'clock'
             },
             {
               href: '/dashboard/leaves',
               title: 'Review leaves',
               desc: 'Approve / reject requests',
-              gradient: 'from-emerald-500 to-teal-500',
+              color: '#10b981',
               icon: 'check'
             },
             {
               href: '/dashboard/tasks',
               title: 'Create task',
               desc: 'Assign work to team',
-              gradient: 'from-amber-500 to-orange-500',
+              color: '#f97316',
               icon: 'tasks'
             },
             {
               href: '/dashboard/devices',
               title: 'Assign device',
               desc: 'Laptop / phone / assets',
-              gradient: 'from-rose-500 to-pink-500',
+              color: '#f43f5e',
               icon: 'device'
             },
             {
               href: '/dashboard/sales-accounts',
               title: 'Sales & Accounts',
               desc: 'Quotes, orders, invoices, payments',
-              gradient: 'from-fuchsia-500 to-violet-500',
+              color: '#7c3aed',
               icon: 'money'
             }
           ].map((item) => (
             <motion.div
               key={item.href}
-              whileHover={{ y: -4, scale: 1.01 }}
-              whileTap={{ scale: 0.99 }}
-              transition={{ duration: 0.15 }}
+              whileHover="hover"
+              whileTap={{ scale: 0.98 }}
+              className="relative group cursor-pointer"
             >
               <Link
                 href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-white shadow hover:shadow-lg transition bg-gradient-to-r ${item.gradient}`}
+                className="relative block overflow-hidden rounded-2xl p-6 text-white h-44 shadow-[0_15px_30px_rgba(0,0,0,0.12)] transition-all duration-300"
+                style={{ backgroundColor: item.color }}
+                variants={{
+                  hover: { 
+                    y: -4, 
+                    scale: 1.02,
+                    boxShadow: "0 20px 40px rgba(0,0,0,0.18)"
+                  }
+                }}
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 border border-white/10">
-                  {renderQAIcon(item.icon)}
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-semibold text-sm">
-                    {item.title}
-                  </span>
-                  <span className="text-[11px] text-white/90">
-                    {item.desc}
-                  </span>
+                {/* Corner highlight shape */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-bl-full translate-x-12 -translate-y-12 transition-transform duration-500 group-hover:translate-x-8 group-hover:-translate-y-8" />
+                
+                {/* Hover Arrow */}
+                <motion.div
+                  variants={{
+                    hover: { opacity: 1, x: 0 }
+                  }}
+                  initial={{ opacity: 0, x: -10 }}
+                  className="absolute top-6 right-6 z-20"
+                >
+                  <svg 
+                    width="24" 
+                    height="24" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="2.5" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    className="text-white/90 drop-shadow-sm"
+                  >
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </motion.div>
+
+                <div className="relative z-10 h-full flex flex-col justify-between">
+                  <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-white/20 backdrop-blur-md border border-white/20 shadow-inner">
+                    <div className="scale-110 drop-shadow-sm">
+                      {renderQAIcon(item.icon)}
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-0.5">
+                    <h3 className="font-bold text-lg leading-tight tracking-tight drop-shadow-md">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs text-white/80 font-medium">
+                      {item.desc}
+                    </p>
+                  </div>
                 </div>
               </Link>
             </motion.div>

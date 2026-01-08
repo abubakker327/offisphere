@@ -781,7 +781,7 @@ router.get('/payments', authenticate, authorize([]), async (req, res) => {
 
 router.get('/inventory/stock-ledger', authenticate, authorize([]), async (req, res) => {
   const { product_id, warehouse_id } = req.query;
-  let query = supabase.from('stock_ledger').select('*').order('created_at', { ascending: false });
+  let query = supabase.from('stock_ledger').select('*, products(name)').order('created_at', { ascending: false });
   if (product_id) query = query.eq('product_id', product_id);
   if (warehouse_id) query = query.eq('warehouse_id', warehouse_id);
   const { data, error } = await query;

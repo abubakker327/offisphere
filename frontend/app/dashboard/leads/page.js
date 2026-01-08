@@ -201,7 +201,7 @@ export default function LeadsPage() {
 
       <form
         onSubmit={handleSubmit}
-        className="relative overflow-hidden bg-white/90 rounded-2xl border border-indigo-100/60 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 backdrop-blur"
+        className="relative overflow-hidden bg-white/90 rounded-xl border border-indigo-100/60 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 backdrop-blur"
       >
         <div
           className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
@@ -365,7 +365,7 @@ export default function LeadsPage() {
         </div>
       </div>
 
-      <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
+      <div className="relative overflow-hidden bg-white rounded-xl border border-slate-100 shadow-sm p-4">
         <div
           className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
           aria-hidden="true"

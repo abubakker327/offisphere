@@ -149,7 +149,9 @@ export default function InventoryPage() {
                     <td className="px-2 py-2 text-slate-900">
                       {row.ref_type} #{row.ref_id}
                     </td>
-                    <td className="px-2 py-2 text-slate-600">{row.product_id}</td>
+                    <td className="px-2 py-2 text-slate-600">
+                      {row.products?.name || row.product_id}
+                    </td>
                     <td className="px-2 py-2 text-slate-600">{row.warehouse_id || '-'}</td>
                     <td className="px-2 py-2 text-slate-600">{row.qty_delta}</td>
                     <td className="px-2 py-2 text-slate-600">
