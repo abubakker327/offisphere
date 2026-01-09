@@ -71,23 +71,23 @@ export default function UsersPage() {
 
   const renderRoles = (roles = []) => {
     if (!roles || roles.length === 0) {
-      return <span className="text-xs text-slate-400">â€”</span>;
+      return <span className="text-xs text-slate-400">None</span>;
     }
 
     return (
       <div className="flex flex-wrap gap-1">
         {roles.includes('admin') && (
-          <span className="px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs border border-indigo-100">
+          <span className="px-3 py-1 rounded-full bg-violet-50 text-violet-700 text-xs font-medium border border-violet-100">
             Admin
           </span>
         )}
         {roles.includes('manager') && (
-          <span className="px-3 py-1 rounded-full bg-sky-50 text-sky-700 text-xs border border-sky-100">
+          <span className="px-3 py-1 rounded-full bg-sky-50 text-sky-700 text-xs font-medium border border-sky-100">
             Manager
           </span>
         )}
         {roles.includes('employee') && (
-          <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs border border-emerald-100">
+          <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-medium border border-emerald-100">
             Employee
           </span>
         )}
@@ -99,7 +99,7 @@ export default function UsersPage() {
           .map((r) => (
             <span
               key={r}
-              className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs border border-slate-200"
+              className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-medium border border-slate-200"
             >
               {r}
             </span>
@@ -267,29 +267,48 @@ export default function UsersPage() {
   };
 
   return (
-    <div className="space-y-6 bg-gradient-to-br from-slate-50 via-indigo-50/70 to-cyan-50/60 p-1 rounded-2xl">
-      <div className="space-y-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 text-white text-[11px] font-semibold shadow-sm shadow-indigo-200">
-          <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
+    <div className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6">
+      <div className="space-y-3">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
           <span>User directory</span>
         </div>
         <div>
-          <h1 className="text-xl font-semibold text-slate-900">Users</h1>
-          <p className="text-sm text-slate-600">
+          <h1 className="text-3xl font-semibold text-slate-900">Users</h1>
+          <p className="text-sm text-slate-500">
             Manage Offisphere admins, managers and employees.
           </p>
         </div>
       </div>
 
       {/* Create user form */}
-      <div className="relative overflow-hidden rounded-xl bg-white/90 backdrop-blur border border-indigo-100/60 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4">
-        <div
-          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-          aria-hidden="true"
-        />
-        <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-3">
-          Create new user
-        </h2>
+      <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="h-10 w-10 rounded-2xl bg-violet-600 text-white flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <line x1="19" y1="8" x2="19" y2="14" />
+              <line x1="22" y1="11" x2="16" y2="11" />
+            </svg>
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900">
+              Create new user
+            </h2>
+            <p className="text-xs text-slate-500">
+              Add admins, managers, or employees.
+            </p>
+          </div>
+        </div>
 
         {createError && (
           <div className="mb-3 text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-3 py-2">
@@ -299,7 +318,7 @@ export default function UsersPage() {
 
         <form
           onSubmit={handleCreateUser}
-          className="grid grid-cols-1 md:grid-cols-4 gap-3 text-sm"
+          className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm"
         >
           <div className="space-y-1">
             <label className="text-xs text-slate-600">Full name</label>
@@ -309,8 +328,8 @@ export default function UsersPage() {
               onChange={(e) =>
                 handleChange('full_name', e.target.value)
               }
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-              placeholder="••••••••"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              placeholder="Enter full name"
               required
             />
           </div>
@@ -321,8 +340,8 @@ export default function UsersPage() {
               type="email"
               value={form.email}
               onChange={(e) => handleChange('email', e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-              placeholder="••••••••"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              placeholder="Enter email"
               required
             />
           </div>
@@ -335,13 +354,13 @@ export default function UsersPage() {
               onChange={(e) =>
                 handleChange('password', e.target.value)
               }
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-              placeholder="••••••••"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              placeholder="Enter password"
               required
             />
           </div>
 
-          <div className="space-y-1">
+          <div className="space-y-1 md:col-span-3">
             <label className="text-xs text-slate-600">
               Roles
               <span className="text-[11px] text-slate-400 ml-1">
@@ -358,8 +377,8 @@ export default function UsersPage() {
                     onClick={() => toggleRoleCreate(role)}
                     className={`px-3 py-1 rounded-full text-xs border transition ${
                       selected
-                        ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white border-transparent shadow'
-                        : 'bg-slate-50 text-slate-600 border-slate-200'
+                        ? 'bg-violet-600 text-white border-transparent shadow'
+                        : 'bg-white text-slate-600 border-slate-200 hover:border-violet-200'
                     }`}
                   >
                     {role.charAt(0).toUpperCase() + role.slice(1)}
@@ -369,52 +388,74 @@ export default function UsersPage() {
             </div>
           </div>
 
-      <div className="md:col-span-4 flex justify-end">
-        <button
-          type="submit"
-          disabled={creating}
-          className="px-5 py-2 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-500 shadow-lg shadow-indigo-300/50 hover:opacity-90 disabled:opacity-60"
-        >
-          {creating ? 'Creating...' : 'Create user'}
-        </button>
-      </div>
-    </form>
+          <div className="md:col-span-3 flex justify-end">
+            <button
+              type="submit"
+              disabled={creating}
+              className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-violet-600 shadow-lg shadow-violet-300/50 hover:bg-violet-700 disabled:opacity-60"
+            >
+              {creating ? 'Creating...' : 'Create user'}
+            </button>
+          </div>
+        </form>
       </div>
 
       {/* Users table */}
-      <div className="relative overflow-hidden rounded-xl bg-white border border-slate-100 shadow-sm p-4">
-        <div
-          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-          aria-hidden="true"
-        />
-        <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-3">
-          Users
-        </h2>
+      <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
+        <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-4 border-b border-slate-100">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-2xl bg-violet-100 text-violet-700 flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M22 11v6" />
+                <path d="M19 14h6" />
+              </svg>
+            </div>
+            <div>
+              <div className="text-lg font-semibold text-slate-900">Users</div>
+              <div className="text-xs text-slate-500">
+                {users.length} total
+              </div>
+            </div>
+          </div>
+        </div>
 
         {error && (
-          <div className="mb-3 text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-3 py-2">
-            {error}
+          <div className="px-6 pt-4">
+            <div className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-3 py-2">
+              {error}
+            </div>
           </div>
         )}
 
-        <div className="overflow-x-auto text-sm">
-          <table className="min-w-full border-separate border-spacing-y-2">
-            <thead className="text-xs text-white">
-              <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
-                <th className="text-left px-3 py-2 font-semibold first:rounded-l-xl">Name</th>
-                <th className="text-left px-3 py-2 font-semibold">Email</th>
-                <th className="text-left px-3 py-2 font-semibold">Roles</th>
-                <th className="text-left px-3 py-2 font-semibold">Status</th>
-                <th className="text-left px-3 py-2 font-semibold">Created</th>
-                <th className="text-right px-3 py-2 font-semibold last:rounded-r-xl">Actions</th>
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-sm">
+            <thead className="bg-slate-50 text-xs text-slate-500 uppercase tracking-wider">
+              <tr>
+                <th className="text-left px-6 py-3 font-semibold">Name</th>
+                <th className="text-left px-6 py-3 font-semibold">Email</th>
+                <th className="text-left px-6 py-3 font-semibold">Roles</th>
+                <th className="text-left px-6 py-3 font-semibold">Status</th>
+                <th className="text-left px-6 py-3 font-semibold">Created</th>
+                <th className="text-right px-6 py-3 font-semibold">Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-slate-100">
               {loading ? (
                 <tr>
                   <td
                     colSpan={6}
-                    className="px-3 py-6 text-center text-xs text-slate-400"
+                    className="px-6 py-8 text-center text-xs text-slate-400"
                   >
                     Loading users...
                   </td>
@@ -423,37 +464,46 @@ export default function UsersPage() {
                 <tr>
                   <td
                     colSpan={6}
-                    className="px-3 py-6 text-center text-xs text-slate-400"
+                    className="px-6 py-8 text-center text-xs text-slate-400"
                   >
                     No users found.
                   </td>
                 </tr>
               ) : (
-                users.map((user, idx) => (
+                users.map((user) => (
                   <tr
                     key={user.id}
-                    className={`rounded-xl shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}
+                    className="hover:bg-slate-50"
                   >
-                    <td className="px-3 py-3 rounded-l-xl text-slate-900">
-                      {user.full_name}
+                    <td className="px-6 py-4 text-slate-900">
+                      <div className="flex items-center gap-3">
+                        <div className="h-10 w-10 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center text-sm font-semibold">
+                          {user.full_name
+                            ? user.full_name.charAt(0).toUpperCase()
+                            : 'U'}
+                        </div>
+                        <div className="text-sm font-semibold">
+                          {user.full_name}
+                        </div>
+                      </div>
                     </td>
-                    <td className="px-3 py-3 text-slate-600">
+                    <td className="px-6 py-4 text-slate-600">
                       {user.email}
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="px-6 py-4">
                       {renderRoles(user.roles)}
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="px-6 py-4">
                       {renderStatus(user.is_active)}
                     </td>
-                    <td className="px-3 py-3 text-slate-500 text-xs">
+                    <td className="px-6 py-4 text-slate-500 text-xs">
                       {formatDate(user.created_at)}
                     </td>
-                    <td className="px-3 py-3 rounded-r-xl text-right">
+                    <td className="px-6 py-4 text-right">
                       <button
                         type="button"
                         onClick={() => openEdit(user)}
-                        className="px-4 py-1.5 rounded-full bg-slate-900 text-white text-xs hover:bg-slate-700"
+                        className="text-xs font-semibold text-violet-700 hover:text-violet-900"
                       >
                         Edit
                       </button>
@@ -468,10 +518,10 @@ export default function UsersPage() {
 
       {/* Edit modal */}
       {editingUser && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-lg p-5">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-slate-900">
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 px-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-base font-semibold text-slate-900">
                 Edit user
               </h3>
               <button
@@ -479,7 +529,7 @@ export default function UsersPage() {
                 onClick={closeEdit}
                 className="text-xs text-slate-500 hover:text-slate-700"
               >
-                âœ•
+                Close
               </button>
             </div>
 
@@ -503,7 +553,7 @@ export default function UsersPage() {
                   onChange={(e) =>
                     handleEditChange('full_name', e.target.value)
                   }
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                   required
                 />
               </div>
@@ -518,7 +568,7 @@ export default function UsersPage() {
                   onChange={(e) =>
                     handleEditChange('email', e.target.value)
                   }
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                   required
                 />
               </div>
@@ -536,7 +586,7 @@ export default function UsersPage() {
                     className={`px-3 py-1 rounded-full border ${
                       editForm.is_active !== false
                         ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                        : 'bg-slate-50 text-slate-500 border-slate-200'
+                        : 'bg-white text-slate-500 border-slate-200'
                     }`}
                   >
                     Active
@@ -549,7 +599,7 @@ export default function UsersPage() {
                     className={`px-3 py-1 rounded-full border ${
                       editForm.is_active === false
                         ? 'bg-rose-50 text-rose-700 border-rose-200'
-                        : 'bg-slate-50 text-slate-500 border-slate-200'
+                        : 'bg-white text-slate-500 border-slate-200'
                     }`}
                   >
                     Inactive
@@ -571,8 +621,8 @@ export default function UsersPage() {
                         onClick={() => toggleRoleEdit(role)}
                         className={`px-3 py-1 rounded-full text-xs border transition ${
                           selected
-                            ? 'bg-indigo-600 text-white border-indigo-600'
-                            : 'bg-slate-50 text-slate-600 border-slate-200'
+                            ? 'bg-violet-600 text-white border-violet-600'
+                            : 'bg-white text-slate-600 border-slate-200 hover:border-violet-200'
                         }`}
                       >
                         {role.charAt(0).toUpperCase() + role.slice(1)}
@@ -586,14 +636,14 @@ export default function UsersPage() {
                 <button
                   type="button"
                   onClick={closeEdit}
-                  className="px-4 py-2 rounded-xl text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200"
+                  className="px-4 py-2 rounded-2xl text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={editSaving}
-                  className="px-5 py-2 rounded-xl text-xs font-medium text-white bg-slate-900 hover:bg-slate-700 disabled:opacity-60"
+                  className="px-5 py-2 rounded-2xl text-xs font-medium text-white bg-violet-600 hover:bg-violet-700 disabled:opacity-60"
                 >
                   {editSaving ? 'Saving...' : 'Save changes'}
                 </button>
@@ -605,5 +655,6 @@ export default function UsersPage() {
     </div>
   );
 }
+
 
 

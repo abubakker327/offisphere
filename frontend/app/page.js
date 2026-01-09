@@ -59,7 +59,7 @@ export default function LoginPage() {
           sessionStorage.setItem('offisphere_roles', JSON.stringify(roles || []));
         }
 
-        triggerToast('success', 'Welcome back to Offisphere ✨');
+        triggerToast('success', 'Welcome back to Offisphere!');
         router.replace('/dashboard');
       }
     } catch (err) {
@@ -92,9 +92,9 @@ export default function LoginPage() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="min-h-screen w-full flex bg-white"
+      className="min-h-screen w-full flex bg-[#f6f5fb]"
     >
-      {/* LEFT SIDE – gradient blob art */}
+      {/* LEFT SIDE - gradient blob art */}
       <div className="hidden lg:flex w-1/2 relative overflow-hidden">
         {/* Background gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#4f46e5] via-[#7c3aed] to-[#f97316]" />
@@ -106,7 +106,7 @@ export default function LoginPage() {
           transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
-          className="absolute bottom-[-120px] left-[-40px] w-80 h-80 rounded-[45%] bg-indigo-500/80 blur-3xl"
+          className="absolute bottom-[-120px] left-[-40px] w-80 h-80 rounded-[45%] bg-violet-500/80 blur-3xl"
           animate={{ y: [0, -40, 0] }}
           transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
         />
@@ -117,7 +117,7 @@ export default function LoginPage() {
         />
 
         {/* Semi-transparent overlay to soften */}
-        <div className="absolute inset-0 bg-white/5" />
+        <div className="absolute inset-0 bg-white/10" />
 
         {/* Content */}
         <div className="relative z-10 flex flex-col justify-between px-12 py-10 w-full">
@@ -148,7 +148,7 @@ export default function LoginPage() {
               to Offisphere
             </p>
             <p className="text-sm text-indigo-50/90 max-w-xs">
-              Sign in to access your all-in-one office management workspace.
+              Sign in to manage people, assets, payroll, and reporting in one place.
             </p>
           </motion.div>
 
@@ -164,22 +164,33 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* RIGHT SIDE – login form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center">
+      {/* RIGHT SIDE - login form */}
+      <div className="relative w-full lg:w-1/2 flex items-center justify-center px-6 py-12">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-24 right-10 h-56 w-56 rounded-full bg-violet-200/50 blur-3xl" />
+          <div className="absolute bottom-0 left-6 h-64 w-64 rounded-full bg-amber-100/70 blur-3xl" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.9),_rgba(255,255,255,0.3),_transparent_70%)]" />
+        </div>
         <motion.div
           initial={{ x: 20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.35 }}
-          className="w-full max-w-md px-6 sm:px-10"
+          className="relative w-full max-w-md rounded-3xl border border-white/70 bg-white/80 p-8 shadow-[0_24px_60px_rgba(15,23,42,0.18)] backdrop-blur-xl ring-1 ring-black/5"
         >
           <div className="mb-8">
+            <div className="flex items-center gap-3 mb-6 lg:hidden">
+              <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-500 text-white flex items-center justify-center text-sm font-semibold shadow-lg">
+                O
+              </div>
+              <div className="text-sm font-semibold text-slate-900">Offisphere</div>
+            </div>
             <motion.h1
               initial={{ y: 10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2 }}
               className="text-2xl sm:text-3xl font-bold text-slate-900"
             >
-              Welcome Back! ✨
+              Welcome Back!
             </motion.h1>
             <motion.p
               initial={{ y: 10, opacity: 0 }}
@@ -187,7 +198,7 @@ export default function LoginPage() {
               transition={{ delay: 0.28 }}
               className="text-xs sm:text-sm text-slate-500 mt-2"
             >
-            Please login to your account.
+              Sign in to continue to your workspace.
             </motion.p>
           </div>
 
@@ -209,16 +220,16 @@ export default function LoginPage() {
               transition={{ delay: 0.32 }}
               className="space-y-1"
             >
-              <label className="text-xs text-slate-500">User Name</label>
+              <label className="text-xs text-slate-500">Email</label>
               <div className="relative group">
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 outline-none
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm text-slate-900 outline-none
                              transition shadow-sm group-hover:shadow-md
-                             focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                  placeholder="username@gmail.com"
+                             focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                  placeholder="name@company.com"
                   required
                 />
               </div>
@@ -237,10 +248,10 @@ export default function LoginPage() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 outline-none
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm text-slate-900 outline-none
                              transition shadow-sm group-hover:shadow-md
-                             focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                  placeholder="••••••••"
+                             focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                  placeholder="********"
                   required
                 />
               </div>
@@ -259,20 +270,18 @@ export default function LoginPage() {
                     type="checkbox"
                     checked={remember}
                     onChange={(e) => setRemember(e.target.checked)}
-                    className="peer h-3.5 w-3.5 rounded border border-slate-300 text-indigo-600 focus:ring-0 focus:outline-none"
+                    className="peer h-3.5 w-3.5 rounded border border-slate-300 text-violet-600 focus:ring-0 focus:outline-none"
                   />
                   {/* custom checkbox micro interaction */}
-                  <span className="pointer-events-none absolute inset-0 rounded bg-indigo-500 scale-0 opacity-0 peer-checked:scale-100 peer-checked:opacity-100 transition-transform duration-150" />
-                  <span className="pointer-events-none absolute inset-0 flex items-center justify-center text-[8px] text-white opacity-0 peer-checked:opacity-100 transition-opacity">
-                    ✓
-                  </span>
+                  <span className="pointer-events-none absolute inset-0 rounded bg-violet-500 scale-0 opacity-0 peer-checked:scale-100 peer-checked:opacity-100 transition-transform duration-150" />
+                  <span className="pointer-events-none absolute inset-0 flex items-center justify-center text-[8px] text-white opacity-0 peer-checked:opacity-100 transition-opacity">v</span>
                 </span>
                 <span>Remember Me</span>
               </label>
 
               <button
                 type="button"
-                className="text-indigo-500 hover:text-indigo-600"
+                className="text-violet-600 hover:text-violet-700"
               >
                 Forgot Password?
               </button>
@@ -291,8 +300,7 @@ export default function LoginPage() {
                 whileTap={{ scale: 0.98, y: 0 }}
                 onClick={handleButtonClick}
                 disabled={loading}
-                className="relative w-full overflow-hidden rounded-full bg-[#6c4df4] text-white text-sm font-medium py-2.5 shadow-md
-                           disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none"
+                className="relative w-full overflow-hidden rounded-full bg-gradient-to-r from-violet-600 via-fuchsia-500 to-amber-400 text-white text-sm font-medium py-3 shadow-lg shadow-violet-500/25 disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none"
               >
                 {rippleVisible && (
                   <span
@@ -300,7 +308,7 @@ export default function LoginPage() {
                     className="absolute rounded-full bg-white/40 animate-[ping_0.7s_ease-out] pointer-events-none"
                   />
                 )}
-                {loading ? 'Signing in…' : 'Login'}
+                {loading ? 'Signing in...' : 'Login'}
               </motion.button>
             </motion.div>
 
@@ -314,7 +322,7 @@ export default function LoginPage() {
               <span>New User?&nbsp;</span>
               <button
                 type="button"
-                className="text-indigo-500 hover:text-indigo-600 font-medium"
+                className="text-violet-600 hover:text-violet-700 font-medium"
               >
                 Signup
               </button>
@@ -325,3 +333,4 @@ export default function LoginPage() {
     </motion.div>
   );
 }
+

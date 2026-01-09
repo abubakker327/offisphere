@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -71,20 +71,19 @@ export default function ExportsPage() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
-      className="space-y-6 bg-gradient-to-br from-slate-50 via-indigo-50/70 to-cyan-50/60 p-1 rounded-3xl"
+      className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6"
     >
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 text-white text-[11px] font-semibold shadow-sm shadow-indigo-200">
-            <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
             <span>Data exports</span>
           </div>
           <div>
-            <h1 className="text-xl font-semibold text-slate-900">
+            <h1 className="text-3xl font-semibold text-slate-900">
               Exports
             </h1>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-slate-500">
               Download attendance, timesheets, leaves and payroll data as CSV
               for reporting or backup.
             </p>
@@ -102,38 +101,34 @@ export default function ExportsPage() {
       {/* Filters card */}
       <motion.div
         whileHover={{ y: -2 }}
-        className="relative overflow-hidden bg-white/90 rounded-2xl border border-indigo-100/60 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 backdrop-blur"
+        className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6"
       >
-        <div
-          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-          aria-hidden="true"
-        />
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
+          <h2 className="text-base font-semibold text-slate-900">
             Date range filter
           </h2>
-          <span className="text-[11px] text-slate-400">
+          <span className="text-xs text-slate-400">
             Uses created date / period dates
           </span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
           <div className="space-y-1">
-            <label className="text-xs text-slate-500">From date</label>
+            <label className="text-xs text-slate-600">From date</label>
             <input
               type="date"
               value={fromDate}
               onChange={(e) => setFromDate(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
             />
           </div>
           <div className="space-y-1">
-            <label className="text-xs text-slate-500">To date</label>
+            <label className="text-xs text-slate-600">To date</label>
             <input
               type="date"
               value={toDate}
               onChange={(e) => setToDate(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
             />
           </div>
           <div className="space-y-1 flex items-end">
@@ -143,7 +138,7 @@ export default function ExportsPage() {
                 setFromDate('');
                 setToDate('');
               }}
-              className="px-3 py-2 rounded-xl border border-slate-200 text-xs text-slate-600 hover:bg-slate-50"
+              className="px-5 py-2.5 rounded-2xl bg-slate-100 text-xs text-slate-600 hover:bg-slate-200"
             >
               Clear dates
             </button>
@@ -154,17 +149,13 @@ export default function ExportsPage() {
       {/* Export buttons */}
       <motion.div
         whileHover={{ y: -2 }}
-        className="relative overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
+        className="rounded-3xl bg-white border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-6"
       >
-        <div
-          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-          aria-hidden="true"
-        />
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
+          <h2 className="text-base font-semibold text-slate-900">
             Export datasets
           </h2>
-          <span className="text-[11px] text-slate-400">
+          <span className="text-xs text-slate-400">
             CSV files open in Excel, Sheets or BI tools
           </span>
         </div>
@@ -176,7 +167,7 @@ export default function ExportsPage() {
             whileTap={{ scale: 0.98 }}
             onClick={() => handleDownload('attendance')}
             disabled={downloading === 'attendance'}
-            className="flex flex-col items-start px-3 py-3 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-slate-100 text-left shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
+            className="flex flex-col items-start px-4 py-4 rounded-2xl border border-slate-100 bg-white hover:bg-slate-50 text-left shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
           >
             <span className="text-xs font-semibold text-slate-900">
               Attendance CSV
@@ -184,9 +175,9 @@ export default function ExportsPage() {
             <span className="text-[11px] text-slate-500">
               Check-ins / check-outs
             </span>
-            <span className="mt-2 text-[11px] text-indigo-600">
+            <span className="mt-2 text-[11px] text-violet-600">
               {downloading === 'attendance'
-                ? 'Preparing…'
+                ? 'Preparing'
                 : 'Download'}
             </span>
           </motion.button>
@@ -197,7 +188,7 @@ export default function ExportsPage() {
             whileTap={{ scale: 0.98 }}
             onClick={() => handleDownload('timesheets')}
             disabled={downloading === 'timesheets'}
-            className="flex flex-col items-start px-3 py-3 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-slate-100 text-left shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
+            className="flex flex-col items-start px-4 py-4 rounded-2xl border border-slate-100 bg-white hover:bg-slate-50 text-left shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
           >
             <span className="text-xs font-semibold text-slate-900">
               Timesheets CSV
@@ -205,9 +196,9 @@ export default function ExportsPage() {
             <span className="text-[11px] text-slate-500">
               Time entries / hours
             </span>
-            <span className="mt-2 text-[11px] text-indigo-600">
+            <span className="mt-2 text-[11px] text-violet-600">
               {downloading === 'timesheets'
-                ? 'Preparing…'
+                ? 'Preparing'
                 : 'Download'}
             </span>
           </motion.button>
@@ -218,7 +209,7 @@ export default function ExportsPage() {
             whileTap={{ scale: 0.98 }}
             onClick={() => handleDownload('leaves')}
             disabled={downloading === 'leaves'}
-            className="flex flex-col items-start px-3 py-3 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-slate-100 text-left shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
+            className="flex flex-col items-start px-4 py-4 rounded-2xl border border-slate-100 bg-white hover:bg-slate-50 text-left shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
           >
             <span className="text-xs font-semibold text-slate-900">
               Leaves CSV
@@ -226,9 +217,9 @@ export default function ExportsPage() {
             <span className="text-[11px] text-slate-500">
               Leave requests & status
             </span>
-            <span className="mt-2 text-[11px] text-indigo-600">
+            <span className="mt-2 text-[11px] text-violet-600">
               {downloading === 'leaves'
-                ? 'Preparing…'
+                ? 'Preparing'
                 : 'Download'}
             </span>
           </motion.button>
@@ -239,7 +230,7 @@ export default function ExportsPage() {
             whileTap={{ scale: 0.98 }}
             onClick={() => handleDownload('payroll')}
             disabled={downloading === 'payroll'}
-            className="flex flex-col items-start px-3 py-3 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-slate-100 text-left shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
+            className="flex flex-col items-start px-4 py-4 rounded-2xl border border-slate-100 bg-white hover:bg-slate-50 text-left shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
           >
             <span className="text-xs font-semibold text-slate-900">
               Payroll runs CSV
@@ -247,9 +238,9 @@ export default function ExportsPage() {
             <span className="text-[11px] text-slate-500">
               Periods, totals & status
             </span>
-            <span className="mt-2 text-[11px] text-indigo-600">
+            <span className="mt-2 text-[11px] text-violet-600">
               {downloading === 'payroll'
-                ? 'Preparing…'
+                ? 'Preparing'
                 : 'Download'}
             </span>
           </motion.button>

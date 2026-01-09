@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -229,15 +229,15 @@ export default function SalesFlowPage() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
-      className="space-y-6 bg-gradient-to-br from-slate-50 via-indigo-50/70 to-cyan-50/60 p-1 rounded-3xl"
-    >      <div className="space-y-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 text-white text-[11px] font-semibold shadow-sm shadow-indigo-200">
-          <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
+      className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6"
+    >
+      <div className="space-y-2">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
           <span>Sales pipeline</span>
         </div>
         <div>
-          <h1 className="text-xl font-semibold text-slate-900">Sales Flow</h1>
-          <p className="text-sm text-slate-600">
+          <h1 className="text-3xl font-semibold text-slate-900">Sales Flow</h1>
+          <p className="text-sm text-slate-500">
             Quotations - Orders - Delivery - Invoice with GST, serials for panels/projectors.
           </p>
         </div>
@@ -260,17 +260,13 @@ export default function SalesFlowPage() {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="relative overflow-hidden rounded-2xl border border-indigo-100/60 bg-white/90 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 space-y-2 backdrop-blur">
-          <div
-            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-            aria-hidden="true"
-          />
-          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">Quotation / Sales Order</h3>
+        <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6 space-y-4">
+          <h3 className="text-base font-semibold text-slate-900">Quotation / Sales Order</h3>
           <div className="grid grid-cols-1 gap-2 text-xs">
             <div className="space-y-1">
-              <label className="text-[11px] text-slate-500">Customer</label>
+              <label className="text-xs text-slate-600">Customer</label>
               <select
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 value={form.customer_id}
                 onChange={(e) => setForm((p) => ({ ...p, customer_id: e.target.value }))}
               >
@@ -283,9 +279,9 @@ export default function SalesFlowPage() {
               </select>
             </div>
             <div className="space-y-1">
-              <label className="text-[11px] text-slate-500">Product</label>
+              <label className="text-xs text-slate-600">Product</label>
               <select
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 value={form.product_id}
                 onChange={(e) => setForm((p) => ({ ...p, product_id: e.target.value }))}
               >
@@ -300,21 +296,21 @@ export default function SalesFlowPage() {
             <div className="grid grid-cols-3 gap-2">
               <input
                 type="number"
-                className="px-3 py-2 rounded-xl border border-slate-200"
+                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 placeholder="Qty"
                 value={form.qty}
                 onChange={(e) => setForm((p) => ({ ...p, qty: e.target.value }))}
               />
               <input
                 type="number"
-                className="px-3 py-2 rounded-xl border border-slate-200"
+                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 placeholder="Unit price"
                 value={form.unit_price}
                 onChange={(e) => setForm((p) => ({ ...p, unit_price: e.target.value }))}
               />
               <input
                 type="number"
-                className="px-3 py-2 rounded-xl border border-slate-200"
+                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 placeholder="GST %"
                 value={form.gst_rate}
                 onChange={(e) => setForm((p) => ({ ...p, gst_rate: e.target.value }))}
@@ -327,7 +323,7 @@ export default function SalesFlowPage() {
               whileTap={{ scale: 0.97 }}
               disabled={saving}
               onClick={createQuotation}
-              className="px-4 py-2 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-indigo-500 to-purple-500 shadow hover:shadow-lg disabled:opacity-60"
+              className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 disabled:opacity-60"
             >
               Create Quotation
             </motion.button>
@@ -336,42 +332,38 @@ export default function SalesFlowPage() {
               whileTap={{ scale: 0.97 }}
               disabled={saving}
               onClick={createOrder}
-              className="px-4 py-2 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-emerald-500 to-teal-500 shadow hover:shadow-lg disabled:opacity-60"
+              className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-slate-900 hover:bg-slate-950 disabled:opacity-60"
             >
               Create Order
             </motion.button>
           </div>
         </div>
 
-        <div className="relative overflow-hidden rounded-2xl border border-indigo-100/60 bg-white/90 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 space-y-2 backdrop-blur">
-          <div
-            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-            aria-hidden="true"
-          />
-          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">Delivery & Invoice</h3>
+        <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6 space-y-4">
+          <h3 className="text-base font-semibold text-slate-900">Delivery & Invoice</h3>
           <div className="grid grid-cols-1 gap-2 text-xs">
             <div className="space-y-1">
-              <label className="text-[11px] text-slate-500">Sales Order ID</label>
+              <label className="text-xs text-slate-600">Sales Order ID</label>
               <input
-                className="w-full px-3 py-2 rounded-xl border border-slate-200"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 placeholder="Sales Order ID"
                 value={deliveryForm.sales_order_id}
                 onChange={(e) => setDeliveryForm((p) => ({ ...p, sales_order_id: e.target.value }))}
               />
             </div>
             <div className="space-y-1">
-              <label className="text-[11px] text-slate-500">Warehouse ID</label>
+              <label className="text-xs text-slate-600">Warehouse ID</label>
               <input
-                className="w-full px-3 py-2 rounded-xl border border-slate-200"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 placeholder="Warehouse ID"
                 value={deliveryForm.warehouse_id}
                 onChange={(e) => setDeliveryForm((p) => ({ ...p, warehouse_id: e.target.value }))}
               />
             </div>
             <div className="space-y-1">
-              <label className="text-[11px] text-slate-500">Product</label>
+              <label className="text-xs text-slate-600">Product</label>
               <select
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 value={deliveryForm.product_id}
                 onChange={(e) => setDeliveryForm((p) => ({ ...p, product_id: e.target.value }))}
               >
@@ -386,13 +378,13 @@ export default function SalesFlowPage() {
             <div className="grid grid-cols-2 gap-2">
               <input
                 type="number"
-                className="px-3 py-2 rounded-xl border border-slate-200"
+                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 placeholder="Qty"
                 value={deliveryForm.qty}
                 onChange={(e) => setDeliveryForm((p) => ({ ...p, qty: e.target.value }))}
               />
               <input
-                className="px-3 py-2 rounded-xl border border-slate-200"
+                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 placeholder="Serials (comma separated)"
                 value={deliveryForm.serials}
                 onChange={(e) => setDeliveryForm((p) => ({ ...p, serials: e.target.value }))}
@@ -405,7 +397,7 @@ export default function SalesFlowPage() {
               whileTap={{ scale: 0.97 }}
               disabled={saving}
               onClick={createDelivery}
-              className="px-4 py-2 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-amber-500 to-orange-500 shadow hover:shadow-lg disabled:opacity-60"
+              className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-slate-900 hover:bg-slate-950 disabled:opacity-60"
             >
               Post Delivery
             </motion.button>
@@ -415,18 +407,18 @@ export default function SalesFlowPage() {
             <h4 className="text-xs font-semibold text-slate-700 mb-2">Invoice</h4>
             <div className="grid grid-cols-1 gap-2 text-xs">
               <div className="space-y-1">
-                <label className="text-[11px] text-slate-500">Delivery ID</label>
+                <label className="text-xs text-slate-600">Delivery ID</label>
                 <input
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                   placeholder="Delivery ID"
                   value={invoiceForm.delivery_id}
                   onChange={(e) => setInvoiceForm((p) => ({ ...p, delivery_id: e.target.value }))}
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] text-slate-500">Customer</label>
+                <label className="text-xs text-slate-600">Customer</label>
                 <select
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                   value={invoiceForm.customer_id}
                   onChange={(e) => setInvoiceForm((p) => ({ ...p, customer_id: e.target.value }))}
                 >
@@ -439,9 +431,9 @@ export default function SalesFlowPage() {
                 </select>
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] text-slate-500">Product</label>
+                <label className="text-xs text-slate-600">Product</label>
                 <select
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                   value={invoiceForm.product_id}
                   onChange={(e) => setInvoiceForm((p) => ({ ...p, product_id: e.target.value }))}
                 >
@@ -456,21 +448,21 @@ export default function SalesFlowPage() {
               <div className="grid grid-cols-3 gap-2">
                 <input
                   type="number"
-                  className="px-3 py-2 rounded-xl border border-slate-200"
+                  className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                   placeholder="Qty"
                   value={invoiceForm.qty}
                   onChange={(e) => setInvoiceForm((p) => ({ ...p, qty: e.target.value }))}
                 />
                 <input
                   type="number"
-                  className="px-3 py-2 rounded-xl border border-slate-200"
+                  className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                   placeholder="Unit price"
                   value={invoiceForm.unit_price}
                   onChange={(e) => setInvoiceForm((p) => ({ ...p, unit_price: e.target.value }))}
                 />
                 <input
                   type="number"
-                  className="px-3 py-2 rounded-xl border border-slate-200"
+                  className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                   placeholder="GST %"
                   value={invoiceForm.gst_rate}
                   onChange={(e) => setInvoiceForm((p) => ({ ...p, gst_rate: e.target.value }))}
@@ -483,7 +475,7 @@ export default function SalesFlowPage() {
                 whileTap={{ scale: 0.97 }}
                 disabled={saving}
                 onClick={createInvoice}
-                className="px-4 py-2 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-indigo-500 to-purple-500 shadow hover:shadow-lg disabled:opacity-60"
+                className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 disabled:opacity-60"
               >
                 Post Invoice
               </motion.button>
@@ -493,34 +485,32 @@ export default function SalesFlowPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
-          <div
-            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-            aria-hidden="true"
-          />
-          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-2">Recent Quotations</h3>
-          <div className="overflow-x-auto text-xs">
-            <table className="min-w-full border-separate border-spacing-y-1">
-              <thead className="text-[11px] text-white">
-                <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
-                  <th className="text-left px-2 py-2 font-semibold first:rounded-l-xl">Quote #</th>
-                  <th className="text-left px-2 py-2 font-semibold">Customer</th>
-                  <th className="text-left px-2 py-2 font-semibold last:rounded-r-xl">Status</th>
+        <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
+          <div className="px-6 py-4 border-b border-slate-100">
+            <h3 className="text-base font-semibold text-slate-900">Recent Quotations</h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm">
+              <thead className="bg-slate-50 text-xs text-slate-500 uppercase tracking-wider">
+                <tr>
+                  <th className="text-left px-6 py-3 font-semibold">Quote #</th>
+                  <th className="text-left px-6 py-3 font-semibold">Customer</th>
+                  <th className="text-left px-6 py-3 font-semibold">Status</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-slate-100">
                 {quotations.length === 0 ? (
                   <tr>
-                    <td colSpan={3} className="px-2 py-3 text-center text-slate-400">
+                    <td colSpan={3} className="px-6 py-6 text-center text-xs text-slate-400">
                       No quotations yet.
                     </td>
                   </tr>
                 ) : (
-                  quotations.slice(0, 8).map((q, idx) => (
-                    <tr key={q.id} className={`rounded shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}>
-                      <td className="px-2 py-2 text-slate-900">{q.quote_number || q.id}</td>
-                      <td className="px-2 py-2 text-slate-600">{customerName(q.customer_id)}</td>
-                      <td className="px-2 py-2 text-slate-600">{q.status || '-'}</td>
+                  quotations.slice(0, 8).map((q) => (
+                    <tr key={q.id} className="hover:bg-slate-50">
+                      <td className="px-6 py-4 text-slate-900">{q.quote_number || q.id}</td>
+                      <td className="px-6 py-4 text-slate-600">{customerName(q.customer_id)}</td>
+                      <td className="px-6 py-4 text-slate-600">{q.status || '-'}</td>
                     </tr>
                   ))
                 )}
@@ -529,34 +519,32 @@ export default function SalesFlowPage() {
           </div>
         </div>
 
-        <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
-          <div
-            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-            aria-hidden="true"
-          />
-          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-2">Recent Orders</h3>
-          <div className="overflow-x-auto text-xs">
-            <table className="min-w-full border-separate border-spacing-y-1">
-              <thead className="text-[11px] text-white">
-                <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
-                  <th className="text-left px-2 py-2 font-semibold first:rounded-l-xl">SO #</th>
-                  <th className="text-left px-2 py-2 font-semibold">Customer</th>
-                  <th className="text-left px-2 py-2 font-semibold last:rounded-r-xl">Status</th>
+        <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
+          <div className="px-6 py-4 border-b border-slate-100">
+            <h3 className="text-base font-semibold text-slate-900">Recent Orders</h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm">
+              <thead className="bg-slate-50 text-xs text-slate-500 uppercase tracking-wider">
+                <tr>
+                  <th className="text-left px-6 py-3 font-semibold">SO #</th>
+                  <th className="text-left px-6 py-3 font-semibold">Customer</th>
+                  <th className="text-left px-6 py-3 font-semibold">Status</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-slate-100">
                 {orders.length === 0 ? (
                   <tr>
-                    <td colSpan={3} className="px-2 py-3 text-center text-slate-400">
+                    <td colSpan={3} className="px-6 py-6 text-center text-xs text-slate-400">
                       No orders yet.
                     </td>
                   </tr>
                 ) : (
-                  orders.slice(0, 8).map((o, idx) => (
-                    <tr key={o.id} className={`rounded shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}>
-                      <td className="px-2 py-2 text-slate-900">{o.so_number || o.id}</td>
-                      <td className="px-2 py-2 text-slate-600">{customerName(o.customer_id)}</td>
-                      <td className="px-2 py-2 text-slate-600">{o.status || '-'}</td>
+                  orders.slice(0, 8).map((o) => (
+                    <tr key={o.id} className="hover:bg-slate-50">
+                      <td className="px-6 py-4 text-slate-900">{o.so_number || o.id}</td>
+                      <td className="px-6 py-4 text-slate-600">{customerName(o.customer_id)}</td>
+                      <td className="px-6 py-4 text-slate-600">{o.status || '-'}</td>
                     </tr>
                   ))
                 )}
@@ -565,34 +553,32 @@ export default function SalesFlowPage() {
           </div>
         </div>
 
-        <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
-          <div
-            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-            aria-hidden="true"
-          />
-          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-2">Recent Invoices</h3>
-          <div className="overflow-x-auto text-xs">
-            <table className="min-w-full border-separate border-spacing-y-1">
-              <thead className="text-[11px] text-white">
-                <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
-                  <th className="text-left px-2 py-2 font-semibold first:rounded-l-xl">Invoice #</th>
-                  <th className="text-left px-2 py-2 font-semibold">Customer</th>
-                  <th className="text-left px-2 py-2 font-semibold last:rounded-r-xl">Status</th>
+        <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
+          <div className="px-6 py-4 border-b border-slate-100">
+            <h3 className="text-base font-semibold text-slate-900">Recent Invoices</h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm">
+              <thead className="bg-slate-50 text-xs text-slate-500 uppercase tracking-wider">
+                <tr>
+                  <th className="text-left px-6 py-3 font-semibold">Invoice #</th>
+                  <th className="text-left px-6 py-3 font-semibold">Customer</th>
+                  <th className="text-left px-6 py-3 font-semibold">Status</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-slate-100">
                 {invoices.length === 0 ? (
                   <tr>
-                    <td colSpan={3} className="px-2 py-3 text-center text-slate-400">
+                    <td colSpan={3} className="px-6 py-6 text-center text-xs text-slate-400">
                       No invoices yet.
                     </td>
                   </tr>
                 ) : (
-                  invoices.slice(0, 8).map((inv, idx) => (
-                    <tr key={inv.id} className={`rounded shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}>
-                      <td className="px-2 py-2 text-slate-900">{inv.invoice_number || inv.id}</td>
-                      <td className="px-2 py-2 text-slate-600">{customerName(inv.customer_id)}</td>
-                      <td className="px-2 py-2 text-slate-600">{inv.status || '-'}</td>
+                  invoices.slice(0, 8).map((inv) => (
+                    <tr key={inv.id} className="hover:bg-slate-50">
+                      <td className="px-6 py-4 text-slate-900">{inv.invoice_number || inv.id}</td>
+                      <td className="px-6 py-4 text-slate-600">{customerName(inv.customer_id)}</td>
+                      <td className="px-6 py-4 text-slate-600">{inv.status || '-'}</td>
                     </tr>
                   ))
                 )}
@@ -601,38 +587,36 @@ export default function SalesFlowPage() {
           </div>
         </div>
 
-        <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
-          <div
-            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-            aria-hidden="true"
-          />
-          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-2">Recent deliveries (from stock ledger)</h3>
-          <div className="overflow-x-auto text-xs">
-            <table className="min-w-full border-separate border-spacing-y-1">
-              <thead className="text-[11px] text-white">
-                <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
-                  <th className="text-left px-2 py-2 font-semibold first:rounded-l-xl">Ref</th>
-                  <th className="text-left px-2 py-2 font-semibold">Product</th>
-                  <th className="text-left px-2 py-2 font-semibold">Warehouse</th>
-                  <th className="text-left px-2 py-2 font-semibold last:rounded-r-xl">Qty</th>
+        <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
+          <div className="px-6 py-4 border-b border-slate-100">
+            <h3 className="text-base font-semibold text-slate-900">Recent deliveries (from stock ledger)</h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm">
+              <thead className="bg-slate-50 text-xs text-slate-500 uppercase tracking-wider">
+                <tr>
+                  <th className="text-left px-6 py-3 font-semibold">Ref</th>
+                  <th className="text-left px-6 py-3 font-semibold">Product</th>
+                  <th className="text-left px-6 py-3 font-semibold">Warehouse</th>
+                  <th className="text-left px-6 py-3 font-semibold">Qty</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-slate-100">
                 {deliveries.length === 0 ? (
                   <tr>
-                    <td colSpan={4} className="px-2 py-3 text-center text-slate-400">
+                    <td colSpan={4} className="px-6 py-6 text-center text-xs text-slate-400">
                       No deliveries yet.
                     </td>
                   </tr>
                 ) : (
-                  deliveries.map((row, idx) => (
-                    <tr key={row.id} className={`rounded shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}>
-                      <td className="px-2 py-2 text-slate-900">
+                  deliveries.map((row) => (
+                    <tr key={row.id} className="hover:bg-slate-50">
+                      <td className="px-6 py-4 text-slate-900">
                         {row.ref_type} #{row.ref_id}
                       </td>
-                      <td className="px-2 py-2 text-slate-600">{productName(row.product_id)}</td>
-                      <td className="px-2 py-2 text-slate-600">{row.warehouse_id || '-'}</td>
-                      <td className="px-2 py-2 text-slate-600">{row.qty_delta}</td>
+                      <td className="px-6 py-4 text-slate-600">{productName(row.product_id)}</td>
+                      <td className="px-6 py-4 text-slate-600">{row.warehouse_id || '-'}</td>
+                      <td className="px-6 py-4 text-slate-600">{row.qty_delta}</td>
                     </tr>
                   ))
                 )}

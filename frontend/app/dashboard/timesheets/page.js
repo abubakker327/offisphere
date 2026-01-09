@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 
@@ -221,17 +221,16 @@ export default function TimesheetsPage() {
   });
 
   return (
-    <div className="space-y-6 bg-gradient-to-br from-slate-50 via-indigo-50/70 to-cyan-50/60 p-1 rounded-3xl">
+    <div className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-        <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 text-white text-[11px] font-semibold shadow-sm shadow-indigo-200">
-            <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
+        <div className="space-y-3">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
             <span>Time tracking</span>
           </div>
           <div>
-            <h1 className="text-xl font-semibold text-slate-900">Timesheets</h1>
-            <p className="text-sm text-slate-600">
+            <h1 className="text-3xl font-semibold text-slate-900">Timesheets</h1>
+            <p className="text-sm text-slate-500">
               Log daily work hours and review timesheet entries. Managers can
               approve or reject submissions.
             </p>
@@ -240,12 +239,30 @@ export default function TimesheetsPage() {
       </div>
 
       {/* Log work form */}
-      <div className="relative overflow-hidden rounded-2xl bg-white/90 p-5 shadow-[0_14px_36px_rgba(0,0,0,0.06)] border border-indigo-100/60 backdrop-blur">
-        <div
-          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-          aria-hidden="true"
-        />
-        <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-3">Log work</h2>
+      <div className="rounded-3xl bg-white p-6 shadow-[0_20px_40px_rgba(15,23,42,0.08)] border border-slate-100">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="h-10 w-10 rounded-2xl bg-violet-600 text-white flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="3" y="4" width="18" height="18" rx="2" />
+              <path d="M16 2v4" />
+              <path d="M8 2v4" />
+              <path d="M3 10h18" />
+            </svg>
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900">Log work</h2>
+            <p className="text-xs text-slate-500">Capture today&apos;s hours and tasks.</p>
+          </div>
+        </div>
 
         <form
           onSubmit={handleCreateTimesheet}
@@ -257,7 +274,7 @@ export default function TimesheetsPage() {
               type="date"
               value={workDate}
               onChange={(e) => setWorkDate(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
               required
             />
           </div>
@@ -269,7 +286,7 @@ export default function TimesheetsPage() {
               value={projectName}
               onChange={(e) => setProjectName(e.target.value)}
               placeholder="Project name"
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
             />
           </div>
 
@@ -280,7 +297,7 @@ export default function TimesheetsPage() {
               value={taskDescription}
               onChange={(e) => setTaskDescription(e.target.value)}
               placeholder="What did you work on?"
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
             />
           </div>
 
@@ -294,7 +311,7 @@ export default function TimesheetsPage() {
               value={hours}
               onChange={(e) => setHours(e.target.value)}
               placeholder="e.g. 4"
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
               required
             />
           </div>
@@ -308,7 +325,7 @@ export default function TimesheetsPage() {
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Any extra details..."
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent resize-none"
             />
           </div>
 
@@ -326,7 +343,7 @@ export default function TimesheetsPage() {
             <button
               type="submit"
               disabled={creating}
-              className="self-start px-4 py-2 rounded-xl text-xs font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-500 shadow hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="self-start px-5 py-2.5 rounded-2xl text-xs font-semibold text-white bg-violet-600 shadow-lg shadow-violet-300/40 hover:bg-violet-700 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {creating ? 'Saving...' : 'Add entry'}
             </button>
@@ -335,19 +352,36 @@ export default function TimesheetsPage() {
       </div>
 
       {/* Filters */}
-      <div className="relative overflow-hidden rounded-2xl bg-white p-4 shadow-sm border border-slate-100">
-        <div
-          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-          aria-hidden="true"
-        />
-        <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-3">Filters</h2>
+      <div className="rounded-3xl bg-white p-6 shadow-[0_18px_36px_rgba(15,23,42,0.08)] border border-slate-100">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="h-10 w-10 rounded-2xl bg-violet-100 text-violet-700 flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M3 4h18" />
+              <path d="M7 12h10" />
+              <path d="M10 20h4" />
+            </svg>
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900">Filters</h2>
+            <p className="text-xs text-slate-500">Refine entries by status or date.</p>
+          </div>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
           <div className="space-y-1">
             <label className="font-medium text-slate-700">Status</label>
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
             >
               <option value="all">All statuses</option>
               <option value="submitted">Submitted</option>
@@ -361,7 +395,7 @@ export default function TimesheetsPage() {
               type="date"
               value={filterDateFrom}
               onChange={(e) => setFilterDateFrom(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
             />
           </div>
           <div className="space-y-1">
@@ -370,22 +404,21 @@ export default function TimesheetsPage() {
               type="date"
               value={filterDateTo}
               onChange={(e) => setFilterDateTo(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
             />
           </div>
         </div>
       </div>
 
       {/* Timesheets table */}
-      <div className="relative overflow-hidden rounded-2xl bg-white p-5 shadow-sm border border-slate-100">
-        <div
-          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-          aria-hidden="true"
-        />
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
-            Timesheet entries
-          </h2>
+      <div className="rounded-3xl bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] border border-slate-100">
+        <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-100">
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900">Timesheet entries</h2>
+            <p className="text-xs text-slate-500">
+              {filteredTimesheets.length} entries
+            </p>
+          </div>
         </div>
 
         {listError && (
@@ -394,25 +427,25 @@ export default function TimesheetsPage() {
           </p>
         )}
 
-        <div className="overflow-x-auto text-sm">
-          <table className="min-w-full border-separate border-spacing-y-2">
-            <thead className="text-xs text-white">
-              <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
-                <th className="text-left px-2 py-2 font-semibold first:rounded-l-xl">Employee</th>
-                <th className="text-left px-2 py-2 font-semibold">Date</th>
-                <th className="text-left px-2 py-2 font-semibold">Project</th>
-                <th className="text-left px-2 py-2 font-semibold">Task</th>
-                <th className="text-left px-2 py-2 font-semibold">Hours</th>
-                <th className="text-left px-2 py-2 font-semibold">Status</th>
-                <th className="text-left px-2 py-2 font-semibold last:rounded-r-xl">Actions</th>
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-sm">
+            <thead className="bg-slate-50 text-xs text-slate-500 uppercase tracking-wider">
+              <tr>
+                <th className="text-left px-6 py-3 font-semibold">Employee</th>
+                <th className="text-left px-6 py-3 font-semibold">Date</th>
+                <th className="text-left px-6 py-3 font-semibold">Project</th>
+                <th className="text-left px-6 py-3 font-semibold">Task</th>
+                <th className="text-left px-6 py-3 font-semibold">Hours</th>
+                <th className="text-left px-6 py-3 font-semibold">Status</th>
+                <th className="text-left px-6 py-3 font-semibold">Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-slate-100">
               {loadingList ? (
                 <tr>
                   <td
                     colSpan={7}
-                    className="px-2 py-4 text-center text-xs text-slate-400"
+                    className="px-6 py-8 text-center text-xs text-slate-400"
                   >
                     Loading timesheets...
                   </td>
@@ -421,33 +454,33 @@ export default function TimesheetsPage() {
                 <tr>
                   <td
                     colSpan={7}
-                    className="px-2 py-4 text-center text-xs text-slate-400"
+                    className="px-6 py-8 text-center text-xs text-slate-400"
                   >
                     No timesheet entries match your filters.
                   </td>
                 </tr>
               ) : (
-                filteredTimesheets.map((item, idx) => (
+                filteredTimesheets.map((item) => (
                   <tr
                     key={item.id}
-                    className={`transition rounded-xl shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}
+                    className="transition hover:bg-slate-50"
                   >
-                    <td className="px-2 py-2 rounded-l-xl text-slate-800">
+                    <td className="px-6 py-4 text-slate-800">
                       {item.full_name}
                     </td>
-                    <td className="px-2 py-2 text-slate-600">
+                    <td className="px-6 py-4 text-slate-600">
                       {formatDate(item.work_date)}
                     </td>
-                    <td className="px-2 py-2 text-slate-600">
-                      {item.project_name || '—'}
+                    <td className="px-6 py-4 text-slate-600">
+                      {item.project_name || '--'}
                     </td>
-                    <td className="px-2 py-2 text-slate-600">
-                      {item.task_description || '—'}
+                    <td className="px-6 py-4 text-slate-600">
+                      {item.task_description || '--'}
                     </td>
-                    <td className="px-2 py-2 text-slate-800">{item.hours}</td>
-                    <td className="px-2 py-2 text-xs">
+                    <td className="px-6 py-4 text-slate-800">{item.hours}</td>
+                    <td className="px-6 py-4 text-xs">
                       <span
-                        className={`px-2 py-0.5 rounded-full border ${
+                        className={`px-2.5 py-1 rounded-full border font-medium ${
                           STATUS_COLORS[item.status] ||
                           'bg-slate-50 text-slate-700 border-slate-200'
                         }`}
@@ -455,7 +488,7 @@ export default function TimesheetsPage() {
                         {item.status}
                       </span>
                     </td>
-                    <td className="px-2 py-2 rounded-r-xl text-xs">
+                    <td className="px-6 py-4 text-xs">
                       <div className="flex flex-wrap gap-2">
                         {isAdminOrManager && item.status === 'submitted' && (
                           <>

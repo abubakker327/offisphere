@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -133,16 +133,15 @@ export default function PaymentsSAPage() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
-      className="space-y-6 bg-gradient-to-br from-slate-50 via-indigo-50/70 to-cyan-50/60 p-1 rounded-3xl"
+      className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6"
     >
       <div className="space-y-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 text-white text-[11px] font-semibold shadow-sm shadow-indigo-200">
-          <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
           <span>Cash desk</span>
         </div>
         <div>
-          <h1 className="text-xl font-semibold text-slate-900">Payments</h1>
-          <p className="text-sm text-slate-600">
+          <h1 className="text-3xl font-semibold text-slate-900">Payments</h1>
+          <p className="text-sm text-slate-500">
             Cash in (customers) and cash out (vendors) with balanced ledger enforcement.
           </p>
         </div>
@@ -155,21 +154,17 @@ export default function PaymentsSAPage() {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="relative overflow-hidden rounded-2xl border border-indigo-100/60 bg-white/90 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 space-y-2 backdrop-blur">
-          <div
-            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-            aria-hidden="true"
-          />
-          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">Customer Receipts</h3>
+        <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6 space-y-4">
+          <h3 className="text-base font-semibold text-slate-900">Customer Receipts</h3>
           <div className="grid grid-cols-1 gap-2 text-xs">
             <input
-              className="px-3 py-2 rounded-xl border border-slate-200"
+              className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
               placeholder="Invoice ID (optional)"
               value={inForm.invoice_id}
               onChange={(e) => setInForm((p) => ({ ...p, invoice_id: e.target.value }))}
             />
             <input
-              className="px-3 py-2 rounded-xl border border-slate-200"
+              className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
               placeholder="Customer"
               list="customerOptions"
               value={inForm.customer_id}
@@ -184,13 +179,13 @@ export default function PaymentsSAPage() {
             </datalist>
             <div className="grid grid-cols-2 gap-2">
               <input
-                className="px-3 py-2 rounded-xl border border-slate-200"
+                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 placeholder="Amount"
                 value={inForm.amount}
                 onChange={(e) => setInForm((p) => ({ ...p, amount: e.target.value }))}
               />
               <input
-                className="px-3 py-2 rounded-xl border border-slate-200"
+                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 placeholder="Date"
                 type="date"
                 value={inForm.date}
@@ -198,7 +193,7 @@ export default function PaymentsSAPage() {
               />
             </div>
             <input
-              className="px-3 py-2 rounded-xl border border-slate-200"
+              className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
               placeholder="Mode (cash/bank/upi/cheque)"
               value={inForm.mode}
               onChange={(e) => setInForm((p) => ({ ...p, mode: e.target.value }))}
@@ -210,22 +205,18 @@ export default function PaymentsSAPage() {
               whileTap={{ scale: 0.97 }}
               disabled={savingIn}
               onClick={handleIn}
-              className="px-4 py-2 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-indigo-500 to-purple-500 shadow hover:shadow-lg disabled:opacity-60"
+              className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 disabled:opacity-60"
             >
-              {savingIn ? 'Saving…' : 'Record Payment In'}
+              {savingIn ? 'Saving' : 'Record Payment In'}
             </motion.button>
           </div>
         </div>
 
-        <div className="relative overflow-hidden rounded-2xl border border-indigo-100/60 bg-white/90 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 space-y-2 backdrop-blur">
-          <div
-            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-            aria-hidden="true"
-          />
-          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">Vendor Payments</h3>
+        <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6 space-y-4">
+          <h3 className="text-base font-semibold text-slate-900">Vendor Payments</h3>
           <div className="grid grid-cols-1 gap-2 text-xs">
             <input
-              className="px-3 py-2 rounded-xl border border-slate-200"
+              className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
               placeholder="Vendor"
               list="vendorOptions"
               value={outForm.vendor_id}
@@ -239,20 +230,20 @@ export default function PaymentsSAPage() {
               ))}
             </datalist>
             <input
-              className="px-3 py-2 rounded-xl border border-slate-200"
+              className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
               placeholder="PO ID (optional)"
               value={outForm.po_id}
               onChange={(e) => setOutForm((p) => ({ ...p, po_id: e.target.value }))}
             />
             <div className="grid grid-cols-2 gap-2">
               <input
-                className="px-3 py-2 rounded-xl border border-slate-200"
+                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 placeholder="Amount"
                 value={outForm.amount}
                 onChange={(e) => setOutForm((p) => ({ ...p, amount: e.target.value }))}
               />
               <input
-                className="px-3 py-2 rounded-xl border border-slate-200"
+                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 placeholder="Date"
                 type="date"
                 value={outForm.date}
@@ -260,7 +251,7 @@ export default function PaymentsSAPage() {
               />
             </div>
             <input
-              className="px-3 py-2 rounded-xl border border-slate-200"
+              className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
               placeholder="Mode (cash/bank/upi/cheque)"
               value={outForm.mode}
               onChange={(e) => setOutForm((p) => ({ ...p, mode: e.target.value }))}
@@ -272,36 +263,34 @@ export default function PaymentsSAPage() {
               whileTap={{ scale: 0.97 }}
               disabled={savingOut}
               onClick={handleOut}
-              className="px-4 py-2 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-emerald-500 to-teal-500 shadow hover:shadow-lg disabled:opacity-60"
+              className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-slate-900 hover:bg-slate-950 disabled:opacity-60"
             >
-              {savingOut ? 'Saving…' : 'Record Payment Out'}
+              {savingOut ? 'Saving' : 'Record Payment Out'}
             </motion.button>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
-          <div
-            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-            aria-hidden="true"
-          />
-          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-2">Recent Customer Payments</h3>
-          <div className="overflow-x-auto text-xs">
-            <table className="min-w-full border-separate border-spacing-y-1">
-              <thead className="text-[11px] text-white">
-                <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
-                  <th className="text-left px-2 py-2 font-semibold first:rounded-l-xl">Ref</th>
-                  <th className="text-left px-2 py-2 font-semibold">Customer</th>
-                  <th className="text-left px-2 py-2 font-semibold">Amount</th>
-                  <th className="text-left px-2 py-2 font-semibold">Method</th>
-                  <th className="text-left px-2 py-2 font-semibold last:rounded-r-xl">Status</th>
+        <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
+          <div className="px-6 py-4 border-b border-slate-100">
+            <h3 className="text-base font-semibold text-slate-900">Recent Customer Payments</h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm">
+              <thead className="bg-slate-50 text-xs text-slate-500 uppercase tracking-wider">
+                <tr>
+                  <th className="text-left px-6 py-3 font-semibold">Ref</th>
+                  <th className="text-left px-6 py-3 font-semibold">Customer</th>
+                  <th className="text-left px-6 py-3 font-semibold">Amount</th>
+                  <th className="text-left px-6 py-3 font-semibold">Method</th>
+                  <th className="text-left px-6 py-3 font-semibold">Status</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-slate-100">
                 {payments.filter((p) => p.type === 'in').length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-2 py-3 text-center text-slate-400">
+                    <td colSpan={5} className="px-6 py-6 text-center text-xs text-slate-400">
                       No customer payments yet.
                     </td>
                   </tr>
@@ -309,13 +298,13 @@ export default function PaymentsSAPage() {
                   payments
                     .filter((p) => p.type === 'in')
                     .slice(0, 8)
-                    .map((p, idx) => (
-                      <tr key={p.id} className={`rounded shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}>
-                        <td className="px-2 py-2 text-slate-900">{formatRef(p)}</td>
-                        <td className="px-2 py-2 text-slate-600">{customerName(p.customer_id)}</td>
-                        <td className="px-2 py-2 text-slate-900 font-semibold">{p.amount ?? '-'}</td>
-                        <td className="px-2 py-2 text-slate-600">{p.method || '-'}</td>
-                        <td className="px-2 py-2 text-slate-600">{displayStatus(p)}</td>
+                    .map((p) => (
+                      <tr key={p.id} className="hover:bg-slate-50">
+                        <td className="px-6 py-4 text-slate-900">{formatRef(p)}</td>
+                        <td className="px-6 py-4 text-slate-600">{customerName(p.customer_id)}</td>
+                        <td className="px-6 py-4 text-slate-900 font-semibold">{p.amount ?? '-'}</td>
+                        <td className="px-6 py-4 text-slate-600">{p.method || '-'}</td>
+                        <td className="px-6 py-4 text-slate-600">{displayStatus(p)}</td>
                       </tr>
                     ))
                 )}
@@ -324,27 +313,25 @@ export default function PaymentsSAPage() {
           </div>
         </div>
 
-        <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
-          <div
-            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-            aria-hidden="true"
-          />
-          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-2">Recent Vendor Payments</h3>
-          <div className="overflow-x-auto text-xs">
-            <table className="min-w-full border-separate border-spacing-y-1">
-              <thead className="text-[11px] text-white">
-                <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
-                  <th className="text-left px-2 py-2 font-semibold first:rounded-l-xl">Ref</th>
-                  <th className="text-left px-2 py-2 font-semibold">Vendor</th>
-                  <th className="text-left px-2 py-2 font-semibold">Amount</th>
-                  <th className="text-left px-2 py-2 font-semibold">Method</th>
-                  <th className="text-left px-2 py-2 font-semibold last:rounded-r-xl">Status</th>
+        <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
+          <div className="px-6 py-4 border-b border-slate-100">
+            <h3 className="text-base font-semibold text-slate-900">Recent Vendor Payments</h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm">
+              <thead className="bg-slate-50 text-xs text-slate-500 uppercase tracking-wider">
+                <tr>
+                  <th className="text-left px-6 py-3 font-semibold">Ref</th>
+                  <th className="text-left px-6 py-3 font-semibold">Vendor</th>
+                  <th className="text-left px-6 py-3 font-semibold">Amount</th>
+                  <th className="text-left px-6 py-3 font-semibold">Method</th>
+                  <th className="text-left px-6 py-3 font-semibold">Status</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-slate-100">
                 {payments.filter((p) => p.type === 'out').length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-2 py-3 text-center text-slate-400">
+                    <td colSpan={5} className="px-6 py-6 text-center text-xs text-slate-400">
                       No vendor payments yet.
                     </td>
                   </tr>
@@ -352,13 +339,13 @@ export default function PaymentsSAPage() {
                   payments
                     .filter((p) => p.type === 'out')
                     .slice(0, 8)
-                    .map((p, idx) => (
-                      <tr key={p.id} className={`rounded shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}>
-                        <td className="px-2 py-2 text-slate-900">{formatRef(p)}</td>
-                        <td className="px-2 py-2 text-slate-600">{vendorName(p.vendor_id)}</td>
-                        <td className="px-2 py-2 text-slate-900 font-semibold">{p.amount ?? '-'}</td>
-                        <td className="px-2 py-2 text-slate-600">{p.method || '-'}</td>
-                        <td className="px-2 py-2 text-slate-600">{displayStatus(p)}</td>
+                    .map((p) => (
+                      <tr key={p.id} className="hover:bg-slate-50">
+                        <td className="px-6 py-4 text-slate-900">{formatRef(p)}</td>
+                        <td className="px-6 py-4 text-slate-600">{vendorName(p.vendor_id)}</td>
+                        <td className="px-6 py-4 text-slate-900 font-semibold">{p.amount ?? '-'}</td>
+                        <td className="px-6 py-4 text-slate-600">{p.method || '-'}</td>
+                        <td className="px-6 py-4 text-slate-600">{displayStatus(p)}</td>
                       </tr>
                     ))
                 )}

@@ -74,8 +74,6 @@ export default function DashboardLayout({ children }) {
   const [userName, setUserName] = useState('');
   const [roles, setRoles] = useState([]);
   const [openGroups, setOpenGroups] = useState({});
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
-  const [cursorActive, setCursorActive] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   // Auth + user info
@@ -210,86 +208,61 @@ export default function DashboardLayout({ children }) {
     }
   };
 
-  // Custom cursor (circle) with hover response on interactive elements
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const handleMove = (e) => {
-      const x = e.clientX;
-      const y = e.clientY;
-      setCursorPos({ x, y });
-
-      const interactive = e.target?.closest?.(
-        'a, button, input, select, textarea, [role="button"], [data-interactive]'
-      );
-      setCursorActive(!!interactive);
-    };
-
-    window.addEventListener('pointermove', handleMove);
-    return () => {
-      window.removeEventListener('pointermove', handleMove);
-    };
-  }, []);
 
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Fixed sidebar on the left */}
       <aside
-        className={`hidden md:flex md:flex-col fixed inset-y-0 left-0 overflow-visible ${
-          sidebarCollapsed ? 'w-16' : 'w-64'
-        } bg-gradient-to-b from-indigo-700 via-indigo-800 to-purple-900 text-indigo-50 transition-[width,transform] duration-300 ease-in-out ${
+        className={`hidden md:flex md:flex-col fixed inset-y-0 left-0 overflow-hidden ${
+          sidebarCollapsed ? 'w-20' : 'w-72'
+        } bg-gradient-to-b from-violet-600 via-violet-700 to-fuchsia-700 text-white transition-[width,transform] duration-500 ease-in-out will-change-[width,transform] ${
           sidebarCollapsed ? '-translate-x-0' : 'translate-x-0'
         }`}
       >
         {/* Brand */}
-        <div className="h-16 px-4 flex items-center justify-between gap-2 border-b border-white/10 w-full">
-          <div className="flex items-center gap-3 flex-shrink-0">
-            <div className="h-9 w-9 rounded-2xl bg-white/10 ring-1 ring-white/20 flex items-center justify-center text-white text-sm font-semibold shadow-lg shadow-black/20">
-              O
+        <div className="px-5 pt-6 pb-4">
+          <button
+            type="button"
+            data-interactive
+            onClick={() => setSidebarCollapsed((v) => !v)}
+            className="w-full flex items-center gap-3 text-left"
+            aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            <div className="h-12 w-12 rounded-2xl bg-white/15 ring-1 ring-white/25 flex items-center justify-center text-white text-sm font-semibold shadow-lg shadow-black/20">
+              <span className="text-lg">O</span>
             </div>
             {!sidebarCollapsed && (
               <div>
-                <div className="text-sm font-semibold text-white">
+                <div className="text-base font-semibold text-white">
                   Offisphere
                 </div>
-                <div className="text-[11px] text-indigo-100/80">
+                <div className="text-xs text-white/70">
                   Workplace OS
                 </div>
               </div>
             )}
-          </div>
+          </button>
         </div>
 
-        {/* Collapse/expand arrow */}
-        <button
-          type="button"
-          data-interactive
-          onClick={() => setSidebarCollapsed((v) => !v)}
-          className="absolute top-3 -right-3 h-7 w-7 rounded-full bg-white text-slate-700 shadow-lg shadow-black/20 border border-slate-200 ring-4 ring-black ring-offset-[3px] ring-offset-indigo-800 flex items-center justify-center hover:bg-slate-50 transition md:flex"
-          aria-label={sidebarCollapsed ? 'Open menu' : 'Hide menu'}
-        >
-          <span className="text-sm leading-none">{sidebarCollapsed ? '›' : '‹'}</span>
-        </button>
-
         {/* Dashboard (single item, no dropdown) */}
-        <div className="px-3 pt-4 pb-1">
+        <div className="px-4 pb-1">
           <Link
             href="/dashboard"
-            className={`flex items-center gap-3 px-3 py-2 rounded-xl text-[11px] font-semibold transition ${
+            className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition ${
               isActive('/dashboard', true)
-                ? 'bg-white text-indigo-900 shadow-sm shadow-black/10'
-                : 'bg-white/10 text-indigo-50 hover:bg-white/15'
+                ? 'bg-white text-violet-700 shadow-[0_8px_20px_rgba(0,0,0,0.18)]'
+                : 'bg-white/10 text-white/90 hover:bg-white/15'
             }`}
           >
             <span className="text-base drop-shadow-sm">
-              {renderIcon('home', isActive('/dashboard', true) ? 'text-indigo-900' : 'text-white')}
+              {renderIcon('home', isActive('/dashboard', true) ? 'text-violet-700' : 'text-white')}
             </span>
             {!sidebarCollapsed && <span>Dashboard</span>}
           </Link>
         </div>
 
         {/* Grouped nav (no internal scroll) */}
-        <nav className="flex-1 px-3 pb-3 space-y-3 text-sm">
+        <nav className="flex-1 px-4 pb-3 space-y-3 text-sm">
           {navGroups.map((group) => {
             const open = openGroups[group.id];
 
@@ -301,11 +274,18 @@ export default function DashboardLayout({ children }) {
                   onClick={() => toggleGroup(group.id)}
                   className={`w-full flex items-center ${
                     sidebarCollapsed ? 'justify-center' : 'justify-between'
-                  } px-3 py-2 rounded-xl text-[11px] font-semibold text-indigo-100/90 hover:bg-white/10 hover:text-white transition`}
+                  } px-4 py-3 rounded-2xl text-sm font-semibold transition ${
+                    open && !sidebarCollapsed
+                      ? 'bg-white text-violet-700 shadow-[0_10px_25px_rgba(0,0,0,0.18)]'
+                      : 'text-white/90 hover:bg-white/12 hover:text-white'
+                  }`}
                 >
                   <span className="flex items-center gap-2">
                     <span className="text-base drop-shadow-sm">
-                      {renderIcon(group.icon, sidebarCollapsed ? 'text-white' : 'text-indigo-100/90')}
+                      {renderIcon(
+                        group.icon,
+                        open && !sidebarCollapsed ? 'text-violet-700' : 'text-white/90'
+                      )}
                     </span>
                     {!sidebarCollapsed && <span>{group.label}</span>}
                   </span>
@@ -313,15 +293,15 @@ export default function DashboardLayout({ children }) {
                     <motion.span
                       animate={{ rotate: open ? 90 : 0 }}
                       transition={{ duration: 0.15 }}
-                      className="text-indigo-100/70"
+                      className={open ? 'text-violet-700' : 'text-white/70'}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-3 w-3"
+                        className="h-4 w-4"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
-                        strokeWidth="2"
+                        strokeWidth="2.5"
                         strokeLinecap="round"
                         strokeLinejoin="round"
                       >
@@ -347,10 +327,10 @@ export default function DashboardLayout({ children }) {
                           <Link
                             key={item.href}
                             href={item.href}
-                            className={`block px-3 py-1.5 rounded-lg text-[11px] transition ${
+                            className={`block px-4 py-2 rounded-xl text-[11px] transition ${
                               (item.label === 'Overview' ? pathname === item.href : active)
-                                ? 'bg-white text-indigo-900 font-semibold shadow-sm shadow-black/10'
-                                : 'text-indigo-100/80 hover:bg-white/10 hover:text-white'
+                                ? 'bg-white text-violet-700 font-semibold shadow-[0_8px_20px_rgba(0,0,0,0.15)]'
+                                : 'text-white/80 hover:bg-white/10 hover:text-white'
                             }`}
                           >
                             {item.label}
@@ -366,10 +346,10 @@ export default function DashboardLayout({ children }) {
         </nav>
 
         {/* User / logout */}
-        <div className="border-t border-white/10 px-3 py-3">
-          <div className={`flex items-center ${sidebarCollapsed ? 'justify-center' : 'justify-between'} gap-2`}>
+        <div className="border-t border-white/10 px-4 py-4">
+          <div className={`flex items-center ${sidebarCollapsed ? 'justify-center' : 'justify-between'} gap-3`}>
             <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-full bg-black/25 flex items-center justify-center text-xs font-medium text-white">
+              <div className="h-10 w-10 rounded-2xl bg-white/10 flex items-center justify-center text-sm font-semibold text-white ring-1 ring-white/20">
                 {userName ? userName.charAt(0).toUpperCase() : 'U'}
               </div>
               {!sidebarCollapsed && (
@@ -377,7 +357,7 @@ export default function DashboardLayout({ children }) {
                   <div className="text-xs font-medium text-white line-clamp-1">
                     {userName || 'Super Admin'}
                   </div>
-                  <div className="inline-flex items-center px-2 py-0.5 rounded-full bg-black/25 text-[10px] text-indigo-100/90 border border-white/10 mt-0.5">
+                  <div className="inline-flex items-center px-2 py-0.5 rounded-full bg-white/10 text-[10px] text-white/80 border border-white/15 mt-0.5">
                     {primaryRoleLabel}
                   </div>
                 </div>
@@ -388,15 +368,15 @@ export default function DashboardLayout({ children }) {
               <button
                 type="button"
                 onClick={handleLogout}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 text-[11px] text-rose-100 border border-white/20 hover:bg-rose-500/35 hover:border-rose-100 hover:text-white transition shadow-sm shadow-black/20"
+                className="inline-flex items-center px-3 py-2 rounded-2xl bg-white/15 text-[11px] text-white border border-white/20 hover:bg-white/20 transition shadow-sm shadow-black/20"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-3.5 w-3.5"
+                  className="h-4 w-4"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2"
+                  strokeWidth="2.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
@@ -404,7 +384,6 @@ export default function DashboardLayout({ children }) {
                   <polyline points="16 17 21 12 16 7" />
                   <line x1="21" y1="12" x2="9" y2="12" />
                 </svg>
-                <span>Logout</span>
               </button>
             )}
           </div>
@@ -413,34 +392,16 @@ export default function DashboardLayout({ children }) {
 
       {/* Main content area, shifted right by sidebar width on desktop */}
       <div
-        className={`md:transition-[margin-left] duration-300 ease-in-out ${
-          sidebarCollapsed ? 'md:ml-16' : 'md:ml-64'
+        className={`md:transition-[margin-left] duration-500 ease-in-out ${
+          sidebarCollapsed ? 'md:ml-20' : 'md:ml-72'
         }`}
       >
         <main className="min-h-screen p-4 md:p-6">{children}</main>
       </div>
 
-      {/* Custom cursor overlay */}
-      <div
-        className="pointer-events-none fixed inset-0 z-[9999]"
-        aria-hidden="true"
-      >
-        <div
-          className="absolute rounded-full mix-blend-difference"
-          style={{
-            width: cursorActive ? 26 : 18,
-            height: cursorActive ? 26 : 18,
-            transform: `translate(${cursorPos.x - (cursorActive ? 13 : 9)}px, ${
-              cursorPos.y - (cursorActive ? 13 : 9)
-            }px)`,
-            transition: 'transform 120ms ease, width 120ms ease, height 120ms ease',
-            background: 'rgba(12,12,12,0.85)',
-            boxShadow: cursorActive
-              ? '0 0 0 8px rgba(0,0,0,0.12)'
-              : '0 0 0 4px rgba(0,0,0,0.08)'
-          }}
-        />
-      </div>
     </div>
   );
 }
+
+
+

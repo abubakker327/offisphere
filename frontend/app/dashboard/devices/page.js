@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 
@@ -223,36 +223,54 @@ export default function DevicesPage() {
   };
 
   const formatDateTime = (value) => {
-    if (!value) return '—';
+    if (!value) return '--';
     return new Date(value).toLocaleString();
   };
 
   return (
-    <div className="space-y-6 bg-gradient-to-br from-slate-50 via-indigo-50/70 to-cyan-50/60 p-1 rounded-3xl">
-      <div className="space-y-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 text-white text-[11px] font-semibold shadow-sm shadow-indigo-200">
-          <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
+    <div className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6">
+      <div className="space-y-3">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
           <span>Device shelf</span>
         </div>
         <div>
-          <h1 className="text-xl font-semibold text-slate-900">
+          <h1 className="text-3xl font-semibold text-slate-900">
             Devices
           </h1>
-          <p className="text-sm text-slate-600">
-            Track company laptops, phones and other equipment.
+          <p className="text-sm text-slate-500">
+            Track company laptops, phones, and other equipment.
           </p>
         </div>
       </div>
 
       {/* Create device */}
-      <div className="relative overflow-hidden rounded-2xl bg-white/90 border border-indigo-100/60 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 backdrop-blur">
-        <div
-          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-          aria-hidden="true"
-        />
-        <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-3">
-          Add new device
-        </h2>
+      <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="h-10 w-10 rounded-2xl bg-violet-600 text-white flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="2" y="3" width="20" height="14" rx="2" />
+              <path d="M8 21h8" />
+              <path d="M12 17v4" />
+            </svg>
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900">
+              Add new device
+            </h2>
+            <p className="text-xs text-slate-500">
+              Register equipment and assign owners.
+            </p>
+          </div>
+        </div>
 
         {createError && (
           <div className="mb-3 text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-3 py-2">
@@ -262,7 +280,7 @@ export default function DevicesPage() {
 
         <form
           onSubmit={handleCreateDevice}
-          className="grid grid-cols-1 md:grid-cols-4 gap-3 text-sm"
+          className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm"
         >
           <div className="space-y-1">
             <label className="text-xs text-slate-600">Name</label>
@@ -272,7 +290,7 @@ export default function DevicesPage() {
               onChange={(e) =>
                 handleFormChange('name', e.target.value)
               }
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
               placeholder="Dell XPS 13, iPhone 14..."
               required
             />
@@ -288,7 +306,7 @@ export default function DevicesPage() {
               onChange={(e) =>
                 handleFormChange('device_type', e.target.value)
               }
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
               placeholder="Laptop, Phone, Monitor"
             />
           </div>
@@ -303,7 +321,7 @@ export default function DevicesPage() {
               onChange={(e) =>
                 handleFormChange('serial_number', e.target.value)
               }
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
             />
           </div>
 
@@ -314,7 +332,7 @@ export default function DevicesPage() {
               onChange={(e) =>
                 handleFormChange('assigned_to', e.target.value)
               }
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-xs"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-xs"
             >
               <option value="">Unassigned</option>
               {users.map((u) => (
@@ -335,7 +353,7 @@ export default function DevicesPage() {
                 handleFormChange('notes', e.target.value)
               }
               rows={2}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-xs resize-none"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-xs resize-none"
               placeholder="Add purchase date, condition, accessories, etc."
             />
           </div>
@@ -344,7 +362,7 @@ export default function DevicesPage() {
             <button
               type="submit"
               disabled={creating}
-              className="px-5 py-2 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-500 shadow hover:opacity-90 disabled:opacity-60"
+              className="px-5 py-2.5 rounded-2xl text-sm font-semibold text-white bg-violet-600 shadow-lg shadow-violet-300/40 hover:bg-violet-700 disabled:opacity-60"
             >
               {creating ? 'Saving...' : 'Add device'}
             </button>
@@ -353,40 +371,45 @@ export default function DevicesPage() {
       </div>
 
       {/* Devices table */}
-      <div className="relative overflow-hidden rounded-2xl bg-white border border-slate-100 shadow-sm p-4">
-        <div
-          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-          aria-hidden="true"
-        />
-        <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-3">
-          Devices inventory
-        </h2>
+      <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
+        <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-4 border-b border-slate-100">
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900">
+              Devices inventory
+            </h2>
+            <p className="text-xs text-slate-500">
+              {devices.length} devices
+            </p>
+          </div>
+        </div>
 
         {error && (
-          <div className="mb-3 text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-3 py-2">
-            {error}
+          <div className="px-6 pt-4">
+            <div className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-3 py-2">
+              {error}
+            </div>
           </div>
         )}
 
-        <div className="overflow-x-auto text-sm">
-          <table className="min-w-full border-separate border-spacing-y-2">
-            <thead className="text-xs text-white">
-              <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
-                <th className="text-left px-3 py-2 font-semibold first:rounded-l-xl">Name</th>
-                <th className="text-left px-3 py-2 font-semibold">Type</th>
-                <th className="text-left px-3 py-2 font-semibold">Serial</th>
-                <th className="text-left px-3 py-2 font-semibold">Assigned to</th>
-                <th className="text-left px-3 py-2 font-semibold">Assigned at</th>
-                <th className="text-left px-3 py-2 font-semibold">Status</th>
-                <th className="text-right px-3 py-2 font-semibold last:rounded-r-xl">Actions</th>
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-sm">
+            <thead className="bg-slate-50 text-xs text-slate-500 uppercase tracking-wider">
+              <tr>
+                <th className="text-left px-6 py-3 font-semibold">Name</th>
+                <th className="text-left px-6 py-3 font-semibold">Type</th>
+                <th className="text-left px-6 py-3 font-semibold">Serial</th>
+                <th className="text-left px-6 py-3 font-semibold">Assigned to</th>
+                <th className="text-left px-6 py-3 font-semibold">Assigned at</th>
+                <th className="text-left px-6 py-3 font-semibold">Status</th>
+                <th className="text-right px-6 py-3 font-semibold">Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-slate-100">
               {loading ? (
                 <tr>
                   <td
                     colSpan={7}
-                    className="px-3 py-6 text-center text-xs text-slate-400"
+                    className="px-6 py-8 text-center text-xs text-slate-400"
                   >
                     Loading devices...
                   </td>
@@ -395,18 +418,18 @@ export default function DevicesPage() {
                 <tr>
                   <td
                     colSpan={7}
-                    className="px-3 py-6 text-center text-xs text-slate-400"
+                    className="px-6 py-8 text-center text-xs text-slate-400"
                   >
                     No devices found.
                   </td>
                 </tr>
               ) : (
-                devices.map((d, idx) => (
+                devices.map((d) => (
                   <tr
                     key={d.id}
-                    className={`rounded-xl shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}
+                    className="hover:bg-slate-50"
                   >
-                    <td className="px-3 py-3 rounded-l-xl text-slate-900">
+                    <td className="px-6 py-4 text-slate-900">
                       {d.name}
                       {d.notes && (
                         <div className="text-[11px] text-slate-500 mt-1 line-clamp-2">
@@ -414,28 +437,28 @@ export default function DevicesPage() {
                         </div>
                       )}
                     </td>
-                    <td className="px-3 py-3 text-xs text-slate-600">
-                      {d.device_type || '—'}
+                    <td className="px-6 py-4 text-xs text-slate-600">
+                      {d.device_type || '--'}
                     </td>
-                    <td className="px-3 py-3 text-xs text-slate-600">
-                      {d.serial_number || '—'}
+                    <td className="px-6 py-4 text-xs text-slate-600">
+                      {d.serial_number || '--'}
                     </td>
-                    <td className="px-3 py-3 text-xs text-slate-600">
+                    <td className="px-6 py-4 text-xs text-slate-600">
                       {d.assigned_to_name || 'Unassigned'}
                     </td>
-                    <td className="px-3 py-3 text-xs text-slate-500">
+                    <td className="px-6 py-4 text-xs text-slate-500">
                       {formatDateTime(d.assigned_at)}
                     </td>
-                    <td className="px-3 py-3 text-xs">
+                    <td className="px-6 py-4 text-xs">
                       <span className={statusBadge(d.status)}>
                         {d.status}
                       </span>
                     </td>
-                    <td className="px-3 py-3 rounded-r-xl text-right text-xs">
+                    <td className="px-6 py-4 text-right text-xs">
                       <button
                         type="button"
                         onClick={() => openEdit(d)}
-                        className="px-4 py-1.5 rounded-full bg-slate-900 text-white hover:bg-slate-700"
+                        className="text-xs font-semibold text-violet-700 hover:text-violet-900"
                       >
                         Edit
                       </button>
@@ -450,10 +473,10 @@ export default function DevicesPage() {
 
       {/* Edit modal */}
       {editingDevice && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg p-5">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-slate-900">
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 px-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-base font-semibold text-slate-900">
                 Edit device
               </h3>
               <button
@@ -461,7 +484,7 @@ export default function DevicesPage() {
                 onClick={closeEdit}
                 className="text-xs text-slate-500 hover:text-slate-700"
               >
-                ✕
+                Close
               </button>
             </div>
 
@@ -483,7 +506,7 @@ export default function DevicesPage() {
                   onChange={(e) =>
                     handleFormChange('name', e.target.value, true)
                   }
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                   required
                 />
               </div>
@@ -502,7 +525,7 @@ export default function DevicesPage() {
                       true
                     )
                   }
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 />
               </div>
 
@@ -520,7 +543,7 @@ export default function DevicesPage() {
                       true
                     )
                   }
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 />
               </div>
 
@@ -531,7 +554,7 @@ export default function DevicesPage() {
                   onChange={(e) =>
                     handleFormChange('status', e.target.value, true)
                   }
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-xs"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-xs"
                 >
                   <option value="available">Available</option>
                   <option value="assigned">Assigned</option>
@@ -553,7 +576,7 @@ export default function DevicesPage() {
                       true
                     )
                   }
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-xs"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-xs"
                 >
                   <option value="">Unassigned</option>
                   {users.map((u) => (
@@ -572,7 +595,7 @@ export default function DevicesPage() {
                     handleFormChange('notes', e.target.value, true)
                   }
                   rows={2}
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-xs resize-none"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-xs resize-none"
                 />
               </div>
 
@@ -580,14 +603,14 @@ export default function DevicesPage() {
                 <button
                   type="button"
                   onClick={closeEdit}
-                  className="px-4 py-2 rounded-xl text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200"
+                  className="px-4 py-2 rounded-2xl text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={editSaving}
-                  className="px-5 py-2 rounded-xl text-xs font-medium text-white bg-slate-900 hover:bg-slate-700 disabled:opacity-60"
+                  className="px-5 py-2 rounded-2xl text-xs font-semibold text-white bg-violet-600 hover:bg-violet-700 disabled:opacity-60"
                 >
                   {editSaving ? 'Saving...' : 'Save changes'}
                 </button>

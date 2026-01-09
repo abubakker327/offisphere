@@ -176,17 +176,16 @@ export default function LeadsPage() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
-      className="space-y-6 bg-gradient-to-br from-slate-50 via-indigo-50/70 to-cyan-50/60 p-1 rounded-3xl"
+      className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6"
     >
       <div className="flex items-center justify-between">
-        <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 text-white text-[11px] font-semibold shadow-sm shadow-indigo-200">
-            <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
+        <div className="space-y-3">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
             <span>Lead pipeline</span>
           </div>
           <div>
-            <h1 className="text-xl font-semibold text-slate-900">Leads</h1>
-            <p className="text-sm text-slate-600">
+            <h1 className="text-3xl font-semibold text-slate-900">Leads</h1>
+            <p className="text-sm text-slate-500">
               Capture and track your sales pipeline.
             </p>
           </div>
@@ -201,83 +200,103 @@ export default function LeadsPage() {
 
       <form
         onSubmit={handleSubmit}
-        className="relative overflow-hidden bg-white/90 rounded-xl border border-indigo-100/60 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 backdrop-blur"
+        className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6"
       >
-        <div
-          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-          aria-hidden="true"
-        />
-        <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-3">
-          Add new lead
-        </h2>
+        <div className="flex items-center gap-3 mb-4">
+          <div className="h-10 w-10 rounded-2xl bg-violet-600 text-white flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <line x1="19" y1="8" x2="19" y2="14" />
+              <line x1="22" y1="11" x2="16" y2="11" />
+            </svg>
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900">
+              Add new lead
+            </h2>
+            <p className="text-xs text-slate-500">
+              Capture a new opportunity for the pipeline.
+            </p>
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-5 gap-3 text-sm">
           <div className="space-y-1">
-            <label className="text-xs text-slate-600">Lead name</label>
+            <label className="text-xs text-slate-500">Lead name</label>
             <input
               placeholder="Lead name"
               value={form.name}
               onChange={(e) => handleChange('name', e.target.value)}
               required
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
             />
           </div>
           <div className="space-y-1">
-            <label className="text-xs text-slate-600">Email</label>
+            <label className="text-xs text-slate-500">Email</label>
             <input
               placeholder="Email"
               value={form.email}
               onChange={(e) => handleChange('email', e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
             />
           </div>
           <div className="space-y-1">
-            <label className="text-xs text-slate-600">Phone</label>
+            <label className="text-xs text-slate-500">Phone</label>
             <input
               placeholder="Phone"
               value={form.phone}
               onChange={(e) => handleChange('phone', e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
             />
           </div>
           <div className="space-y-1">
-            <label className="text-xs text-slate-600">Company</label>
+            <label className="text-xs text-slate-500">Company</label>
             <input
               placeholder="Company"
               value={form.company}
               onChange={(e) => handleChange('company', e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
             />
           </div>
           <div className="space-y-1">
-            <label className="text-xs text-slate-600">Source</label>
+            <label className="text-xs text-slate-500">Source</label>
             <input
               placeholder="Source"
               value={form.source}
               onChange={(e) => handleChange('source', e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
             />
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3 text-sm">
           <div className="space-y-1">
-            <label className="text-xs text-slate-600">Expected value</label>
+            <label className="text-xs text-slate-500">Expected value</label>
             <input
               type="number"
               placeholder="e.g. 50000"
               value={form.expected_value}
               onChange={(e) => handleChange('expected_value', e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs text-slate-600">Stage</label>
+            <label className="text-xs text-slate-500">Stage</label>
             <select
               value={form.stage}
               onChange={(e) => handleChange('stage', e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-xs"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-xs"
             >
               {STAGE_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -292,7 +311,7 @@ export default function LeadsPage() {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               type="submit"
-              className="px-5 py-2 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-500 shadow hover:shadow-lg disabled:opacity-60"
+              className="px-5 py-2.5 rounded-2xl text-sm font-semibold text-white bg-violet-600 shadow-lg shadow-violet-300/40 hover:bg-violet-700 disabled:opacity-60"
             >
               Add lead
             </motion.button>
@@ -314,8 +333,8 @@ export default function LeadsPage() {
                 onClick={() => setStageFilter(s)}
                 className={`px-3 py-1.5 rounded-full border transition ${
                   active
-                    ? 'bg-slate-900 text-white border-slate-900'
-                    : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                    ? 'bg-violet-600 text-white border-violet-600'
+                    : 'bg-white text-slate-700 border-slate-200 hover:border-violet-200'
                 }`}
               >
                 {s === 'all' ? 'All' : getStageLabel(s)}
@@ -334,7 +353,7 @@ export default function LeadsPage() {
             onChange={(e) =>
               handleDateRangeChange('start', e.target.value)
             }
-            className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-xs"
+            className="px-4 py-2 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-xs"
           />
           <span className="text-slate-400">to</span>
           <input
@@ -343,13 +362,13 @@ export default function LeadsPage() {
             onChange={(e) =>
               handleDateRangeChange('end', e.target.value)
             }
-            className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-xs"
+            className="px-4 py-2 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-xs"
           />
           <button
             type="button"
             onClick={applyDateFilter}
             disabled={loading}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium text-white bg-slate-900 disabled:opacity-60 shadow-sm"
+            className="px-4 py-2 rounded-2xl text-xs font-semibold text-white bg-violet-600 disabled:opacity-60 shadow-sm hover:bg-violet-700"
           >
             Apply
           </button>
@@ -357,7 +376,7 @@ export default function LeadsPage() {
             <button
               type="button"
               onClick={clearDateFilter}
-              className="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 border border-slate-200 hover:bg-slate-50"
+              className="px-4 py-2 rounded-2xl text-xs font-semibold text-slate-600 border border-slate-200 hover:border-violet-200"
             >
               Clear
             </button>
@@ -365,36 +384,35 @@ export default function LeadsPage() {
         </div>
       </div>
 
-      <div className="relative overflow-hidden bg-white rounded-xl border border-slate-100 shadow-sm p-4">
-        <div
-          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-          aria-hidden="true"
-        />
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
-            Pipeline
-          </h2>
+      <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
+        <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-4 border-b border-slate-100">
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900">Pipeline</h2>
+            <p className="text-xs text-slate-500">
+              {filteredLeads.length} leads
+            </p>
+          </div>
         </div>
 
-        <div className="overflow-x-auto text-sm">
-          <table className="min-w-full border-separate border-spacing-y-2">
-            <thead className="text-xs text-white">
-              <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
-                <th className="text-left px-3 py-2 font-semibold first:rounded-l-xl">Lead</th>
-                <th className="text-left px-3 py-2 font-semibold">Company</th>
-                <th className="text-left px-3 py-2 font-semibold">Source</th>
-                <th className="text-left px-3 py-2 font-semibold">Telecaller</th>
-                <th className="text-left px-3 py-2 font-semibold">Value</th>
-                <th className="text-left px-3 py-2 font-semibold">Stage</th>
-                <th className="text-left px-3 py-2 font-semibold last:rounded-r-xl">Created</th>
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-sm">
+            <thead className="bg-slate-50 text-xs text-slate-500 uppercase tracking-wider">
+              <tr>
+                <th className="text-left px-6 py-3 font-semibold">Lead</th>
+                <th className="text-left px-6 py-3 font-semibold">Company</th>
+                <th className="text-left px-6 py-3 font-semibold">Source</th>
+                <th className="text-left px-6 py-3 font-semibold">Telecaller</th>
+                <th className="text-left px-6 py-3 font-semibold">Value</th>
+                <th className="text-left px-6 py-3 font-semibold">Stage</th>
+                <th className="text-left px-6 py-3 font-semibold">Created</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-slate-100">
               {loading ? (
                 <tr>
                   <td
                     colSpan={columnCount}
-                    className="px-3 py-6 text-center text-xs text-slate-400"
+                    className="px-6 py-8 text-center text-xs text-slate-400"
                   >
                     Loading leads...
                   </td>
@@ -403,35 +421,35 @@ export default function LeadsPage() {
                 <tr>
                   <td
                     colSpan={columnCount}
-                    className="px-3 py-6 text-center text-xs text-slate-400"
+                    className="px-6 py-8 text-center text-xs text-slate-400"
                   >
                     No leads found.
                   </td>
                 </tr>
               ) : (
-                filteredLeads.map((lead, idx) => (
+                filteredLeads.map((lead) => (
                   <tr
                     key={lead.id}
-                    className={`rounded-xl shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}
+                    className="hover:bg-slate-50"
                   >
-                    <td className="px-3 py-2 rounded-l-xl text-slate-900">
+                    <td className="px-6 py-4 text-slate-900">
                       {lead.name || '-'}
                     </td>
-                    <td className="px-3 py-2 text-xs text-slate-600">
+                    <td className="px-6 py-4 text-xs text-slate-500">
                       {lead.company || '-'}
                     </td>
-                    <td className="px-3 py-2 text-xs text-slate-600">
+                    <td className="px-6 py-4 text-xs text-slate-500">
                       {lead.source || '-'}
                     </td>
-                    <td className="px-3 py-2 text-xs text-slate-600">
+                    <td className="px-6 py-4 text-xs text-slate-500">
                       {lead.telecaller_name || '-'}
                     </td>
-                    <td className="px-3 py-2 text-xs text-slate-600">
+                    <td className="px-6 py-4 text-xs text-slate-500">
                       {lead.expected_value != null
                         ? Number(lead.expected_value).toLocaleString()
                         : '-'}
                     </td>
-                    <td className="px-3 py-2 text-xs">
+                    <td className="px-6 py-4 text-xs">
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-medium ${
                           lead.stage === 'hot'
@@ -444,7 +462,7 @@ export default function LeadsPage() {
                         {getStageLabel(lead.stage)}
                       </span>
                     </td>
-                    <td className="px-3 py-2 rounded-r-xl text-xs text-slate-500">
+                    <td className="px-6 py-4 text-xs text-slate-500">
                       {lead.created_at
                         ? new Date(lead.created_at).toLocaleDateString()
                         : '-'}
@@ -459,3 +477,4 @@ export default function LeadsPage() {
     </motion.div>
   );
 }
+

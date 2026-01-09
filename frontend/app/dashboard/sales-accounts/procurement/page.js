@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -177,16 +177,15 @@ export default function ProcurementPage() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
-      className="space-y-6 bg-gradient-to-br from-slate-50 via-indigo-50/70 to-cyan-50/60 p-1 rounded-3xl"
+      className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6"
     >
       <div className="space-y-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 text-white text-[11px] font-semibold shadow-sm shadow-indigo-200">
-          <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
           <span>Procurement desk</span>
         </div>
         <div>
-          <h1 className="text-xl font-semibold text-slate-900">Procurement</h1>
-          <p className="text-sm text-slate-600">
+          <h1 className="text-3xl font-semibold text-slate-900">Procurement</h1>
+          <p className="text-sm text-slate-500">
             Create Purchase Orders and receive Goods (GRN) with GST and serial capture.
           </p>
         </div>
@@ -199,17 +198,13 @@ export default function ProcurementPage() {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="relative overflow-hidden rounded-2xl border border-indigo-100/60 bg-white/90 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 space-y-3 backdrop-blur">
-          <div
-            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-            aria-hidden="true"
-          />
-          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">New Purchase Order</h3>
+        <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6 space-y-4">
+          <h3 className="text-base font-semibold text-slate-900">New Purchase Order</h3>
           <div className="grid grid-cols-1 gap-2 text-xs">
             <div className="space-y-1">
-              <label className="text-[11px] text-slate-500">Vendor</label>
+              <label className="text-xs text-slate-600">Vendor</label>
               <select
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 value={poForm.vendor_id}
                 onChange={(e) => setPoForm((p) => ({ ...p, vendor_id: e.target.value }))}
               >
@@ -222,18 +217,18 @@ export default function ProcurementPage() {
               </select>
             </div>
             <div className="space-y-1">
-              <label className="text-[11px] text-slate-500">Warehouse ID</label>
+              <label className="text-xs text-slate-600">Warehouse ID</label>
               <input
-                className="w-full px-3 py-2 rounded-xl border border-slate-200"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 placeholder="Warehouse ID"
                 value={poForm.warehouse_id}
                 onChange={(e) => setPoForm((p) => ({ ...p, warehouse_id: e.target.value }))}
               />
             </div>
             <div className="space-y-1">
-              <label className="text-[11px] text-slate-500">Product</label>
+              <label className="text-xs text-slate-600">Product</label>
               <select
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 value={poForm.product_id}
                 onChange={(e) => setPoForm((p) => ({ ...p, product_id: e.target.value }))}
               >
@@ -247,30 +242,30 @@ export default function ProcurementPage() {
             </div>
             <div className="grid grid-cols-3 gap-2">
               <div className="space-y-1">
-                <label className="text-[11px] text-slate-500">Qty</label>
+                <label className="text-xs text-slate-600">Qty</label>
                 <input
                   type="number"
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                   placeholder="Qty"
                   value={poForm.qty}
                   onChange={(e) => setPoForm((p) => ({ ...p, qty: e.target.value }))}
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] text-slate-500">Unit price</label>
+                <label className="text-xs text-slate-600">Unit price</label>
                 <input
                   type="number"
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                   placeholder="Unit price"
                   value={poForm.unit_price}
                   onChange={(e) => setPoForm((p) => ({ ...p, unit_price: e.target.value }))}
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] text-slate-500">GST %</label>
+                <label className="text-xs text-slate-600">GST %</label>
                 <input
                   type="number"
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                   placeholder="GST %"
                   value={poForm.gst_rate}
                   onChange={(e) => setPoForm((p) => ({ ...p, gst_rate: e.target.value }))}
@@ -284,27 +279,23 @@ export default function ProcurementPage() {
               whileTap={{ scale: 0.97 }}
               disabled={savingPO}
               onClick={handleSavePO}
-              className="px-4 py-2 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-indigo-500 to-purple-500 shadow hover:shadow-lg disabled:opacity-60"
+              className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 disabled:opacity-60"
             >
-              {savingPO ? 'Saving…' : 'Create PO'}
+              {savingPO ? 'Saving' : 'Create PO'}
             </motion.button>
           </div>
-          <div className="text-[11px] text-slate-500">
+          <div className="text-xs text-slate-400">
             Endpoint: POST /api/sa/procurement/po
           </div>
         </div>
 
-        <div className="relative overflow-hidden rounded-2xl border border-indigo-100/60 bg-white/90 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 space-y-3 backdrop-blur">
-          <div
-            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-            aria-hidden="true"
-          />
-          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">Receive Goods (GRN)</h3>
+        <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6 space-y-4">
+          <h3 className="text-base font-semibold text-slate-900">Receive Goods (GRN)</h3>
           <div className="grid grid-cols-1 gap-2 text-xs">
             <div className="space-y-1">
-              <label className="text-[11px] text-slate-500">PO</label>
+              <label className="text-xs text-slate-600">PO</label>
               <select
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 value={grnForm.po_id}
                 onChange={(e) => handleSelectPoForGrn(e.target.value)}
               >
@@ -317,15 +308,15 @@ export default function ProcurementPage() {
               </select>
             </div>
             <input
-              className="px-3 py-2 rounded-xl border border-slate-200"
+              className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
               placeholder="Warehouse ID"
               value={grnForm.warehouse_id}
               onChange={(e) => setGrnForm((p) => ({ ...p, warehouse_id: e.target.value }))}
             />
             <div className="space-y-1">
-              <label className="text-[11px] text-slate-500">Product (from PO)</label>
+              <label className="text-xs text-slate-600">Product (from PO)</label>
               <select
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 value={grnForm.product_id}
                 onChange={(e) => setGrnForm((p) => ({ ...p, product_id: e.target.value }))}
               >
@@ -342,19 +333,19 @@ export default function ProcurementPage() {
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-1">
-                <label className="text-[11px] text-slate-500">Qty received</label>
+                <label className="text-xs text-slate-600">Qty received</label>
                 <input
                   type="number"
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                   placeholder="Qty received"
                   value={grnForm.qty_received}
                   onChange={(e) => setGrnForm((p) => ({ ...p, qty_received: e.target.value }))}
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] text-slate-500">Serials (comma separated)</label>
+                <label className="text-xs text-slate-600">Serials (comma separated)</label>
                 <input
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                   placeholder="Serials (comma separated)"
                   value={grnForm.serials}
                   onChange={(e) => setGrnForm((p) => ({ ...p, serials: e.target.value }))}
@@ -368,52 +359,50 @@ export default function ProcurementPage() {
               whileTap={{ scale: 0.97 }}
               disabled={savingGRN}
               onClick={handleSaveGRN}
-              className="px-4 py-2 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-emerald-500 to-teal-500 shadow hover:shadow-lg disabled:opacity-60"
+              className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 disabled:opacity-60"
             >
-              {savingGRN ? 'Saving…' : 'Post GRN'}
+              {savingGRN ? 'Saving' : 'Post GRN'}
             </motion.button>
           </div>
-          <div className="text-[11px] text-slate-500">
+          <div className="text-xs text-slate-400">
             Endpoint: POST /api/sa/procurement/grn
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
-          <div
-            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-            aria-hidden="true"
-          />
-          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-2">Purchase Orders</h3>
-          <div className="overflow-x-auto text-xs">
-            <table className="min-w-full border-separate border-spacing-y-1">
-              <thead className="text-[11px] text-white">
-                <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
-                  <th className="text-left px-2 py-2 font-semibold first:rounded-l-xl">PO #</th>
-                  <th className="text-left px-2 py-2 font-semibold">Vendor</th>
-                  <th className="text-left px-2 py-2 font-semibold last:rounded-r-xl">Status</th>
+        <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
+          <div className="px-6 py-4 border-b border-slate-100">
+            <h3 className="text-base font-semibold text-slate-900">Purchase Orders</h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm">
+              <thead className="bg-slate-50 text-xs text-slate-500 uppercase tracking-wider">
+                <tr>
+                  <th className="text-left px-6 py-3 font-semibold">PO #</th>
+                  <th className="text-left px-6 py-3 font-semibold">Vendor</th>
+                  <th className="text-left px-6 py-3 font-semibold">Status</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-slate-100">
                 {loading ? (
                   <tr>
-                    <td colSpan={4} className="px-2 py-3 text-center text-slate-400">
-                      Loading…
+                    <td colSpan={3} className="px-6 py-6 text-center text-xs text-slate-400">
+                      Loading
                     </td>
                   </tr>
                 ) : pos.length === 0 ? (
                   <tr>
-                    <td colSpan={4} className="px-2 py-3 text-center text-slate-400">
+                    <td colSpan={3} className="px-6 py-6 text-center text-xs text-slate-400">
                       No POs found.
                     </td>
                   </tr>
                 ) : (
-                  pos.map((po, idx) => (
-                    <tr key={po.id} className={`rounded shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}>
-                      <td className="px-2 py-2 text-slate-900">{po.po_number || po.id}</td>
-                      <td className="px-2 py-2 text-slate-600">{vendorName(po.vendor_id)}</td>
-                      <td className="px-2 py-2 text-slate-600">{po.status || 'draft'}</td>
+                  pos.map((po) => (
+                    <tr key={po.id} className="hover:bg-slate-50">
+                      <td className="px-6 py-4 text-slate-900">{po.po_number || po.id}</td>
+                      <td className="px-6 py-4 text-slate-600">{vendorName(po.vendor_id)}</td>
+                      <td className="px-6 py-4 text-slate-600">{po.status || 'draft'}</td>
                     </tr>
                   ))
                 )}
@@ -422,44 +411,42 @@ export default function ProcurementPage() {
           </div>
         </div>
 
-        <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
-          <div
-            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-            aria-hidden="true"
-          />
-          <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 mb-2">Recent GRN (stock ledger +)</h3>
-          <div className="overflow-x-auto text-xs">
-            <table className="min-w-full border-separate border-spacing-y-1">
-              <thead className="text-[11px] text-white">
-                <tr className="bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
-                  <th className="text-left px-2 py-2 font-semibold first:rounded-l-xl">Ref</th>
-                  <th className="text-left px-2 py-2 font-semibold">Product</th>
-                  <th className="text-left px-2 py-2 font-semibold">Warehouse</th>
-                  <th className="text-left px-2 py-2 font-semibold last:rounded-r-xl">Qty</th>
+        <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
+          <div className="px-6 py-4 border-b border-slate-100">
+            <h3 className="text-base font-semibold text-slate-900">Recent GRN (stock ledger +)</h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm">
+              <thead className="bg-slate-50 text-xs text-slate-500 uppercase tracking-wider">
+                <tr>
+                  <th className="text-left px-6 py-3 font-semibold">Ref</th>
+                  <th className="text-left px-6 py-3 font-semibold">Product</th>
+                  <th className="text-left px-6 py-3 font-semibold">Warehouse</th>
+                  <th className="text-left px-6 py-3 font-semibold">Qty</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-slate-100">
                 {loading ? (
                   <tr>
-                    <td colSpan={4} className="px-2 py-3 text-center text-slate-400">
-                      Loading…
+                    <td colSpan={4} className="px-6 py-6 text-center text-xs text-slate-400">
+                      Loading
                     </td>
                   </tr>
                 ) : grns.length === 0 ? (
                   <tr>
-                    <td colSpan={4} className="px-2 py-3 text-center text-slate-400">
+                    <td colSpan={4} className="px-6 py-6 text-center text-xs text-slate-400">
                       No GRN entries found.
                     </td>
                   </tr>
                 ) : (
-                  grns.slice(0, 10).map((row, idx) => (
-                    <tr key={row.id} className={`rounded shadow-sm ${idx % 2 === 0 ? 'bg-indigo-50/70' : 'bg-slate-50'} hover:bg-indigo-50`}>
-                      <td className="px-2 py-2 text-slate-900">
+                  grns.slice(0, 10).map((row) => (
+                    <tr key={row.id} className="hover:bg-slate-50">
+                      <td className="px-6 py-4 text-slate-900">
                         {row.ref_type} #{row.ref_id}
                       </td>
-                      <td className="px-2 py-2 text-slate-600">{productName(row.product_id)}</td>
-                      <td className="px-2 py-2 text-slate-600">{row.warehouse_id || '-'}</td>
-                      <td className="px-2 py-2 text-slate-600">{row.qty_delta ?? row.quantity ?? '-'}</td>
+                      <td className="px-6 py-4 text-slate-600">{productName(row.product_id)}</td>
+                      <td className="px-6 py-4 text-slate-600">{row.warehouse_id || '-'}</td>
+                      <td className="px-6 py-4 text-slate-600">{row.qty_delta ?? row.quantity ?? '-'}</td>
                     </tr>
                   ))
                 )}

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -136,27 +136,26 @@ export default function EmailPage() {
   };
 
   const formatDate = (value) =>
-    value ? new Date(value).toLocaleString() : '—';
+    value ? new Date(value).toLocaleString() : '-';
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
-      className="space-y-6 bg-gradient-to-br from-slate-50 via-indigo-50/70 to-cyan-50/60 p-1 rounded-3xl"
+      className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6"
     >
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 text-white text-[11px] font-semibold shadow-sm shadow-indigo-200">
-            <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
             <span>Template studio</span>
           </div>
           <div>
-            <h1 className="text-xl font-semibold text-slate-900">
+            <h1 className="text-3xl font-semibold text-slate-900">
               Email templates
             </h1>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-slate-500">
               Manage subjects and bodies for automated emails like leaves,
               tasks and payroll.
             </p>
@@ -176,37 +175,33 @@ export default function EmailPage() {
         {/* Templates list */}
         <motion.div
           whileHover={{ y: -2 }}
-          className="relative overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-sm p-4 lg:col-span-2"
+          className="rounded-3xl bg-white border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] lg:col-span-2"
         >
-          <div
-            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-            aria-hidden="true"
-          />
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+            <h2 className="text-base font-semibold text-slate-900">
               Templates
             </h2>
           </div>
 
           {loading ? (
             <div className="py-6 text-center text-xs text-slate-400">
-              Loading templates…
+              Loading templates
             </div>
           ) : templates.length === 0 ? (
             <div className="py-6 text-center text-xs text-slate-400">
               No templates yet. Create your first one on the right.
             </div>
           ) : (
-            <div className="space-y-2 text-sm">
+            <div className="space-y-2 text-sm px-6 py-4">
               {templates.map((tpl) => (
                 <button
                   key={tpl.id}
                   type="button"
                   onClick={() => handleEditClick(tpl)}
-                  className={`w-full text-left px-3 py-2 rounded-2xl border ${
+                  className={`w-full text-left px-4 py-3 rounded-2xl border ${
                     editingId === tpl.id
-                      ? 'border-indigo-300 bg-indigo-50'
-                      : 'border-slate-100 bg-slate-50 hover:bg-slate-100'
+                      ? 'border-violet-200 bg-violet-50'
+                      : 'border-slate-100 bg-white hover:bg-slate-50'
                   } transition`}
                 >
                   <div className="flex items-center justify-between gap-2">
@@ -245,21 +240,17 @@ export default function EmailPage() {
         {/* Form */}
         <motion.div
           whileHover={{ y: -2 }}
-          className="relative overflow-hidden bg-white/90 rounded-2xl border border-indigo-100/60 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 backdrop-blur"
+          className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6"
         >
-          <div
-            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-            aria-hidden="true"
-          />
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
+            <h2 className="text-base font-semibold text-slate-900">
               {editingId ? 'Edit template' : 'New template'}
             </h2>
             {editingId && (
               <button
                 type="button"
                 onClick={resetForm}
-                className="text-[11px] text-slate-400 hover:text-slate-600"
+                className="text-xs text-slate-400 hover:text-slate-600"
               >
                 + New template
               </button>
@@ -271,7 +262,7 @@ export default function EmailPage() {
             className="space-y-3 text-sm"
           >
             <div className="space-y-1">
-              <label className="text-xs text-slate-500">
+              <label className="text-xs text-slate-600">
                 Template key
               </label>
               <input
@@ -280,25 +271,25 @@ export default function EmailPage() {
                 onChange={(e) =>
                   handleChange('template_key', e.target.value)
                 }
-                placeholder="leave_approved, task_assigned, payroll_payslip…"
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                placeholder="leave_approved, task_assigned, payroll_payslip"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 disabled={!!editingId} // cannot change key on edit
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs text-slate-500">Name</label>
+              <label className="text-xs text-slate-600">Name</label>
               <input
                 type="text"
                 value={form.name}
                 onChange={(e) => handleChange('name', e.target.value)}
                 placeholder="Leave approved (employee)"
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs text-slate-500">Subject</label>
+              <label className="text-xs text-slate-600">Subject</label>
               <input
                 type="text"
                 value={form.subject}
@@ -306,12 +297,12 @@ export default function EmailPage() {
                   handleChange('subject', e.target.value)
                 }
                 placeholder="Your leave request has been approved"
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs text-slate-500">
+              <label className="text-xs text-slate-600">
                 Body (supports plain text, use variables like
                 {' {{name}} '}later)
               </label>
@@ -320,7 +311,7 @@ export default function EmailPage() {
                 value={form.body}
                 onChange={(e) => handleChange('body', e.target.value)}
                 placeholder={`Hi {{name}},\n\nYour leave from {{from_date}} to {{to_date}} has been approved.\n\nThanks,\nOffisphere`}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent resize-none"
               />
             </div>
 
@@ -332,7 +323,7 @@ export default function EmailPage() {
                   onChange={(e) =>
                     handleChange('is_active', e.target.checked)
                   }
-                  className="h-3.5 w-3.5 rounded border border-slate-300 text-indigo-600 focus:ring-0 focus:outline-none"
+                  className="h-3.5 w-3.5 rounded border border-slate-300 text-violet-600 focus:ring-0 focus:outline-none"
                 />
                 <span>Active</span>
               </label>
@@ -342,12 +333,12 @@ export default function EmailPage() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.97 }}
                 disabled={saving}
-                className="px-4 py-1.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-xs font-medium shadow disabled:opacity-60 disabled:cursor-not-allowed"
+                className="px-5 py-2 rounded-2xl bg-violet-600 text-white text-xs font-medium shadow-lg shadow-violet-300/50 hover:bg-violet-700 disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {saving
                   ? editingId
-                    ? 'Updating…'
-                    : 'Creating…'
+                    ? 'Updating'
+                    : 'Creating'
                   : editingId
                   ? 'Update template'
                   : 'Create template'}

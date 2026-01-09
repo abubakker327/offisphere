@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -72,27 +72,26 @@ export default function ReportsPage() {
   }, []);
 
   const formatCurrency = (value) =>
-    `₹${Number(value || 0).toLocaleString('en-IN')}`;
+    `${Number(value || 0).toLocaleString('en-IN')}`;
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
-      className="space-y-6 bg-gradient-to-br from-slate-50 via-indigo-50/70 to-cyan-50/60 p-1 rounded-3xl"
+      className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6"
     >
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 text-white text-[11px] font-semibold shadow-sm shadow-indigo-200">
-            <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
             <span>Insights hub</span>
           </div>
           <div>
-            <h1 className="text-xl font-semibold text-slate-900">
+            <h1 className="text-3xl font-semibold text-slate-900">
               Reports
             </h1>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-slate-500">
               Cross-module summary for attendance, leaves, timesheets, tasks
               and payroll over a selected period.
             </p>
@@ -110,38 +109,34 @@ export default function ReportsPage() {
       {/* Filters */}
       <motion.div
         whileHover={{ y: -2 }}
-        className="relative overflow-hidden bg-white/90 rounded-2xl border border-indigo-100/60 shadow-[0_14px_36px_rgba(0,0,0,0.06)] p-4 backdrop-blur"
+        className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6"
       >
-        <div
-          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-500"
-          aria-hidden="true"
-        />
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500">
+          <h2 className="text-base font-semibold text-slate-900">
             Date range
           </h2>
-          <span className="text-[11px] text-slate-400">
+          <span className="text-xs text-slate-400">
             Filters all metrics on this page
           </span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-sm items-end">
           <div className="space-y-1">
-            <label className="text-xs text-slate-500">From date</label>
+            <label className="text-xs text-slate-600">From date</label>
             <input
               type="date"
               value={fromDate}
               onChange={(e) => setFromDate(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
             />
           </div>
           <div className="space-y-1">
-            <label className="text-xs text-slate-500">To date</label>
+            <label className="text-xs text-slate-600">To date</label>
             <input
               type="date"
               value={toDate}
               onChange={(e) => setToDate(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
             />
           </div>
           <div className="space-y-1 flex gap-2">
@@ -151,7 +146,7 @@ export default function ReportsPage() {
                 setFromDate('');
                 setToDate('');
               }}
-              className="h-10 mt-auto px-3 py-2 rounded-xl border border-slate-200 text-xs text-slate-600 hover:bg-slate-50"
+              className="h-10 mt-auto px-4 py-2 rounded-2xl bg-slate-100 text-xs text-slate-600 hover:bg-slate-200"
             >
               Clear
             </button>
@@ -163,9 +158,9 @@ export default function ReportsPage() {
               whileTap={{ scale: 0.97 }}
               onClick={fetchSummary}
               disabled={loading}
-              className="h-10 mt-auto px-4 py-2 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-xs font-medium shadow disabled:opacity-60 disabled:cursor-not-allowed"
+              className="h-10 mt-auto px-5 py-2 rounded-2xl bg-violet-600 text-white text-xs font-medium shadow-lg shadow-violet-300/50 hover:bg-violet-700 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {loading ? 'Updating…' : 'Apply filters'}
+              {loading ? 'Updating' : 'Apply filters'}
             </motion.button>
           </div>
         </div>
@@ -179,13 +174,10 @@ export default function ReportsPage() {
           variants={cardVariants}
           initial="hidden"
           animate="visible"
-          whileHover={{
-            y: -4,
-            boxShadow: '0 18px 40px rgba(14,165,233,0.18)'
-          }}
-          className="bg-gradient-to-br from-sky-500/10 via-sky-500/5 to-transparent rounded-2xl border border-sky-100 shadow-sm p-4"
+          whileHover={{ y: -4 }}
+          className="bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-4"
         >
-          <p className="text-xs font-medium text-sky-500 mb-2">
+          <p className="text-xs font-medium text-slate-500 mb-2">
             Attendance (records)
           </p>
           <div className="text-2xl font-semibold text-slate-900">
@@ -219,13 +211,10 @@ export default function ReportsPage() {
           variants={cardVariants}
           initial="hidden"
           animate="visible"
-          whileHover={{
-            y: -4,
-            boxShadow: '0 18px 40px rgba(79,70,229,0.18)'
-          }}
-          className="bg-gradient-to-br from-indigo-500/10 via-indigo-500/5 to-transparent rounded-2xl border border-indigo-100 shadow-sm p-4"
+          whileHover={{ y: -4 }}
+          className="bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-4"
         >
-          <p className="text-xs font-medium text-indigo-500 mb-2">
+          <p className="text-xs font-medium text-slate-500 mb-2">
             Leaves (requests)
           </p>
           <div className="text-2xl font-semibold text-slate-900">
@@ -259,11 +248,8 @@ export default function ReportsPage() {
           variants={cardVariants}
           initial="hidden"
           animate="visible"
-          whileHover={{
-            y: -4,
-            boxShadow: '0 18px 40px rgba(148,163,184,0.18)'
-          }}
-          className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
+          whileHover={{ y: -4 }}
+          className="bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-4"
         >
           <p className="text-xs font-medium text-slate-500 mb-2">
             Timesheets
@@ -282,11 +268,8 @@ export default function ReportsPage() {
           variants={cardVariants}
           initial="hidden"
           animate="visible"
-          whileHover={{
-            y: -4,
-            boxShadow: '0 18px 40px rgba(251,191,36,0.25)'
-          }}
-          className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
+          whileHover={{ y: -4 }}
+          className="bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-4"
         >
           <p className="text-xs font-medium text-slate-500 mb-2">
             Tasks
@@ -331,13 +314,10 @@ export default function ReportsPage() {
           variants={cardVariants}
           initial="hidden"
           animate="visible"
-          whileHover={{
-            y: -4,
-            boxShadow: '0 18px 40px rgba(16,185,129,0.22)'
-          }}
-          className="bg-gradient-to-br from-emerald-500/10 via-emerald-500/5 to-transparent rounded-2xl border border-emerald-100 shadow-sm p-4"
+          whileHover={{ y: -4 }}
+          className="bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-4"
         >
-          <p className="text-xs font-medium text-emerald-600 mb-2">
+          <p className="text-xs font-medium text-slate-500 mb-2">
             Payroll runs
           </p>
           <div className="text-2xl font-semibold text-slate-900">
@@ -366,7 +346,7 @@ export default function ReportsPage() {
           initial="hidden"
           animate="visible"
           whileHover={{ y: -4 }}
-          className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4"
+          className="bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-4"
         >
           <p className="text-xs font-medium text-slate-500 mb-2">
             HR snapshot
@@ -377,10 +357,10 @@ export default function ReportsPage() {
             tools.
           </p>
           <ul className="mt-2 text-[11px] text-slate-600 space-y-1">
-            <li>• Attendance health (present vs absent)</li>
-            <li>• Leave volume & approval ratios</li>
-            <li>• Task load & completion</li>
-            <li>• Payroll totals for the selected period</li>
+            <li>Attendance health (present vs absent)</li>
+            <li>Leave volume & approval ratios</li>
+            <li>Task load & completion</li>
+            <li>Payroll totals for the selected period</li>
           </ul>
         </motion.div>
 
@@ -391,21 +371,21 @@ export default function ReportsPage() {
           initial="hidden"
           animate="visible"
           whileHover={{ y: -4 }}
-          className="bg-slate-900 rounded-2xl border border-slate-800 shadow-sm p-4 text-slate-100"
+          className="bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-4"
         >
-          <p className="text-xs font-medium text-amber-300 mb-2">
+          <p className="text-xs font-medium text-slate-500 mb-2">
             Tips
           </p>
-          <ul className="text-[11px] space-y-1.5">
+          <ul className="text-[11px] text-slate-600 space-y-1.5">
             <li>
-              • Use a **month** range to match payroll cycles.
+              Use a month range to match payroll cycles.
             </li>
             <li>
-              • Compare different ranges manually (e.g. this month vs last
+              Compare different ranges manually (e.g. this month vs last
               month) to see trends.
             </li>
             <li>
-              • For team-level breakdowns, use the module pages + filters, or
+              For team-level breakdowns, use the module pages + filters, or
               download CSVs from Exports.
             </li>
           </ul>
