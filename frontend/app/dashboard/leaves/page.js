@@ -37,13 +37,33 @@ export default function LeavesPage() {
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterType, setFilterType] = useState('all');
 
+  const normalizeRole = (role) => {
+    if (!role) return '';
+    if (typeof role === 'string') return role;
+    if (typeof role === 'object') {
+      return role.name || role.role || role.type || role.code || '';
+    }
+    return '';
+  };
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const storedRoles =
-        window.localStorage.getItem('offisphere_roles');
+        window.localStorage.getItem('offisphere_roles') ||
+        window.sessionStorage.getItem('offisphere_roles');
       if (storedRoles) {
         try {
-          setRoles(JSON.parse(storedRoles));
+          const parsed = JSON.parse(storedRoles);
+          const normalized = Array.isArray(parsed)
+            ? parsed
+                .map((role) => normalizeRole(role))
+                .map((role) =>
+                  String(role || '')
+                    .toLowerCase()
+                    .replace(/\s+/g, '_')
+                )
+            : [];
+          setRoles(normalized.filter(Boolean));
         } catch {
           setRoles([]);
         }
@@ -63,7 +83,12 @@ export default function LeavesPage() {
       }
     : { 'Content-Type': 'application/json' };
 
-  const isAdmin = roles.includes('admin');
+  const isAdmin =
+    roles.includes('admin') ||
+    roles.includes('super_admin') ||
+    roles.includes('superadmin');
+  const isManager = roles.includes('manager');
+  const canReview = isAdmin || isManager;
 
   const fetchLeaves = async () => {
     setLoadingList(true);
@@ -369,7 +394,7 @@ export default function LeavesPage() {
               {filteredLeaves.length} requests
             </p>
           </div>
-          {isAdmin && (
+          {canReview && (
             <span className="text-[11px] text-slate-500">
               Approve or reject pending requests.
             </span>
@@ -392,14 +417,14 @@ export default function LeavesPage() {
                 <th className="text-left px-6 py-3 font-semibold">To</th>
                 <th className="text-left px-6 py-3 font-semibold">Days</th>
                 <th className="text-left px-6 py-3 font-semibold">Status</th>
-                {isAdmin && <th className="text-left px-6 py-3 font-semibold">Actions</th>}
+                {canReview && <th className="text-right px-6 py-3 font-semibold">Actions</th>}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {loadingList ? (
                 <tr>
                   <td
-                    colSpan={isAdmin ? 7 : 6}
+                    colSpan={canReview ? 7 : 6}
                     className="px-6 py-8 text-center text-xs text-slate-400"
                   >
                     Loading leaves...
@@ -408,7 +433,7 @@ export default function LeavesPage() {
               ) : filteredLeaves.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={isAdmin ? 7 : 6}
+                    colSpan={canReview ? 7 : 6}
                     className="px-6 py-8 text-center text-xs text-slate-400"
                   >
                     No leave requests match your filters.
@@ -444,8 +469,8 @@ export default function LeavesPage() {
                         {leave.status}
                       </span>
                     </td>
-                    {isAdmin && (
-                      <td className="px-6 py-4 text-xs">
+                    {canReview && (
+                      <td className="px-6 py-4 text-xs text-right">
                         {leave.status === 'pending' ? (
                           <div className="flex gap-2">
                             <button
@@ -455,7 +480,7 @@ export default function LeavesPage() {
                               disabled={
                                 statusActionLoadingId === leave.id
                               }
-                              className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 hover:bg-emerald-100 disabled:opacity-60"
+                              className="text-xs font-semibold text-emerald-700 hover:text-emerald-900 disabled:opacity-60"
                             >
                               Approve
                             </button>
@@ -466,7 +491,7 @@ export default function LeavesPage() {
                               disabled={
                                 statusActionLoadingId === leave.id
                               }
-                              className="px-3 py-1 rounded-full bg-red-50 text-red-600 border border-red-100 hover:bg-red-100 disabled:opacity-60"
+                              className="text-xs font-semibold text-rose-600 hover:text-rose-800 disabled:opacity-60"
                             >
                               Reject
                             </button>

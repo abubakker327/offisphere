@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Only grouped sections now (Dashboard is separate, not a dropdown)
@@ -12,11 +12,11 @@ const navGroups = [
     label: 'HR Management',
     icon: 'users',
     items: [
-      { href: '/dashboard/users', label: 'Users' },
-      { href: '/dashboard/attendance', label: 'Attendance' },
-      { href: '/dashboard/timesheets', label: 'Timesheets' },
-      { href: '/dashboard/leaves', label: 'Leaves' },
-      { href: '/dashboard/tasks', label: 'Tasks' }
+      { href: '/dashboard/users', label: 'Users', permission: 'hr:users' },
+      { href: '/dashboard/attendance', label: 'Attendance', permission: 'hr:attendance' },
+      { href: '/dashboard/timesheets', label: 'Timesheets', permission: 'hr:timesheets' },
+      { href: '/dashboard/leaves', label: 'Leaves', permission: 'hr:leaves' },
+      { href: '/dashboard/tasks', label: 'Tasks', permission: 'hr:tasks' }
     ]
   },
   {
@@ -24,9 +24,9 @@ const navGroups = [
     label: 'Assets & Operations',
     icon: 'box',
     items: [
-      { href: '/dashboard/devices', label: 'Devices' },
-      { href: '/dashboard/documents', label: 'Documents' },
-      { href: '/dashboard/reimbursements', label: 'Reimbursements' }
+      { href: '/dashboard/devices', label: 'Devices', permission: 'ops:devices' },
+      { href: '/dashboard/documents', label: 'Documents', permission: 'ops:documents' },
+      { href: '/dashboard/reimbursements', label: 'Reimbursements', permission: 'ops:reimbursements' }
     ]
   },
   {
@@ -34,9 +34,9 @@ const navGroups = [
     label: 'Sales & CRM',
     icon: 'chart',
     items: [
-      { href: '/dashboard/leads', label: 'Leads' },
-      { href: '/dashboard/payments', label: 'Payments' },
-      { href: '/dashboard/sales-reports', label: 'Sales Reports' }
+      { href: '/dashboard/leads', label: 'Leads', permission: 'sales:leads' },
+      { href: '/dashboard/payments', label: 'Payments', permission: 'sales:payments' },
+      { href: '/dashboard/sales-reports', label: 'Sales Reports', permission: 'sales:reports' }
     ]
   },
   {
@@ -44,13 +44,13 @@ const navGroups = [
     label: 'Sales & Accounts',
     icon: 'briefcase',
     items: [
-      { href: '/dashboard/sales-accounts', label: 'Overview' },
-      { href: '/dashboard/sales-accounts/procurement', label: 'Procurement' },
-      { href: '/dashboard/sales-accounts/sales', label: 'Sales' },
-      { href: '/dashboard/sales-accounts/inventory', label: 'Inventory' },
-      { href: '/dashboard/sales-accounts/payments', label: 'Payments' },
-      { href: '/dashboard/sales-accounts/accounting', label: 'Accounting' },
-      { href: '/dashboard/sales-accounts/prints', label: 'Print Docs' }
+      { href: '/dashboard/sales-accounts', label: 'Overview', permission: 'sa:overview' },
+      { href: '/dashboard/sales-accounts/procurement', label: 'Procurement', permission: 'sa:procurement' },
+      { href: '/dashboard/sales-accounts/sales', label: 'Sales', permission: 'sa:sales' },
+      { href: '/dashboard/sales-accounts/inventory', label: 'Inventory', permission: 'sa:inventory' },
+      { href: '/dashboard/sales-accounts/payments', label: 'Payments', permission: 'sa:payments' },
+      { href: '/dashboard/sales-accounts/accounting', label: 'Accounting', permission: 'sa:accounting' },
+      { href: '/dashboard/sales-accounts/prints', label: 'Print Docs', permission: 'sa:prints' }
     ]
   },
   {
@@ -58,14 +58,103 @@ const navGroups = [
     label: 'Finance & Admin',
     icon: 'card',
     items: [
-      { href: '/dashboard/payroll', label: 'Payroll' },
-      { href: '/dashboard/recognition', label: 'Recognition' },
-      { href: '/dashboard/email', label: 'Email' },
-      { href: '/dashboard/exports', label: 'Exports' },
-      { href: '/dashboard/reports', label: 'Reports' }
+      { href: '/dashboard/payroll', label: 'Payroll', permission: 'fin:payroll' },
+      { href: '/dashboard/recognition', label: 'Recognition', permission: 'fin:recognition' },
+      { href: '/dashboard/email', label: 'Email', permission: 'fin:email' },
+      { href: '/dashboard/exports', label: 'Exports', permission: 'fin:exports' },
+      { href: '/dashboard/reports', label: 'Reports', permission: 'fin:reports' }
     ]
   }
 ];
+
+const rolePermissions = {
+  admin: ['*'],
+  manager: [
+    'hr:attendance',
+    'hr:timesheets',
+    'hr:leaves',
+    'hr:tasks',
+    'ops:documents',
+    'ops:reimbursements',
+    'fin:reports',
+    'fin:exports'
+  ],
+  employee: [
+    'hr:attendance',
+    'hr:timesheets',
+    'hr:leaves',
+    'hr:tasks',
+    'ops:documents',
+    'ops:reimbursements'
+  ],
+  sales_agent: [
+    'sales:leads',
+    'sales:payments',
+    'sales:reports',
+    'ops:documents',
+    'hr:attendance'
+  ],
+  sales_manager: [
+    'sales:leads',
+    'sales:payments',
+    'sales:reports',
+    'sa:overview',
+    'sa:procurement',
+    'sa:sales',
+    'sa:inventory',
+    'sa:payments',
+    'sa:accounting',
+    'sa:prints'
+  ],
+  finance: [
+    'ops:reimbursements',
+    'sa:payments',
+    'sa:accounting',
+    'fin:payroll',
+    'fin:reports',
+    'fin:exports',
+    'fin:email'
+  ]
+};
+
+const getPermissionsForRoles = (roleList) => {
+  if (!Array.isArray(roleList) || roleList.length === 0) {
+    return new Set(['*']);
+  }
+  const permissions = new Set();
+  roleList.forEach((role) => {
+    const key = String(role || '').toLowerCase();
+    const perms = rolePermissions[key];
+    if (!perms) return;
+    perms.forEach((perm) => permissions.add(perm));
+  });
+  return permissions;
+};
+
+const filterNavGroups = (permissions) =>
+  navGroups
+    .map((group) => ({
+      ...group,
+      items: group.items.filter((item) => {
+        if (permissions.has('*')) return true;
+        return permissions.has(item.permission);
+      })
+    }))
+    .filter((group) => group.items.length > 0);
+
+const getRequiredPermissionForPath = (path) => {
+  if (path === '/dashboard' || path.startsWith('/dashboard/notifications')) {
+    return null;
+  }
+  for (const group of navGroups) {
+    for (const item of group.items) {
+      if (path === item.href || path.startsWith(`${item.href}/`)) {
+        return item.permission;
+      }
+    }
+  }
+  return null;
+};
 
 export default function DashboardLayout({ children }) {
   const router = useRouter();
@@ -117,17 +206,31 @@ export default function DashboardLayout({ children }) {
     }
   }, [router]);
 
+  const permissions = useMemo(() => getPermissionsForRoles(roles), [roles]);
+  const visibleGroups = useMemo(
+    () => filterNavGroups(permissions),
+    [permissions]
+  );
+
   // Open correct groups based on current route
   useEffect(() => {
     const initial = {};
-    navGroups.forEach((group) => {
+    visibleGroups.forEach((group) => {
       const containsActive = group.items.some((item) =>
         pathname.startsWith(item.href)
       );
       initial[group.id] = containsActive;
     });
     setOpenGroups(initial);
-  }, [pathname]);
+  }, [pathname, visibleGroups]);
+
+  useEffect(() => {
+    const required = getRequiredPermissionForPath(pathname);
+    if (!required || permissions.has('*')) return;
+    if (!permissions.has(required)) {
+      router.replace('/dashboard');
+    }
+  }, [pathname, permissions, router]);
 
   const handleLogout = () => {
     if (typeof window !== 'undefined') {
@@ -263,7 +366,7 @@ export default function DashboardLayout({ children }) {
 
         {/* Grouped nav (no internal scroll) */}
         <nav className="flex-1 px-4 pb-3 space-y-3 text-sm">
-          {navGroups.map((group) => {
+          {visibleGroups.map((group) => {
             const open = openGroups[group.id];
 
             return (
@@ -396,7 +499,19 @@ export default function DashboardLayout({ children }) {
           sidebarCollapsed ? 'md:ml-20' : 'md:ml-72'
         }`}
       >
-        <main className="min-h-screen p-4 md:p-6">{children}</main>
+        <main className="min-h-screen p-4 md:p-6">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={pathname}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 6 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+            >
+              {children}
+            </motion.div>
+          </AnimatePresence>
+        </main>
       </div>
 
     </div>

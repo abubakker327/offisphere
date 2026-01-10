@@ -54,45 +54,55 @@ export default function NotificationsPage() {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
-      className="space-y-6"
+      className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6"
     >
-      <div>
-        <h1 className="text-xl text-slate-900 font-semibold">Notifications</h1>
-        <p className="text-sm text-slate-500">
-          All system alerts and updates
-        </p>
+      <div className="space-y-2">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
+          <span>Activity feed</span>
+        </div>
+        <div>
+          <h1 className="text-3xl text-slate-900 font-semibold">Notifications</h1>
+          <p className="text-sm text-slate-500">
+            All system alerts and updates.
+          </p>
+        </div>
       </div>
 
-      <div className="bg-white rounded-2xl p-4 shadow border">
+      <div className="bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
         {loading ? (
-          <p className="text-sm text-slate-400">Loading...</p>
+          <p className="px-6 py-6 text-sm text-slate-400">Loading...</p>
         ) : notifications.length === 0 ? (
-          <p className="text-sm text-slate-900">No notifications yet.</p>
+          <p className="px-6 py-6 text-sm text-slate-900">No notifications yet.</p>
         ) : (
-          notifications.map((n) => (
-            <div
-              key={n.id}
-              className={`p-3 mb-3 rounded-xl border flex justify-between items-center ${
-                n.is_read
-                  ? 'bg-slate-50 border-slate-100'
-                  : 'bg-indigo-50 border-indigo-200'
-              }`}
-            >
-              <div>
-                <p className="text-sm text-slate-700 font-medium">{n.title}</p>
-                <p className="text-xs text-slate-600">{n.message}</p>
-              </div>
+          <div className="divide-y divide-slate-100">
+            {notifications.map((n) => (
+              <div
+                key={n.id}
+                className="flex flex-col gap-3 px-6 py-4 md:flex-row md:items-center md:justify-between hover:bg-slate-50"
+              >
+                <div className="flex items-start gap-3">
+                  <span
+                    className={`mt-1 h-2 w-2 rounded-full ${
+                      n.is_read ? 'bg-slate-200' : 'bg-violet-500'
+                    }`}
+                  />
+                  <div>
+                    <p className="text-sm text-slate-900 font-semibold">{n.title}</p>
+                    <p className="text-xs text-slate-600">{n.message}</p>
+                  </div>
+                </div>
 
-              {!n.is_read && (
-                <button
-                  onClick={() => markRead(n.id)}
-                  className="text-xs px-3 py-1 rounded-full bg-indigo-600 text-white"
-                >
-                  Mark read
-                </button>
-              )}
-            </div>
-          ))
+                {!n.is_read && (
+                  <button
+                    onClick={() => markRead(n.id)}
+                    className="text-xs px-4 py-2 rounded-2xl bg-violet-600 text-white font-semibold hover:bg-violet-700"
+                  >
+                    Mark read
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </motion.div>
