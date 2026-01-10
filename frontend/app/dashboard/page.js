@@ -661,7 +661,7 @@ export default function DashboardHome() {
         variants={cardVariants}
         initial="hidden"
         animate="visible"
-        className="bg-white rounded-xl border border-slate-100 shadow-sm p-4"
+        className="space-y-4"
       >
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-sm font-semibold text-slate-900">
@@ -787,4 +787,5 @@ export default function DashboardHome() {
     </motion.div>
   );
 }
+
 

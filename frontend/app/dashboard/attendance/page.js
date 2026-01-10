@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -346,3 +346,4 @@ export default function AttendancePage() {
     </motion.div>
   );
 }
+
