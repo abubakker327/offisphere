@@ -1,5 +1,6 @@
-'use client';
+﻿'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
@@ -9,42 +10,42 @@ const tiles = [
     desc: 'Products, Vendors, Customers, GST',
     href: '/dashboard/sales-accounts/masters',
     color: '#0fb472',
-    icon: '🗂️'
+    iconSrc: '/icons/masters-3d.png'
   },
   {
     title: 'Procurement',
     desc: 'PO, GRN, Vendor Bills',
     href: '/dashboard/sales-accounts/procurement',
     color: '#f61b63',
-    icon: '📦'
+    iconSrc: '/icons/procurement-3d.png'
   },
   {
     title: 'Inventory',
     desc: 'Stock Ledger, Serials, Warehouses',
     href: '/dashboard/sales-accounts/inventory',
     color: '#1a7dff',
-    icon: '📊'
+    iconSrc: '/icons/inventory-3d.png'
   },
   {
     title: 'Sales',
     desc: 'Quotations, Orders, Delivery, Invoices',
     href: '/dashboard/sales-accounts/sales',
     color: '#f48c06',
-    icon: '🧾'
+    iconSrc: '/icons/sales-3d.png'
   },
   {
     title: 'Payments',
     desc: 'Cash In (customers) & Out (vendors)',
     href: '/dashboard/sales-accounts/payments',
     color: '#00b3d8',
-    icon: '💸'
+    iconSrc: '/icons/payments-3d.png'
   },
   {
     title: 'Accounting',
     desc: 'Ledger entries, Profit & Loss',
     href: '/dashboard/sales-accounts/accounting',
     color: '#7c4dff',
-    icon: '📈'
+    iconSrc: '/icons/accounting-3d.png'
   }
 ];
 
@@ -152,14 +153,15 @@ export default function SalesAccountsHome() {
                       }
                     }}
                     transition={{ type: 'spring', stiffness: 200, damping: 10 }}
-                    className="relative w-32 h-32 flex items-center justify-center"
+                    className="relative w-36 h-36 flex items-center justify-center"
                   >
-                    {/* Apple-style Glass Glow */}
-                    <div className="absolute inset-0 bg-white/11 rounded-2xl blur-sm border border-white/20 backdrop-blur-xl" />
-                    <div className="absolute inset-4 bg-white/5 rounded-xl shadow-[inset_0_2px_10px_rgba(255,255,255,0.2)]" />
-                    <span className="relative text-[4.5rem] select-none filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.2)]">
-                      {tile.icon}
-                    </span>
+                    <Image
+                      src={tile.iconSrc}
+                      alt={`${tile.title} icon`}
+                      width={96}
+                      height={96}
+                      className="relative drop-shadow-[0_16px_30px_rgba(0,0,0,0.22)]"
+                    />
                   </motion.div>
                 </div>
               </div>
@@ -170,4 +172,5 @@ export default function SalesAccountsHome() {
     </motion.div>
   );
 }
+
 

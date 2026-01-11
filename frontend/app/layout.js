@@ -1,8 +1,13 @@
-import './globals.css';
+﻿import './globals.css';
 
 export const metadata = {
   title: 'Offisphere',
-  description: 'Office management platform - Offisphere'
+  description: 'Office management platform - Offisphere',
+  icons: {
+    icon: '/offisphere-logo.png',
+    shortcut: '/offisphere-logo.png',
+    apple: '/offisphere-logo.png'
+  }
 };
 
 export default function RootLayout({ children }) {

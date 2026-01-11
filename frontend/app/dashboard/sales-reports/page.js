@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -67,7 +67,7 @@ export default function SalesReportsPage() {
     >
       <div className="flex items-center justify-between">
         <div className="space-y-3">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
             <span>Sales pulse</span>
           </div>
           <div>
@@ -319,7 +319,7 @@ export default function SalesReportsPage() {
                         {lead.name}
                       </td>
                       <td className="px-6 py-4 text-[11px]">
-                        <span className="px-2 py-1 rounded-full bg-violet-50 text-violet-700 border border-violet-100 capitalize">
+                        <span className="px-2 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100 capitalize">
                           {lead.status}
                         </span>
                       </td>

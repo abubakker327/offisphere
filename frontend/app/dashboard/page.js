@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -171,7 +171,7 @@ export default function DashboardHome() {
           </svg>
         );
       default:
-        return <span className={base}>•</span>;
+        return <span className={base}>â€¢</span>;
     }
   };
   const renderQAIcon = (name) => {
@@ -224,7 +224,7 @@ export default function DashboardHome() {
           </svg>
         );
       default:
-        return <span className={common}>•</span>;
+        return <span className={common}>â€¢</span>;
     }
   };
 

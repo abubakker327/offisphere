@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -46,7 +46,7 @@ const EntityCard = ({ title, description, list, fields, onSubmit, loading, savin
           <input
             value={f.value}
             onChange={(e) => f.onChange(e.target.value)}
-            className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+            className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder={f.placeholder}
           />
         </div>
@@ -58,7 +58,7 @@ const EntityCard = ({ title, description, list, fields, onSubmit, loading, savin
         whileTap={{ scale: 0.97 }}
         disabled={saving}
         onClick={onSubmit}
-        className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 disabled:opacity-60"
+        className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-60"
       >
         {saving ? 'Saving...' : 'Save'}
       </motion.button>
@@ -188,7 +188,7 @@ export default function MastersPage() {
       className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6"
     >
       <div className="space-y-2">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
           <span>Masters desk</span>
         </div>
         <div>

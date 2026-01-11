@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -57,7 +57,7 @@ export default function NotificationsPage() {
       className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6"
     >
       <div className="space-y-2">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
           <span>Activity feed</span>
         </div>
         <div>
@@ -83,7 +83,7 @@ export default function NotificationsPage() {
                 <div className="flex items-start gap-3">
                   <span
                     className={`mt-1 h-2 w-2 rounded-full ${
-                      n.is_read ? 'bg-slate-200' : 'bg-violet-500'
+                      n.is_read ? 'bg-slate-200' : 'bg-blue-500'
                     }`}
                   />
                   <div>
@@ -95,7 +95,7 @@ export default function NotificationsPage() {
                 {!n.is_read && (
                   <button
                     onClick={() => markRead(n.id)}
-                    className="text-xs px-4 py-2 rounded-2xl bg-violet-600 text-white font-semibold hover:bg-violet-700"
+                    className="text-xs px-4 py-2 rounded-2xl bg-blue-600 text-white font-semibold hover:bg-blue-700"
                   >
                     Mark read
                   </button>

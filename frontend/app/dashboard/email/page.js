@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -148,7 +148,7 @@ export default function EmailPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
             <span>Template studio</span>
           </div>
           <div>
@@ -200,7 +200,7 @@ export default function EmailPage() {
                   onClick={() => handleEditClick(tpl)}
                   className={`w-full text-left px-4 py-3 rounded-2xl border ${
                     editingId === tpl.id
-                      ? 'border-violet-200 bg-violet-50'
+                      ? 'border-blue-200 bg-blue-50'
                       : 'border-slate-100 bg-white hover:bg-slate-50'
                   } transition`}
                 >
@@ -272,7 +272,7 @@ export default function EmailPage() {
                   handleChange('template_key', e.target.value)
                 }
                 placeholder="leave_approved, task_assigned, payroll_payslip"
-                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 disabled={!!editingId} // cannot change key on edit
               />
             </div>
@@ -284,7 +284,7 @@ export default function EmailPage() {
                 value={form.name}
                 onChange={(e) => handleChange('name', e.target.value)}
                 placeholder="Leave approved (employee)"
-                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
 
@@ -297,7 +297,7 @@ export default function EmailPage() {
                   handleChange('subject', e.target.value)
                 }
                 placeholder="Your leave request has been approved"
-                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
 
@@ -311,7 +311,7 @@ export default function EmailPage() {
                 value={form.body}
                 onChange={(e) => handleChange('body', e.target.value)}
                 placeholder={`Hi {{name}},\n\nYour leave from {{from_date}} to {{to_date}} has been approved.\n\nThanks,\nOffisphere`}
-                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent resize-none"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
               />
             </div>
 
@@ -323,7 +323,7 @@ export default function EmailPage() {
                   onChange={(e) =>
                     handleChange('is_active', e.target.checked)
                   }
-                  className="h-3.5 w-3.5 rounded border border-slate-300 text-violet-600 focus:ring-0 focus:outline-none"
+                  className="h-3.5 w-3.5 rounded border border-slate-300 text-blue-600 focus:ring-0 focus:outline-none"
                 />
                 <span>Active</span>
               </label>
@@ -333,7 +333,7 @@ export default function EmailPage() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.97 }}
                 disabled={saving}
-                className="px-5 py-2 rounded-2xl bg-violet-600 text-white text-xs font-medium shadow-lg shadow-violet-300/50 hover:bg-violet-700 disabled:opacity-60 disabled:cursor-not-allowed"
+                className="px-5 py-2 rounded-2xl bg-blue-600 text-white text-xs font-medium shadow-lg shadow-blue-300/50 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {saving
                   ? editingId

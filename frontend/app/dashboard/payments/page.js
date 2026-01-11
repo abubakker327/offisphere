@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -234,7 +234,7 @@ export default function PaymentsPage() {
     >
       <div className="flex items-center justify-between">
         <div className="space-y-3">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
             <span>Payment log</span>
           </div>
           <div>
@@ -251,7 +251,7 @@ export default function PaymentsPage() {
       {/* Record payment */}
       <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6">
         <div className="flex items-center gap-3 mb-4">
-          <div className="h-10 w-10 rounded-2xl bg-violet-600 text-white flex items-center justify-center">
+          <div className="h-10 w-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -292,7 +292,7 @@ export default function PaymentsPage() {
             <select
               value={form.lead_id}
               onChange={(e) => handleChange('lead_id', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-xs"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
             >
               <option value="">No lead</option>
               {leads.map((lead) => (
@@ -311,7 +311,7 @@ export default function PaymentsPage() {
               step="0.01"
               value={form.amount}
               onChange={(e) => handleChange('amount', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="25000"
               required
             />
@@ -323,7 +323,7 @@ export default function PaymentsPage() {
               type="text"
               value={form.currency}
               onChange={(e) => handleChange('currency', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-xs"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
             />
           </div>
 
@@ -332,7 +332,7 @@ export default function PaymentsPage() {
             <select
               value={form.status}
               onChange={(e) => handleChange('status', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-xs"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
             >
               {STATUS_OPTIONS.map((s) => (
                 <option key={s.value} value={s.value}>
@@ -348,7 +348,7 @@ export default function PaymentsPage() {
               type="text"
               value={form.method}
               onChange={(e) => handleChange('method', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="UPI / Bank / Card"
             />
           </div>
@@ -361,7 +361,7 @@ export default function PaymentsPage() {
               type="date"
               value={form.paid_at}
               onChange={(e) => handleChange('paid_at', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-xs"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
             />
           </div>
 
@@ -371,7 +371,7 @@ export default function PaymentsPage() {
               type="text"
               value={form.reference}
               onChange={(e) => handleChange('reference', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="TXN ID / invoice no"
             />
           </div>
@@ -382,7 +382,7 @@ export default function PaymentsPage() {
               type="text"
               value={form.notes}
               onChange={(e) => handleChange('notes', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Optional notes"
             />
           </div>
@@ -393,7 +393,7 @@ export default function PaymentsPage() {
               whileTap={{ scale: 0.97 }}
               type="submit"
               disabled={saving}
-              className="px-5 py-2.5 rounded-2xl text-sm font-semibold text-white bg-violet-600 shadow-lg shadow-violet-300/40 hover:bg-violet-700 disabled:opacity-60"
+              className="px-5 py-2.5 rounded-2xl text-sm font-semibold text-white bg-blue-600 shadow-lg shadow-blue-300/40 hover:bg-blue-700 disabled:opacity-60"
             >
               {saving ? 'Saving...' : 'Record payment'}
             </motion.button>
@@ -411,8 +411,8 @@ export default function PaymentsPage() {
               onClick={() => handleStatusFilter(f.value)}
               className={`px-3 py-1.5 rounded-full border transition ${
                 active
-                  ? 'bg-violet-600 text-white border-violet-600'
-                  : 'bg-white text-slate-700 border-slate-200 hover:border-violet-200'
+                  ? 'bg-blue-600 text-white border-blue-600'
+                  : 'bg-white text-slate-700 border-slate-200 hover:border-blue-200'
               }`}
             >
               {f.label}
@@ -494,7 +494,7 @@ export default function PaymentsPage() {
                           onChange={(e) =>
                             handleStatusChange(p.id, e.target.value)
                           }
-                          className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs shadow-sm hover:border-violet-200"
+                          className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs shadow-sm hover:border-blue-200"
                         >
                           {STATUS_OPTIONS.map((s) => (
                             <option key={s.value} value={s.value}>

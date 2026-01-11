@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -117,7 +117,7 @@ export default function ProductsPage() {
         <motion.button
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
-          className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 shadow-lg shadow-violet-300/40 transition-all"
+          className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-300/40 transition-all"
           onClick={() => setModalOpen(true)}
         >
           Add product
@@ -170,7 +170,7 @@ export default function ProductsPage() {
                     <td className="px-6 py-4 text-slate-600">{p.unit || '-'}</td>
                     <td className="px-6 py-4 text-slate-600 text-xs">
                       {p.has_serial || p.is_serialized ? (
-                        <span className="text-violet-700 bg-violet-50 px-2 py-0.5 rounded-full border border-violet-100">
+                        <span className="text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
                           Yes
                         </span>
                       ) : (
@@ -201,7 +201,7 @@ export default function ProductsPage() {
             >
               <div className="flex items-start justify-between">
                 <div>
-                  <div className="inline-flex items-center gap-2 px-2 py-0.5 rounded-full bg-violet-50 text-violet-700 text-[10px] font-bold uppercase tracking-wider border border-violet-100 mb-1">
+                  <div className="inline-flex items-center gap-2 px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 text-[10px] font-bold uppercase tracking-wider border border-blue-100 mb-1">
                     Masters
                   </div>
                   <h3 className="text-xl font-semibold text-slate-900">
@@ -223,7 +223,7 @@ export default function ProductsPage() {
                 <div className="space-y-1">
                   <label className="text-xs text-slate-600">Product name</label>
                   <input
-                    className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                    className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={form.name}
                     onChange={(e) => onChange('name', e.target.value)}
                     placeholder="e.g. BenQ Projector"
@@ -232,7 +232,7 @@ export default function ProductsPage() {
                 <div className="space-y-1">
                   <label className="text-xs text-slate-600">SKU / Code</label>
                   <input
-                    className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                    className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={form.sku}
                     onChange={(e) => onChange('sku', e.target.value)}
                     placeholder="Reference code"
@@ -241,7 +241,7 @@ export default function ProductsPage() {
                 <div className="space-y-1">
                   <label className="text-xs text-slate-600">Category</label>
                   <input
-                    className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                    className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={form.category}
                     onChange={(e) => onChange('category', e.target.value)}
                     placeholder="Hardware, license..."
@@ -250,7 +250,7 @@ export default function ProductsPage() {
                 <div className="space-y-1">
                   <label className="text-xs text-slate-600">Unit of measure</label>
                   <input
-                    className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                    className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={form.unit}
                     onChange={(e) => onChange('unit', e.target.value)}
                     placeholder="pcs, box, nos..."
@@ -260,7 +260,7 @@ export default function ProductsPage() {
                   <label className="text-xs text-slate-600">GST percentage</label>
                   <input
                     type="number"
-                    className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                    className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={form.gst_percent}
                     onChange={(e) => onChange('gst_percent', e.target.value)}
                   />
@@ -269,7 +269,7 @@ export default function ProductsPage() {
                   <label className="text-xs text-slate-600">Default unit price</label>
                   <input
                     type="number"
-                    className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                    className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={form.unit_price}
                     onChange={(e) => onChange('unit_price', e.target.value)}
                     placeholder="0.00"
@@ -281,7 +281,7 @@ export default function ProductsPage() {
                     type="checkbox"
                     checked={form.has_serial}
                     onChange={(e) => onChange('has_serial', e.target.checked)}
-                    className="h-5 w-5 rounded border-slate-300 text-violet-600 focus:ring-violet-500 cursor-pointer"
+                    className="h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
                   />
                   <div className="flex flex-col">
                     <label htmlFor="is_serialized" className="text-xs font-semibold text-slate-700 cursor-pointer">
@@ -304,7 +304,7 @@ export default function ProductsPage() {
                   whileTap={{ scale: 0.97 }}
                   disabled={saving}
                   onClick={handleSave}
-                  className="px-6 py-2.5 rounded-2xl text-xs font-semibold text-white bg-violet-600 hover:bg-violet-700 shadow-lg shadow-violet-300/50 disabled:opacity-60 transition-all"
+                  className="px-6 py-2.5 rounded-2xl text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-300/50 disabled:opacity-60 transition-all"
                 >
                   {saving ? 'Creating...' : 'Add product'}
                 </motion.button>

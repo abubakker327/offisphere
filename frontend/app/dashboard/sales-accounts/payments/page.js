@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -136,7 +136,7 @@ export default function PaymentsSAPage() {
       className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6"
     >
       <div className="space-y-2">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
           <span>Cash desk</span>
         </div>
         <div>
@@ -158,13 +158,13 @@ export default function PaymentsSAPage() {
           <h3 className="text-base font-semibold text-slate-900">Customer Receipts</h3>
           <div className="grid grid-cols-1 gap-2 text-xs">
             <input
-              className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Invoice ID (optional)"
               value={inForm.invoice_id}
               onChange={(e) => setInForm((p) => ({ ...p, invoice_id: e.target.value }))}
             />
             <input
-              className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Customer"
               list="customerOptions"
               value={inForm.customer_id}
@@ -179,13 +179,13 @@ export default function PaymentsSAPage() {
             </datalist>
             <div className="grid grid-cols-2 gap-2">
               <input
-                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Amount"
                 value={inForm.amount}
                 onChange={(e) => setInForm((p) => ({ ...p, amount: e.target.value }))}
               />
               <input
-                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Date"
                 type="date"
                 value={inForm.date}
@@ -193,7 +193,7 @@ export default function PaymentsSAPage() {
               />
             </div>
             <input
-              className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Mode (cash/bank/upi/cheque)"
               value={inForm.mode}
               onChange={(e) => setInForm((p) => ({ ...p, mode: e.target.value }))}
@@ -205,7 +205,7 @@ export default function PaymentsSAPage() {
               whileTap={{ scale: 0.97 }}
               disabled={savingIn}
               onClick={handleIn}
-              className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 disabled:opacity-60"
+              className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-60"
             >
               {savingIn ? 'Saving' : 'Record Payment In'}
             </motion.button>
@@ -216,7 +216,7 @@ export default function PaymentsSAPage() {
           <h3 className="text-base font-semibold text-slate-900">Vendor Payments</h3>
           <div className="grid grid-cols-1 gap-2 text-xs">
             <input
-              className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Vendor"
               list="vendorOptions"
               value={outForm.vendor_id}
@@ -230,20 +230,20 @@ export default function PaymentsSAPage() {
               ))}
             </datalist>
             <input
-              className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="PO ID (optional)"
               value={outForm.po_id}
               onChange={(e) => setOutForm((p) => ({ ...p, po_id: e.target.value }))}
             />
             <div className="grid grid-cols-2 gap-2">
               <input
-                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Amount"
                 value={outForm.amount}
                 onChange={(e) => setOutForm((p) => ({ ...p, amount: e.target.value }))}
               />
               <input
-                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Date"
                 type="date"
                 value={outForm.date}
@@ -251,7 +251,7 @@ export default function PaymentsSAPage() {
               />
             </div>
             <input
-              className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Mode (cash/bank/upi/cheque)"
               value={outForm.mode}
               onChange={(e) => setOutForm((p) => ({ ...p, mode: e.target.value }))}

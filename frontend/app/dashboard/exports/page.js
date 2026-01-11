@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -76,7 +76,7 @@ export default function ExportsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
             <span>Data exports</span>
           </div>
           <div>
@@ -119,7 +119,7 @@ export default function ExportsPage() {
               type="date"
               value={fromDate}
               onChange={(e) => setFromDate(e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="space-y-1">
@@ -128,7 +128,7 @@ export default function ExportsPage() {
               type="date"
               value={toDate}
               onChange={(e) => setToDate(e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="space-y-1 flex items-end">
@@ -175,7 +175,7 @@ export default function ExportsPage() {
             <span className="text-[11px] text-slate-500">
               Check-ins / check-outs
             </span>
-            <span className="mt-2 text-[11px] text-violet-600">
+            <span className="mt-2 text-[11px] text-blue-600">
               {downloading === 'attendance'
                 ? 'Preparing'
                 : 'Download'}
@@ -196,7 +196,7 @@ export default function ExportsPage() {
             <span className="text-[11px] text-slate-500">
               Time entries / hours
             </span>
-            <span className="mt-2 text-[11px] text-violet-600">
+            <span className="mt-2 text-[11px] text-blue-600">
               {downloading === 'timesheets'
                 ? 'Preparing'
                 : 'Download'}
@@ -217,7 +217,7 @@ export default function ExportsPage() {
             <span className="text-[11px] text-slate-500">
               Leave requests & status
             </span>
-            <span className="mt-2 text-[11px] text-violet-600">
+            <span className="mt-2 text-[11px] text-blue-600">
               {downloading === 'leaves'
                 ? 'Preparing'
                 : 'Download'}
@@ -238,7 +238,7 @@ export default function ExportsPage() {
             <span className="text-[11px] text-slate-500">
               Periods, totals & status
             </span>
-            <span className="mt-2 text-[11px] text-violet-600">
+            <span className="mt-2 text-[11px] text-blue-600">
               {downloading === 'payroll'
                 ? 'Preparing'
                 : 'Download'}

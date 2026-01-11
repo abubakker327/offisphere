@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -64,7 +64,7 @@ export default function AccountingPage() {
       className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6"
     >
       <div className="space-y-2">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
           <span>Ledger view</span>
         </div>
         <div>
@@ -78,13 +78,13 @@ export default function AccountingPage() {
       <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6 space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
           <input
-            className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+            className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Ledger (e.g. AR_Customer)"
             value={filters.ledger}
             onChange={(e) => onChange('ledger', e.target.value)}
           />
           <input
-            className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+            className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Ref type (INVOICE/GRN/PAYMENT_IN/...)"
             value={filters.ref_type}
             onChange={(e) => onChange('ref_type', e.target.value)}
@@ -92,7 +92,7 @@ export default function AccountingPage() {
           <div className="flex gap-2">
             <button
               onClick={loadLedger}
-              className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-violet-600 hover:bg-violet-700"
+              className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
             >
               Apply
             </button>

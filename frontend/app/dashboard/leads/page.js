@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -180,7 +180,7 @@ export default function LeadsPage() {
     >
       <div className="flex items-center justify-between">
         <div className="space-y-3">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
             <span>Lead pipeline</span>
           </div>
           <div>
@@ -203,7 +203,7 @@ export default function LeadsPage() {
         className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6"
       >
         <div className="flex items-center gap-3 mb-4">
-          <div className="h-10 w-10 rounded-2xl bg-violet-600 text-white flex items-center justify-center">
+          <div className="h-10 w-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -238,7 +238,7 @@ export default function LeadsPage() {
               value={form.name}
               onChange={(e) => handleChange('name', e.target.value)}
               required
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="space-y-1">
@@ -247,7 +247,7 @@ export default function LeadsPage() {
               placeholder="Email"
               value={form.email}
               onChange={(e) => handleChange('email', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="space-y-1">
@@ -256,7 +256,7 @@ export default function LeadsPage() {
               placeholder="Phone"
               value={form.phone}
               onChange={(e) => handleChange('phone', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="space-y-1">
@@ -265,7 +265,7 @@ export default function LeadsPage() {
               placeholder="Company"
               value={form.company}
               onChange={(e) => handleChange('company', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div className="space-y-1">
@@ -274,7 +274,7 @@ export default function LeadsPage() {
               placeholder="Source"
               value={form.source}
               onChange={(e) => handleChange('source', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
         </div>
@@ -287,7 +287,7 @@ export default function LeadsPage() {
               placeholder="e.g. 50000"
               value={form.expected_value}
               onChange={(e) => handleChange('expected_value', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
@@ -296,7 +296,7 @@ export default function LeadsPage() {
             <select
               value={form.stage}
               onChange={(e) => handleChange('stage', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-xs"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
             >
               {STAGE_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -311,7 +311,7 @@ export default function LeadsPage() {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               type="submit"
-              className="px-5 py-2.5 rounded-2xl text-sm font-semibold text-white bg-violet-600 shadow-lg shadow-violet-300/40 hover:bg-violet-700 disabled:opacity-60"
+              className="px-5 py-2.5 rounded-2xl text-sm font-semibold text-white bg-blue-600 shadow-lg shadow-blue-300/40 hover:bg-blue-700 disabled:opacity-60"
             >
               Add lead
             </motion.button>
@@ -333,8 +333,8 @@ export default function LeadsPage() {
                 onClick={() => setStageFilter(s)}
                 className={`px-3 py-1.5 rounded-full border transition ${
                   active
-                    ? 'bg-violet-600 text-white border-violet-600'
-                    : 'bg-white text-slate-700 border-slate-200 hover:border-violet-200'
+                    ? 'bg-blue-600 text-white border-blue-600'
+                    : 'bg-white text-slate-700 border-slate-200 hover:border-blue-200'
                 }`}
               >
                 {s === 'all' ? 'All' : getStageLabel(s)}
@@ -353,7 +353,7 @@ export default function LeadsPage() {
             onChange={(e) =>
               handleDateRangeChange('start', e.target.value)
             }
-            className="px-4 py-2 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-xs"
+            className="px-4 py-2 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
           />
           <span className="text-slate-400">to</span>
           <input
@@ -362,13 +362,13 @@ export default function LeadsPage() {
             onChange={(e) =>
               handleDateRangeChange('end', e.target.value)
             }
-            className="px-4 py-2 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-xs"
+            className="px-4 py-2 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
           />
           <button
             type="button"
             onClick={applyDateFilter}
             disabled={loading}
-            className="px-4 py-2 rounded-2xl text-xs font-semibold text-white bg-violet-600 disabled:opacity-60 shadow-sm hover:bg-violet-700"
+            className="px-4 py-2 rounded-2xl text-xs font-semibold text-white bg-blue-600 disabled:opacity-60 shadow-sm hover:bg-blue-700"
           >
             Apply
           </button>
@@ -376,7 +376,7 @@ export default function LeadsPage() {
             <button
               type="button"
               onClick={clearDateFilter}
-              className="px-4 py-2 rounded-2xl text-xs font-semibold text-slate-600 border border-slate-200 hover:border-violet-200"
+              className="px-4 py-2 rounded-2xl text-xs font-semibold text-slate-600 border border-slate-200 hover:border-blue-200"
             >
               Clear
             </button>

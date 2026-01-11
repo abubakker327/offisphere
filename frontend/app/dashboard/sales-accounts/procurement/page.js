@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -180,7 +180,7 @@ export default function ProcurementPage() {
       className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6"
     >
       <div className="space-y-2">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
           <span>Procurement desk</span>
         </div>
         <div>
@@ -204,7 +204,7 @@ export default function ProcurementPage() {
             <div className="space-y-1">
               <label className="text-xs text-slate-600">Vendor</label>
               <select
-                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={poForm.vendor_id}
                 onChange={(e) => setPoForm((p) => ({ ...p, vendor_id: e.target.value }))}
               >
@@ -219,7 +219,7 @@ export default function ProcurementPage() {
             <div className="space-y-1">
               <label className="text-xs text-slate-600">Warehouse ID</label>
               <input
-                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Warehouse ID"
                 value={poForm.warehouse_id}
                 onChange={(e) => setPoForm((p) => ({ ...p, warehouse_id: e.target.value }))}
@@ -228,7 +228,7 @@ export default function ProcurementPage() {
             <div className="space-y-1">
               <label className="text-xs text-slate-600">Product</label>
               <select
-                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={poForm.product_id}
                 onChange={(e) => setPoForm((p) => ({ ...p, product_id: e.target.value }))}
               >
@@ -245,7 +245,7 @@ export default function ProcurementPage() {
                 <label className="text-xs text-slate-600">Qty</label>
                 <input
                   type="number"
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Qty"
                   value={poForm.qty}
                   onChange={(e) => setPoForm((p) => ({ ...p, qty: e.target.value }))}
@@ -255,7 +255,7 @@ export default function ProcurementPage() {
                 <label className="text-xs text-slate-600">Unit price</label>
                 <input
                   type="number"
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Unit price"
                   value={poForm.unit_price}
                   onChange={(e) => setPoForm((p) => ({ ...p, unit_price: e.target.value }))}
@@ -265,7 +265,7 @@ export default function ProcurementPage() {
                 <label className="text-xs text-slate-600">GST %</label>
                 <input
                   type="number"
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="GST %"
                   value={poForm.gst_rate}
                   onChange={(e) => setPoForm((p) => ({ ...p, gst_rate: e.target.value }))}
@@ -279,7 +279,7 @@ export default function ProcurementPage() {
               whileTap={{ scale: 0.97 }}
               disabled={savingPO}
               onClick={handleSavePO}
-              className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 disabled:opacity-60"
+              className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-60"
             >
               {savingPO ? 'Saving' : 'Create PO'}
             </motion.button>
@@ -295,7 +295,7 @@ export default function ProcurementPage() {
             <div className="space-y-1">
               <label className="text-xs text-slate-600">PO</label>
               <select
-                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={grnForm.po_id}
                 onChange={(e) => handleSelectPoForGrn(e.target.value)}
               >
@@ -308,7 +308,7 @@ export default function ProcurementPage() {
               </select>
             </div>
             <input
-              className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Warehouse ID"
               value={grnForm.warehouse_id}
               onChange={(e) => setGrnForm((p) => ({ ...p, warehouse_id: e.target.value }))}
@@ -316,7 +316,7 @@ export default function ProcurementPage() {
             <div className="space-y-1">
               <label className="text-xs text-slate-600">Product (from PO)</label>
               <select
-                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={grnForm.product_id}
                 onChange={(e) => setGrnForm((p) => ({ ...p, product_id: e.target.value }))}
               >
@@ -336,7 +336,7 @@ export default function ProcurementPage() {
                 <label className="text-xs text-slate-600">Qty received</label>
                 <input
                   type="number"
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Qty received"
                   value={grnForm.qty_received}
                   onChange={(e) => setGrnForm((p) => ({ ...p, qty_received: e.target.value }))}
@@ -345,7 +345,7 @@ export default function ProcurementPage() {
               <div className="space-y-1">
                 <label className="text-xs text-slate-600">Serials (comma separated)</label>
                 <input
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Serials (comma separated)"
                   value={grnForm.serials}
                   onChange={(e) => setGrnForm((p) => ({ ...p, serials: e.target.value }))}
@@ -359,7 +359,7 @@ export default function ProcurementPage() {
               whileTap={{ scale: 0.97 }}
               disabled={savingGRN}
               onClick={handleSaveGRN}
-              className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 disabled:opacity-60"
+              className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-60"
             >
               {savingGRN ? 'Saving' : 'Post GRN'}
             </motion.button>

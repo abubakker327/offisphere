@@ -1,7 +1,8 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 const API_BASE =
@@ -97,21 +98,24 @@ export default function LoginPage() {
       {/* LEFT SIDE - gradient blob art */}
       <div className="hidden lg:flex w-1/2 relative overflow-hidden">
         {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#4f46e5] via-[#7c3aed] to-[#f97316]" />
+        <div
+          className="absolute inset-0"
+          style={{ background: 'var(--brand-gradient)' }}
+        />
 
         {/* Organic blobs */}
         <motion.div
-          className="absolute -top-32 -left-24 w-72 h-72 rounded-[40%] bg-purple-400/70 blur-3xl"
+          className="absolute -top-32 -left-24 w-72 h-72 rounded-[40%] bg-sky-400/70 blur-3xl"
           animate={{ y: [0, 30, 0] }}
           transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
-          className="absolute bottom-[-120px] left-[-40px] w-80 h-80 rounded-[45%] bg-violet-500/80 blur-3xl"
+          className="absolute bottom-[-120px] left-[-40px] w-80 h-80 rounded-[45%] bg-sky-500/80 blur-3xl"
           animate={{ y: [0, -40, 0] }}
           transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
-          className="absolute -right-32 top-40 w-80 h-80 rounded-[45%] bg-orange-300/80 blur-3xl"
+          className="absolute -right-32 top-40 w-80 h-80 rounded-[45%] bg-sky-300/80 blur-3xl"
           animate={{ x: [0, -30, 0] }}
           transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
         />
@@ -126,12 +130,21 @@ export default function LoginPage() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="flex items-center gap-3"
+            className="flex items-center justify-center"
           >
-            <div className="w-9 h-9 rounded-2xl bg-white/90 flex items-center justify-center shadow-lg">
-              <span className="text-xs font-semibold bg-gradient-to-br from-indigo-500 to-purple-500 bg-clip-text text-transparent">
-                O
-              </span>
+            <div className="relative h-32 w-32">
+              <div className="absolute inset-0 rounded-full shadow-[0_22px_50px_rgba(37,99,235,0.45)]" style={{ background: 'var(--brand-gradient)' }} />
+              <div className="absolute inset-x-0 bottom-0 h-1/2 rounded-b-full bg-white/40 blur-lg" />
+              <div className="absolute inset-3 rounded-full bg-white/20 backdrop-blur-md ring-1 ring-white/60" />
+              <div className="relative h-full w-full flex items-center justify-center">
+                <Image
+                  src="/offisphere-logo.png"
+                  alt="Offisphere logo"
+                  width={64}
+                  height={64}
+                  priority
+                />
+              </div>
             </div>
           </motion.div>
 
@@ -166,9 +179,9 @@ export default function LoginPage() {
 
       {/* RIGHT SIDE - login form */}
       <div className="relative w-full lg:w-1/2 flex items-center justify-center px-6 py-12">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-24 right-10 h-56 w-56 rounded-full bg-violet-200/50 blur-3xl" />
-          <div className="absolute bottom-0 left-6 h-64 w-64 rounded-full bg-amber-100/70 blur-3xl" />
+          <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-24 right-10 h-56 w-56 rounded-full bg-sky-200/70 blur-3xl" />
+          <div className="absolute bottom-0 left-6 h-64 w-64 rounded-full bg-blue-200/70 blur-3xl" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.9),_rgba(255,255,255,0.3),_transparent_70%)]" />
         </div>
         <motion.div
@@ -178,12 +191,6 @@ export default function LoginPage() {
           className="relative w-full max-w-md rounded-3xl border border-white/70 bg-white/80 p-8 shadow-[0_24px_60px_rgba(15,23,42,0.18)] backdrop-blur-xl ring-1 ring-black/5"
         >
           <div className="mb-8">
-            <div className="flex items-center gap-3 mb-6 lg:hidden">
-              <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-500 text-white flex items-center justify-center text-sm font-semibold shadow-lg">
-                O
-              </div>
-              <div className="text-sm font-semibold text-slate-900">Offisphere</div>
-            </div>
             <motion.h1
               initial={{ y: 10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -226,9 +233,9 @@ export default function LoginPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm text-slate-900 outline-none
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm text-slate-900 outline-none
                              transition shadow-sm group-hover:shadow-md
-                             focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                             focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="name@company.com"
                   required
                 />
@@ -248,9 +255,9 @@ export default function LoginPage() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm text-slate-900 outline-none
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm text-slate-900 outline-none
                              transition shadow-sm group-hover:shadow-md
-                             focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                             focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="********"
                   required
                 />
@@ -270,18 +277,18 @@ export default function LoginPage() {
                     type="checkbox"
                     checked={remember}
                     onChange={(e) => setRemember(e.target.checked)}
-                    className="peer h-3.5 w-3.5 rounded border border-slate-300 text-violet-600 focus:ring-0 focus:outline-none"
+                    className="peer h-3.5 w-3.5 rounded border border-slate-300 text-blue-600 focus:ring-0 focus:outline-none"
                   />
                   {/* custom checkbox micro interaction */}
-                  <span className="pointer-events-none absolute inset-0 rounded bg-violet-500 scale-0 opacity-0 peer-checked:scale-100 peer-checked:opacity-100 transition-transform duration-150" />
-                  <span className="pointer-events-none absolute inset-0 flex items-center justify-center text-[8px] text-white opacity-0 peer-checked:opacity-100 transition-opacity">v</span>
+                  <span className="pointer-events-none absolute inset-0 rounded bg-blue-100 scale-0 opacity-0 peer-checked:scale-100 peer-checked:opacity-100 transition-transform duration-150" />
+                  <span className="pointer-events-none absolute inset-0 flex items-center justify-center text-[8px] text-blue-600 opacity-0 peer-checked:opacity-100 transition-opacity">v</span>
                 </span>
                 <span>Remember Me</span>
               </label>
 
               <button
                 type="button"
-                className="text-violet-600 hover:text-violet-700"
+                className="text-blue-600 hover:text-blue-700"
               >
                 Forgot Password?
               </button>
@@ -300,7 +307,8 @@ export default function LoginPage() {
                 whileTap={{ scale: 0.98, y: 0 }}
                 onClick={handleButtonClick}
                 disabled={loading}
-                className="relative w-full overflow-hidden rounded-full bg-gradient-to-r from-violet-600 via-fuchsia-500 to-amber-400 text-white text-sm font-medium py-3 shadow-lg shadow-violet-500/25 disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none"
+                className="relative w-full overflow-hidden rounded-full text-white text-sm font-medium py-3 shadow-lg shadow-blue-500/25 disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none"
+                style={{ background: 'var(--brand-gradient)' }}
               >
                 {rippleVisible && (
                   <span
@@ -322,7 +330,7 @@ export default function LoginPage() {
               <span>New User?&nbsp;</span>
               <button
                 type="button"
-                className="text-violet-600 hover:text-violet-700 font-medium"
+                className="text-blue-600 hover:text-blue-700 font-medium"
               >
                 Signup
               </button>

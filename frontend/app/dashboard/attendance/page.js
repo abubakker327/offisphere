@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -118,7 +118,7 @@ export default function AttendancePage() {
       className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6"
     >
       <div className="space-y-3">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
           <span>Attendance log</span>
         </div>
         <div>
@@ -134,7 +134,7 @@ export default function AttendancePage() {
       {/* Today controls */}
       <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6">
         <div className="flex items-center gap-3 mb-4">
-          <div className="h-10 w-10 rounded-2xl bg-violet-600 text-white flex items-center justify-center">
+          <div className="h-10 w-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -171,7 +171,7 @@ export default function AttendancePage() {
             whileTap={{ scale: 0.97 }}
             disabled={actionLoading}
             onClick={() => setModalType('in')}
-            className="px-5 py-2.5 rounded-2xl text-xs font-semibold bg-violet-600 text-white shadow-lg shadow-violet-300/40 hover:bg-violet-700 disabled:opacity-60"
+            className="px-5 py-2.5 rounded-2xl text-xs font-semibold bg-blue-600 text-white shadow-lg shadow-blue-300/40 hover:bg-blue-700 disabled:opacity-60"
           >
             Check in
           </motion.button>
@@ -181,7 +181,7 @@ export default function AttendancePage() {
             whileTap={{ scale: 0.97 }}
             disabled={actionLoading}
             onClick={() => setModalType('out')}
-            className="px-5 py-2.5 rounded-2xl text-xs font-semibold bg-white text-slate-700 border border-slate-200 shadow-sm hover:border-violet-200 disabled:opacity-60"
+            className="px-5 py-2.5 rounded-2xl text-xs font-semibold bg-white text-slate-700 border border-slate-200 shadow-sm hover:border-blue-200 disabled:opacity-60"
           >
             Check out
           </motion.button>
@@ -196,7 +196,7 @@ export default function AttendancePage() {
       <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
         <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-4 border-b border-slate-100">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-2xl bg-violet-100 text-violet-700 flex items-center justify-center">
+            <div className="h-10 w-10 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -261,7 +261,7 @@ export default function AttendancePage() {
                   >
                     <td className="px-6 py-4 text-slate-900">
                       <div className="flex items-center gap-3">
-                        <div className="h-9 w-9 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center text-sm font-semibold">
+                        <div className="h-9 w-9 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-sm font-semibold">
                           {(row.employee_name || row.user_name || 'U')
                             .charAt(0)
                             .toUpperCase()}
@@ -335,7 +335,7 @@ export default function AttendancePage() {
                 whileTap={{ scale: 0.97 }}
                 disabled={actionLoading}
                 onClick={() => handleCheck(modalType)}
-                className="px-4 py-2 rounded-2xl text-xs font-semibold text-white bg-violet-600 shadow-md hover:bg-violet-700 disabled:opacity-60"
+                className="px-4 py-2 rounded-2xl text-xs font-semibold text-white bg-blue-600 shadow-md hover:bg-blue-700 disabled:opacity-60"
               >
                 {actionLoading ? 'Processing...' : 'Confirm'}
               </motion.button>

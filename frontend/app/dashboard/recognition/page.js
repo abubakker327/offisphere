@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -118,7 +118,7 @@ export default function RecognitionPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
             <span>Team kudos</span>
           </div>
           <div>
@@ -168,7 +168,7 @@ export default function RecognitionPage() {
                 handleChange('receiver_email', e.target.value)
               }
               placeholder="employee@company.com"
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
           </div>
@@ -178,7 +178,7 @@ export default function RecognitionPage() {
             <select
               value={form.badge}
               onChange={(e) => handleChange('badge', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">None</option>
               <option value="Star">Star</option>
@@ -195,7 +195,7 @@ export default function RecognitionPage() {
               value={form.title}
               onChange={(e) => handleChange('title', e.target.value)}
               placeholder="For helping ship the Offisphere release"
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
           </div>
@@ -209,7 +209,7 @@ export default function RecognitionPage() {
               value={form.message}
               onChange={(e) => handleChange('message', e.target.value)}
               placeholder="Write a few words about what they did well"
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent resize-none"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
             />
           </div>
 
@@ -219,7 +219,7 @@ export default function RecognitionPage() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.97 }}
               disabled={creating}
-              className="px-5 py-2.5 rounded-2xl bg-violet-600 text-white text-sm font-medium shadow-lg shadow-violet-300/50 hover:bg-violet-700 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="px-5 py-2.5 rounded-2xl bg-blue-600 text-white text-sm font-medium shadow-lg shadow-blue-300/50 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {creating ? 'Sending' : 'Send recognition'}
             </motion.button>
@@ -256,7 +256,7 @@ export default function RecognitionPage() {
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
                     {r.badge && (
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-violet-100 text-violet-700 border border-violet-200">
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 border border-blue-200">
                         {r.badge}
                       </span>
                     )}

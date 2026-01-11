@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 
@@ -230,7 +230,7 @@ export default function DevicesPage() {
   return (
     <div className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6">
       <div className="space-y-3">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
           <span>Device shelf</span>
         </div>
         <div>
@@ -246,7 +246,7 @@ export default function DevicesPage() {
       {/* Create device */}
       <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6">
         <div className="flex items-center gap-3 mb-4">
-          <div className="h-10 w-10 rounded-2xl bg-violet-600 text-white flex items-center justify-center">
+          <div className="h-10 w-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -290,7 +290,7 @@ export default function DevicesPage() {
               onChange={(e) =>
                 handleFormChange('name', e.target.value)
               }
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Dell XPS 13, iPhone 14..."
               required
             />
@@ -306,7 +306,7 @@ export default function DevicesPage() {
               onChange={(e) =>
                 handleFormChange('device_type', e.target.value)
               }
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Laptop, Phone, Monitor"
             />
           </div>
@@ -321,7 +321,7 @@ export default function DevicesPage() {
               onChange={(e) =>
                 handleFormChange('serial_number', e.target.value)
               }
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
@@ -332,7 +332,7 @@ export default function DevicesPage() {
               onChange={(e) =>
                 handleFormChange('assigned_to', e.target.value)
               }
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-xs"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
             >
               <option value="">Unassigned</option>
               {users.map((u) => (
@@ -353,7 +353,7 @@ export default function DevicesPage() {
                 handleFormChange('notes', e.target.value)
               }
               rows={2}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-xs resize-none"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs resize-none"
               placeholder="Add purchase date, condition, accessories, etc."
             />
           </div>
@@ -362,7 +362,7 @@ export default function DevicesPage() {
             <button
               type="submit"
               disabled={creating}
-              className="px-5 py-2.5 rounded-2xl text-sm font-semibold text-white bg-violet-600 shadow-lg shadow-violet-300/40 hover:bg-violet-700 disabled:opacity-60"
+              className="px-5 py-2.5 rounded-2xl text-sm font-semibold text-white bg-blue-600 shadow-lg shadow-blue-300/40 hover:bg-blue-700 disabled:opacity-60"
             >
               {creating ? 'Saving...' : 'Add device'}
             </button>
@@ -458,7 +458,7 @@ export default function DevicesPage() {
                       <button
                         type="button"
                         onClick={() => openEdit(d)}
-                        className="text-xs font-semibold text-violet-700 hover:text-violet-900"
+                        className="text-xs font-semibold text-blue-700 hover:text-blue-900"
                       >
                         Edit
                       </button>
@@ -506,7 +506,7 @@ export default function DevicesPage() {
                   onChange={(e) =>
                     handleFormChange('name', e.target.value, true)
                   }
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 />
               </div>
@@ -525,7 +525,7 @@ export default function DevicesPage() {
                       true
                     )
                   }
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
@@ -543,7 +543,7 @@ export default function DevicesPage() {
                       true
                     )
                   }
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
@@ -554,7 +554,7 @@ export default function DevicesPage() {
                   onChange={(e) =>
                     handleFormChange('status', e.target.value, true)
                   }
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-xs"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                 >
                   <option value="available">Available</option>
                   <option value="assigned">Assigned</option>
@@ -576,7 +576,7 @@ export default function DevicesPage() {
                       true
                     )
                   }
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-xs"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                 >
                   <option value="">Unassigned</option>
                   {users.map((u) => (
@@ -595,7 +595,7 @@ export default function DevicesPage() {
                     handleFormChange('notes', e.target.value, true)
                   }
                   rows={2}
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-xs resize-none"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs resize-none"
                 />
               </div>
 
@@ -610,7 +610,7 @@ export default function DevicesPage() {
                 <button
                   type="submit"
                   disabled={editSaving}
-                  className="px-5 py-2 rounded-2xl text-xs font-semibold text-white bg-violet-600 hover:bg-violet-700 disabled:opacity-60"
+                  className="px-5 py-2 rounded-2xl text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-60"
                 >
                   {editSaving ? 'Saving...' : 'Save changes'}
                 </button>

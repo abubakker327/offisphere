@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -173,7 +173,7 @@ export default function ReimbursementsPage() {
       className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6"
     >
       <div className="space-y-3">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
           <span>Expense desk</span>
         </div>
         <div>
@@ -189,7 +189,7 @@ export default function ReimbursementsPage() {
       {/* Create reimbursement */}
       <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6">
         <div className="flex items-center gap-3 mb-4">
-          <div className="h-10 w-10 rounded-2xl bg-violet-600 text-white flex items-center justify-center">
+          <div className="h-10 w-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -231,7 +231,7 @@ export default function ReimbursementsPage() {
               type="text"
               value={form.title}
               onChange={(e) => handleChange('title', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Taxi to client meeting"
               required
             />
@@ -243,7 +243,7 @@ export default function ReimbursementsPage() {
               type="text"
               value={form.category}
               onChange={(e) => handleChange('category', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Travel / Food / Software"
               required
             />
@@ -256,7 +256,7 @@ export default function ReimbursementsPage() {
               step="0.01"
               value={form.amount}
               onChange={(e) => handleChange('amount', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="1500"
               required
             />
@@ -270,7 +270,7 @@ export default function ReimbursementsPage() {
               onChange={(e) =>
                 handleChange('expense_date', e.target.value)
               }
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-xs"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
               required
             />
           </div>
@@ -281,7 +281,7 @@ export default function ReimbursementsPage() {
               type="text"
               value={form.notes}
               onChange={(e) => handleChange('notes', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Optional description"
             />
           </div>
@@ -296,7 +296,7 @@ export default function ReimbursementsPage() {
               onChange={(e) =>
                 handleChange('receipt_url', e.target.value)
               }
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Link to uploaded receipt"
             />
           </div>
@@ -307,7 +307,7 @@ export default function ReimbursementsPage() {
               whileTap={{ scale: 0.97 }}
               type="submit"
               disabled={saving}
-              className="px-5 py-2.5 rounded-2xl text-sm font-semibold text-white bg-violet-600 shadow-lg shadow-violet-300/40 hover:bg-violet-700 disabled:opacity-60"
+              className="px-5 py-2.5 rounded-2xl text-sm font-semibold text-white bg-blue-600 shadow-lg shadow-blue-300/40 hover:bg-blue-700 disabled:opacity-60"
             >
               {saving ? 'Submitting...' : 'Submit reimbursement'}
             </motion.button>
@@ -392,7 +392,7 @@ export default function ReimbursementsPage() {
                           onChange={(e) =>
                             handleStatusChange(r.id, e.target.value)
                           }
-                          className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs shadow-sm hover:border-violet-200"
+                          className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs shadow-sm hover:border-blue-200"
                         >
                           <option value="pending">Pending</option>
                           <option value="approved">Approved</option>

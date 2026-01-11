@@ -1,6 +1,7 @@
-'use client';
+﻿'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -307,7 +308,7 @@ export default function DashboardLayout({ children }) {
           </svg>
         );
       default:
-        return <span className={common}>•</span>;
+        return <span className={common}>â€¢</span>;
     }
   };
 
@@ -318,7 +319,7 @@ export default function DashboardLayout({ children }) {
       <aside
         className={`hidden md:flex md:flex-col fixed inset-y-0 left-0 overflow-hidden ${
           sidebarCollapsed ? 'w-20' : 'w-72'
-        } bg-gradient-to-b from-violet-600 via-violet-700 to-fuchsia-700 text-white transition-[width,transform] duration-500 ease-in-out will-change-[width,transform] ${
+        } bg-gradient-to-b from-blue-700 via-blue-600 to-blue-800 text-white transition-[width,transform] duration-500 ease-in-out will-change-[width,transform] ${
           sidebarCollapsed ? '-translate-x-0' : 'translate-x-0'
         }`}
       >
@@ -332,7 +333,13 @@ export default function DashboardLayout({ children }) {
             aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
             <div className="h-12 w-12 rounded-2xl bg-white/15 ring-1 ring-white/25 flex items-center justify-center text-white text-sm font-semibold shadow-lg shadow-black/20">
-              <span className="text-lg">O</span>
+              <Image
+                src="/offisphere-logo.png"
+                alt="Offisphere logo"
+                width={30}
+                height={30}
+                priority
+              />
             </div>
             {!sidebarCollapsed && (
               <div>
@@ -353,12 +360,12 @@ export default function DashboardLayout({ children }) {
             href="/dashboard"
             className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition ${
               isActive('/dashboard', true)
-                ? 'bg-white text-violet-700 shadow-[0_8px_20px_rgba(0,0,0,0.18)]'
+                ? 'bg-white text-blue-700 shadow-[0_8px_20px_rgba(0,0,0,0.18)]'
                 : 'bg-white/10 text-white/90 hover:bg-white/15'
             }`}
           >
             <span className="text-base drop-shadow-sm">
-              {renderIcon('home', isActive('/dashboard', true) ? 'text-violet-700' : 'text-white')}
+              {renderIcon('home', isActive('/dashboard', true) ? 'text-blue-700' : 'text-white')}
             </span>
             {!sidebarCollapsed && <span>Dashboard</span>}
           </Link>
@@ -379,7 +386,7 @@ export default function DashboardLayout({ children }) {
                     sidebarCollapsed ? 'justify-center' : 'justify-between'
                   } px-4 py-3 rounded-2xl text-sm font-semibold transition ${
                     open && !sidebarCollapsed
-                      ? 'bg-white text-violet-700 shadow-[0_10px_25px_rgba(0,0,0,0.18)]'
+                      ? 'bg-white text-blue-700 shadow-[0_10px_25px_rgba(0,0,0,0.18)]'
                       : 'text-white/90 hover:bg-white/12 hover:text-white'
                   }`}
                 >
@@ -387,7 +394,7 @@ export default function DashboardLayout({ children }) {
                     <span className="text-base drop-shadow-sm">
                       {renderIcon(
                         group.icon,
-                        open && !sidebarCollapsed ? 'text-violet-700' : 'text-white/90'
+                        open && !sidebarCollapsed ? 'text-blue-700' : 'text-white/90'
                       )}
                     </span>
                     {!sidebarCollapsed && <span>{group.label}</span>}
@@ -396,7 +403,7 @@ export default function DashboardLayout({ children }) {
                     <motion.span
                       animate={{ rotate: open ? 90 : 0 }}
                       transition={{ duration: 0.15 }}
-                      className={open ? 'text-violet-700' : 'text-white/70'}
+                      className={open ? 'text-blue-700' : 'text-white/70'}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -432,7 +439,7 @@ export default function DashboardLayout({ children }) {
                             href={item.href}
                             className={`block px-4 py-2 rounded-xl text-[11px] transition ${
                               (item.label === 'Overview' ? pathname === item.href : active)
-                                ? 'bg-white text-violet-700 font-semibold shadow-[0_8px_20px_rgba(0,0,0,0.15)]'
+                                ? 'bg-white text-blue-700 font-semibold shadow-[0_8px_20px_rgba(0,0,0,0.15)]'
                                 : 'text-white/80 hover:bg-white/10 hover:text-white'
                             }`}
                           >

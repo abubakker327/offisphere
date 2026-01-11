@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -232,7 +232,7 @@ export default function SalesFlowPage() {
       className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6"
     >
       <div className="space-y-2">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
           <span>Sales pipeline</span>
         </div>
         <div>
@@ -266,7 +266,7 @@ export default function SalesFlowPage() {
             <div className="space-y-1">
               <label className="text-xs text-slate-600">Customer</label>
               <select
-                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={form.customer_id}
                 onChange={(e) => setForm((p) => ({ ...p, customer_id: e.target.value }))}
               >
@@ -281,7 +281,7 @@ export default function SalesFlowPage() {
             <div className="space-y-1">
               <label className="text-xs text-slate-600">Product</label>
               <select
-                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={form.product_id}
                 onChange={(e) => setForm((p) => ({ ...p, product_id: e.target.value }))}
               >
@@ -296,21 +296,21 @@ export default function SalesFlowPage() {
             <div className="grid grid-cols-3 gap-2">
               <input
                 type="number"
-                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Qty"
                 value={form.qty}
                 onChange={(e) => setForm((p) => ({ ...p, qty: e.target.value }))}
               />
               <input
                 type="number"
-                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Unit price"
                 value={form.unit_price}
                 onChange={(e) => setForm((p) => ({ ...p, unit_price: e.target.value }))}
               />
               <input
                 type="number"
-                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="GST %"
                 value={form.gst_rate}
                 onChange={(e) => setForm((p) => ({ ...p, gst_rate: e.target.value }))}
@@ -323,7 +323,7 @@ export default function SalesFlowPage() {
               whileTap={{ scale: 0.97 }}
               disabled={saving}
               onClick={createQuotation}
-              className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 disabled:opacity-60"
+              className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-60"
             >
               Create Quotation
             </motion.button>
@@ -345,7 +345,7 @@ export default function SalesFlowPage() {
             <div className="space-y-1">
               <label className="text-xs text-slate-600">Sales Order ID</label>
               <input
-                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Sales Order ID"
                 value={deliveryForm.sales_order_id}
                 onChange={(e) => setDeliveryForm((p) => ({ ...p, sales_order_id: e.target.value }))}
@@ -354,7 +354,7 @@ export default function SalesFlowPage() {
             <div className="space-y-1">
               <label className="text-xs text-slate-600">Warehouse ID</label>
               <input
-                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Warehouse ID"
                 value={deliveryForm.warehouse_id}
                 onChange={(e) => setDeliveryForm((p) => ({ ...p, warehouse_id: e.target.value }))}
@@ -363,7 +363,7 @@ export default function SalesFlowPage() {
             <div className="space-y-1">
               <label className="text-xs text-slate-600">Product</label>
               <select
-                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={deliveryForm.product_id}
                 onChange={(e) => setDeliveryForm((p) => ({ ...p, product_id: e.target.value }))}
               >
@@ -378,13 +378,13 @@ export default function SalesFlowPage() {
             <div className="grid grid-cols-2 gap-2">
               <input
                 type="number"
-                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Qty"
                 value={deliveryForm.qty}
                 onChange={(e) => setDeliveryForm((p) => ({ ...p, qty: e.target.value }))}
               />
               <input
-                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Serials (comma separated)"
                 value={deliveryForm.serials}
                 onChange={(e) => setDeliveryForm((p) => ({ ...p, serials: e.target.value }))}
@@ -409,7 +409,7 @@ export default function SalesFlowPage() {
               <div className="space-y-1">
                 <label className="text-xs text-slate-600">Delivery ID</label>
                 <input
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Delivery ID"
                   value={invoiceForm.delivery_id}
                   onChange={(e) => setInvoiceForm((p) => ({ ...p, delivery_id: e.target.value }))}
@@ -418,7 +418,7 @@ export default function SalesFlowPage() {
               <div className="space-y-1">
                 <label className="text-xs text-slate-600">Customer</label>
                 <select
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   value={invoiceForm.customer_id}
                   onChange={(e) => setInvoiceForm((p) => ({ ...p, customer_id: e.target.value }))}
                 >
@@ -433,7 +433,7 @@ export default function SalesFlowPage() {
               <div className="space-y-1">
                 <label className="text-xs text-slate-600">Product</label>
                 <select
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   value={invoiceForm.product_id}
                   onChange={(e) => setInvoiceForm((p) => ({ ...p, product_id: e.target.value }))}
                 >
@@ -448,21 +448,21 @@ export default function SalesFlowPage() {
               <div className="grid grid-cols-3 gap-2">
                 <input
                   type="number"
-                  className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                  className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Qty"
                   value={invoiceForm.qty}
                   onChange={(e) => setInvoiceForm((p) => ({ ...p, qty: e.target.value }))}
                 />
                 <input
                   type="number"
-                  className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                  className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Unit price"
                   value={invoiceForm.unit_price}
                   onChange={(e) => setInvoiceForm((p) => ({ ...p, unit_price: e.target.value }))}
                 />
                 <input
                   type="number"
-                  className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                  className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="GST %"
                   value={invoiceForm.gst_rate}
                   onChange={(e) => setInvoiceForm((p) => ({ ...p, gst_rate: e.target.value }))}
@@ -475,7 +475,7 @@ export default function SalesFlowPage() {
                 whileTap={{ scale: 0.97 }}
                 disabled={saving}
                 onClick={createInvoice}
-                className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 disabled:opacity-60"
+                className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-60"
               >
                 Post Invoice
               </motion.button>
