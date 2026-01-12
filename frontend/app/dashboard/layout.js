@@ -478,7 +478,7 @@ export default function DashboardLayout({ children }) {
               <button
                 type="button"
                 onClick={handleLogout}
-                className="inline-flex items-center px-3 py-2 rounded-2xl bg-white/15 text-[11px] text-white border border-white/20 hover:bg-white/20 transition shadow-sm shadow-black/20"
+                className="inline-flex items-center px-3 py-2 rounded-2xl bg-white/15 text-[11px] text-white border border-white/20 hover:bg-rose-500 hover:border-rose-400 transition shadow-sm shadow-black/20"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

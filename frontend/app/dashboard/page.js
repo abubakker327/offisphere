@@ -5,10 +5,42 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 
+const featureIndex = [
+  { label: 'Dashboard', href: '/dashboard', keywords: 'home overview' },
+  { label: 'Users', href: '/dashboard/users', keywords: 'people employees' },
+  { label: 'Attendance', href: '/dashboard/attendance', keywords: 'check-in' },
+  { label: 'Timesheets', href: '/dashboard/timesheets', keywords: 'hours time' },
+  { label: 'Leaves', href: '/dashboard/leaves', keywords: 'vacation time off' },
+  { label: 'Tasks', href: '/dashboard/tasks', keywords: 'work items' },
+  { label: 'Devices', href: '/dashboard/devices', keywords: 'assets hardware' },
+  { label: 'Documents', href: '/dashboard/documents', keywords: 'files library' },
+  { label: 'Reimbursements', href: '/dashboard/reimbursements', keywords: 'claims' },
+  { label: 'Leads', href: '/dashboard/leads', keywords: 'sales prospects' },
+  { label: 'Payments', href: '/dashboard/payments', keywords: 'transactions' },
+  { label: 'Sales Reports', href: '/dashboard/sales-reports', keywords: 'pipeline' },
+  { label: 'Payroll', href: '/dashboard/payroll', keywords: 'salary' },
+  { label: 'Recognition', href: '/dashboard/recognition', keywords: 'rewards' },
+  { label: 'Email', href: '/dashboard/email', keywords: 'templates' },
+  { label: 'Exports', href: '/dashboard/exports', keywords: 'reports' },
+  { label: 'Reports', href: '/dashboard/reports', keywords: 'analytics' },
+  { label: 'Sales & Accounts', href: '/dashboard/sales-accounts', keywords: 'finance' }
+];
+
 export default function DashboardHome() {
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchResults, setSearchResults] = useState({
+    features: [],
+    users: [],
+    devices: []
+  });
+  const [searchError, setSearchError] = useState('');
+  const [usersCache, setUsersCache] = useState(null);
+  const [devicesCache, setDevicesCache] = useState(null);
 
   const router = useRouter();
   const API_BASE = 'http://localhost:5000'; // local dev
@@ -73,6 +105,137 @@ export default function DashboardHome() {
     lop_days: 0
   };
 
+  const normalize = (value) => String(value || '').toLowerCase();
+
+  const filterFeatures = (query) => {
+    const q = normalize(query);
+    return featureIndex
+      .filter((item) => {
+        const haystack = `${item.label} ${item.keywords || ''}`.toLowerCase();
+        return haystack.includes(q);
+      })
+      .slice(0, 6);
+  };
+
+  const filterUsers = (query, users) => {
+    const q = normalize(query);
+    return (users || [])
+      .filter((user) => {
+        const haystack = `${user.full_name || ''} ${user.email || ''}`.toLowerCase();
+        return haystack.includes(q);
+      })
+      .slice(0, 5);
+  };
+
+  const filterDevices = (query, devices) => {
+    const q = normalize(query);
+    return (devices || [])
+      .filter((device) => {
+        const haystack = `${device.name || ''} ${device.device_type || ''} ${device.serial_number || ''} ${device.assigned_to_name || ''}`.toLowerCase();
+        return haystack.includes(q);
+      })
+      .slice(0, 5);
+  };
+
+  const runSearch = async (query) => {
+    const trimmed = query.trim();
+    if (!trimmed) {
+      setSearchResults({ features: [], users: [], devices: [] });
+      setSearchOpen(false);
+      setSearchError('');
+      return;
+    }
+
+    setSearchLoading(true);
+    setSearchError('');
+
+    try {
+      const token =
+        typeof window !== 'undefined'
+          ? window.localStorage.getItem('offisphere_token')
+          : null;
+
+      if (!token) {
+        setSearchError('Not authenticated');
+        setSearchResults({ features: [], users: [], devices: [] });
+        setSearchLoading(false);
+        setSearchOpen(true);
+        return;
+      }
+
+      let users = usersCache;
+      let devices = devicesCache;
+
+      const fetches = [];
+      if (!users) {
+        fetches.push(
+          fetch(`${API_BASE}/api/users`, {
+            headers: { Authorization: `Bearer ${token}` }
+          }).then((res) => res.json().then((data) => ({ res, data, type: 'users' })))
+        );
+      }
+      if (!devices) {
+        fetches.push(
+          fetch(`${API_BASE}/api/devices`, {
+            headers: { Authorization: `Bearer ${token}` }
+          }).then((res) => res.json().then((data) => ({ res, data, type: 'devices' })))
+        );
+      }
+
+      if (fetches.length > 0) {
+        const responses = await Promise.all(fetches);
+        responses.forEach(({ res, data, type }) => {
+          if (!res.ok) return;
+          if (type === 'users') users = Array.isArray(data) ? data : [];
+          if (type === 'devices') devices = Array.isArray(data) ? data : [];
+        });
+      }
+
+      if (!users) users = [];
+      if (!devices) devices = [];
+
+      setUsersCache(users);
+      setDevicesCache(devices);
+
+      const nextResults = {
+        features: filterFeatures(trimmed),
+        users: filterUsers(trimmed, users),
+        devices: filterDevices(trimmed, devices)
+      };
+
+      setSearchResults(nextResults);
+      setSearchOpen(true);
+    } catch (err) {
+      console.error('Search error:', err);
+      setSearchError('Error searching');
+      setSearchResults({ features: [], users: [], devices: [] });
+      setSearchOpen(true);
+    } finally {
+      setSearchLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const handle = setTimeout(() => {
+      runSearch(searchQuery);
+    }, 200);
+    return () => clearTimeout(handle);
+  }, [searchQuery]);
+
+  const handleSearchSelect = (href) => {
+    if (!href) return;
+    setSearchOpen(false);
+    setSearchQuery('');
+    router.push(href);
+  };
+
+  const getTopResult = () => {
+    if (searchResults.features[0]) return searchResults.features[0].href;
+    if (searchResults.users[0]) return '/dashboard/users';
+    if (searchResults.devices[0]) return '/dashboard/devices';
+    return '';
+  };
+
   const renderKpiIcon = (name, color = '#0f172a') => {
     const base = 'w-4 h-4';
     const props = { fill: 'none', stroke: color, strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' };
@@ -80,8 +243,9 @@ export default function DashboardHome() {
       case 'leaf':
         return (
           <svg className={base} viewBox="0 0 24 24" {...props}>
-            <path d="M5 21c8 0 14-6 14-14 0 0-12 0-14 12" />
-            <path d="M9 15c-2.5 0-4-1.5-4-4" />
+            <path d="M20 4c-9 0-14 6-14 12 0 4 3 7 7 7 6 0 12-5 12-14 0 0-2 0-5-5Z" />
+            <path d="M9 14c2 0 4 1 5 3" />
+            <path d="M9 10c1.5 0 3 0.5 4 2" />
           </svg>
         );
       case 'clock':
@@ -132,6 +296,15 @@ export default function DashboardHome() {
             <rect x="2" y="3" width="20" height="14" rx="2" />
             <path d="M12 17v4" />
             <path d="M8 21h8" />
+          </svg>
+        );
+      case 'device':
+        return (
+          <svg className={base} viewBox="0 0 24 24" {...props}>
+            <rect x="3" y="4" width="14" height="12" rx="2" />
+            <rect x="18" y="7" width="3" height="7" rx="1" />
+            <path d="M10 16v4" />
+            <path d="M7 20h6" />
           </svg>
         );
       case 'file':
@@ -298,30 +471,165 @@ export default function DashboardHome() {
           </p>
         </div>
 
-        {/* Notification icon */}
-        <motion.button
-          whileHover={{ scale: 1.05, y: -1 }}
-          whileTap={{ scale: 0.95, y: 0 }}
-          onClick={goToNotifications}
-          className="relative flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-sm border border-slate-200 text-slate-500 hover:text-indigo-600 hover:shadow-md transition"
-          aria-label="Notifications"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+        <div className="flex items-center gap-4">
+          {/* Search */}
+          <div className="hidden md:flex w-[360px]">
+            <div className="relative w-full">
+              <label className="sr-only" htmlFor="dashboard-search">
+                Search
+              </label>
+              <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="M21 21l-4.3-4.3" />
+                </svg>
+              </span>
+              <input
+                id="dashboard-search"
+                type="search"
+                placeholder="Search features, people, or docs..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => {
+                  if (searchQuery.trim()) setSearchOpen(true);
+                }}
+                onBlur={() => {
+                  setTimeout(() => setSearchOpen(false), 150);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    const href = getTopResult();
+                    if (href) {
+                      e.preventDefault();
+                      handleSearchSelect(href);
+                    }
+                  }
+                }}
+                className="w-full rounded-full border border-slate-200 bg-white pl-11 pr-4 py-2 text-sm text-slate-700 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+
+              {searchOpen && (
+                <div className="absolute left-0 right-0 mt-2 rounded-2xl border border-slate-200 bg-white shadow-lg p-2 z-30">
+                  {searchLoading && (
+                    <div className="px-3 py-2 text-xs text-slate-500">
+                      Searching...
+                    </div>
+                  )}
+                  {searchError && !searchLoading && (
+                    <div className="px-3 py-2 text-xs text-rose-600">
+                      {searchError}
+                    </div>
+                  )}
+                  {!searchLoading && !searchError && (
+                    <>
+                      {searchResults.features.length > 0 && (
+                        <div className="space-y-1">
+                          <p className="px-3 pt-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+                            Features
+                          </p>
+                          {searchResults.features.map((item) => (
+                            <button
+                              key={item.href}
+                              type="button"
+                              onMouseDown={() => handleSearchSelect(item.href)}
+                              className="w-full text-left px-3 py-2 rounded-xl text-sm text-slate-700 hover:bg-slate-100"
+                            >
+                              {item.label}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {searchResults.users.length > 0 && (
+                        <div className="space-y-1">
+                          <p className="px-3 pt-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+                            Users
+                          </p>
+                          {searchResults.users.map((user) => (
+                            <button
+                              key={user.id}
+                              type="button"
+                              onMouseDown={() => handleSearchSelect('/dashboard/users')}
+                              className="w-full text-left px-3 py-2 rounded-xl text-sm text-slate-700 hover:bg-slate-100"
+                            >
+                              <span className="font-medium">{user.full_name || user.email}</span>
+                              {user.full_name && user.email && (
+                                <span className="text-xs text-slate-400"> · {user.email}</span>
+                              )}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {searchResults.devices.length > 0 && (
+                        <div className="space-y-1">
+                          <p className="px-3 pt-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+                            Devices
+                          </p>
+                          {searchResults.devices.map((device) => (
+                            <button
+                              key={device.id}
+                              type="button"
+                              onMouseDown={() => handleSearchSelect('/dashboard/devices')}
+                              className="w-full text-left px-3 py-2 rounded-xl text-sm text-slate-700 hover:bg-slate-100"
+                            >
+                              <span className="font-medium">{device.name || 'Device'}</span>
+                              {device.serial_number && (
+                                <span className="text-xs text-slate-400"> · {device.serial_number}</span>
+                              )}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {searchResults.features.length === 0 &&
+                        searchResults.users.length === 0 &&
+                        searchResults.devices.length === 0 && (
+                          <div className="px-3 py-2 text-xs text-slate-500">
+                            No results found.
+                          </div>
+                        )}
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Notification icon */}
+          <motion.button
+            whileHover={{ scale: 1.05, y: -1 }}
+            whileTap={{ scale: 0.95, y: 0 }}
+            onClick={goToNotifications}
+            className="relative flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-sm border border-slate-200 text-slate-500 hover:text-blue-600 hover:shadow-md transition"
+            aria-label="Notifications"
           >
-            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
-            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-          </svg>
-          {/* red dot indicator */}
-          <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-rose-500 rounded-full" />
-        </motion.button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+            </svg>
+            {/* red dot indicator */}
+            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-rose-500 rounded-full" />
+          </motion.button>
+        </div>
       </div>
 
       {/* Error banner */}
@@ -787,5 +1095,6 @@ export default function DashboardHome() {
     </motion.div>
   );
 }
+
 
 

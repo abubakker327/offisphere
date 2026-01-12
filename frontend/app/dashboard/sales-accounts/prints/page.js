@@ -47,118 +47,126 @@ export default function PrintDocsPage() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
-      className="space-y-4"
+      className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6"
     >
-      <div>
-        <h1 className="text-xl font-semibold text-slate-900">Printable Docs</h1>
-        <p className="text-sm text-slate-500">
-          A4-styled previews for Invoice, Sales Order, Delivery Challan, and Purchase Order. Adjust fields, then print.
-        </p>
+      <div className="space-y-3">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(15,23,42,0.2)]">
+          Printable Docs
+        </div>
+        <div>
+          <h1 className="text-3xl font-semibold text-slate-900">Printable Docs</h1>
+          <p className="text-sm text-slate-500">
+            A4-styled previews for Invoice, Sales Order, Delivery Challan, and Purchase Order. Adjust fields, then print.
+          </p>
+        </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-3 text-xs">
-        <div className="flex-1 space-y-2">
-          <label className="text-[11px] text-slate-500">Document type</label>
-          <select
-            className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white"
-            value={docType}
-            onChange={(e) => setDocType(e.target.value)}
+      <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6 space-y-4">
+        <div className="flex flex-col md:flex-row gap-3 text-xs">
+          <div className="flex-1 space-y-2">
+            <label className="text-[11px] text-slate-500">Document type</label>
+            <select
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              value={docType}
+              onChange={(e) => setDocType(e.target.value)}
+            >
+              {DOC_TYPES.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex-1 space-y-2">
+            <label className="text-[11px] text-slate-500">{docMeta.numberLabel}</label>
+            <input
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              value={docNumber}
+              onChange={(e) => setDocNumber(e.target.value)}
+            />
+          </div>
+          <div className="flex-1 space-y-2">
+            <label className="text-[11px] text-slate-500">{docMeta.refLabel}</label>
+            <input
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              value={refNumber}
+              onChange={(e) => setRefNumber(e.target.value)}
+            />
+          </div>
+          <div className="flex-1 space-y-2">
+            <label className="text-[11px] text-slate-500">Issue date</label>
+            <input
+              type="date"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              value={issueDate}
+              onChange={(e) => setIssueDate(e.target.value)}
+            />
+          </div>
+          <div className="flex-1 space-y-2">
+            <label className="text-[11px] text-slate-500">Due / Delivery date</label>
+            <input
+              type="date"
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col md:flex-row gap-3 text-xs">
+          <div className="flex-1 space-y-2">
+            <label className="text-[11px] text-slate-500">From (Seller / Your company)</label>
+            <textarea
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent h-28"
+              value={`${fromInfo.name}\n${fromInfo.address}\n${fromInfo.contact}\nGST: ${fromInfo.gst}`}
+              onChange={(e) => {
+                const lines = e.target.value.split('\n');
+                setFromInfo((p) => ({
+                  ...p,
+                  name: lines[0] || '',
+                  address: lines[1] || '',
+                  contact: lines[2] || '',
+                  gst: (lines[3] || '').replace(/^GST:\s*/i, '')
+                }));
+              }}
+            />
+          </div>
+          <div className="flex-1 space-y-2">
+            <label className="text-[11px] text-slate-500">To (Customer / Vendor)</label>
+            <textarea
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent h-28"
+              value={`${toInfo.name}\n${toInfo.address}\n${toInfo.contact}\nGST: ${toInfo.gst}`}
+              onChange={(e) => {
+                const lines = e.target.value.split('\n');
+                setToInfo((p) => ({
+                  ...p,
+                  name: lines[0] || '',
+                  address: lines[1] || '',
+                  contact: lines[2] || '',
+                  gst: (lines[3] || '').replace(/^GST:\s*/i, '')
+                }));
+              }}
+            />
+          </div>
+        </div>
+
+        <div className="flex justify-end">
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => window.print()}
+            className="px-4 py-2 text-xs font-semibold rounded-full text-white shadow"
+            style={{ background: 'var(--brand-gradient)' }}
           >
-            {DOC_TYPES.map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="flex-1 space-y-2">
-          <label className="text-[11px] text-slate-500">{docMeta.numberLabel}</label>
-          <input
-            className="w-full px-3 py-2 rounded-xl border border-slate-200"
-            value={docNumber}
-            onChange={(e) => setDocNumber(e.target.value)}
-          />
-        </div>
-        <div className="flex-1 space-y-2">
-          <label className="text-[11px] text-slate-500">{docMeta.refLabel}</label>
-          <input
-            className="w-full px-3 py-2 rounded-xl border border-slate-200"
-            value={refNumber}
-            onChange={(e) => setRefNumber(e.target.value)}
-          />
-        </div>
-        <div className="flex-1 space-y-2">
-          <label className="text-[11px] text-slate-500">Issue date</label>
-          <input
-            type="date"
-            className="w-full px-3 py-2 rounded-xl border border-slate-200"
-            value={issueDate}
-            onChange={(e) => setIssueDate(e.target.value)}
-          />
-        </div>
-        <div className="flex-1 space-y-2">
-          <label className="text-[11px] text-slate-500">Due / Delivery date</label>
-          <input
-            type="date"
-            className="w-full px-3 py-2 rounded-xl border border-slate-200"
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
-          />
+            Print / Save as PDF
+          </motion.button>
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-3 text-xs">
-        <div className="flex-1 space-y-2">
-          <label className="text-[11px] text-slate-500">From (Seller / Your company)</label>
-          <textarea
-            className="w-full px-3 py-2 rounded-xl border border-slate-200 h-24"
-            value={`${fromInfo.name}\n${fromInfo.address}\n${fromInfo.contact}\nGST: ${fromInfo.gst}`}
-            onChange={(e) => {
-              const lines = e.target.value.split('\n');
-              setFromInfo((p) => ({
-                ...p,
-                name: lines[0] || '',
-                address: lines[1] || '',
-                contact: lines[2] || '',
-                gst: (lines[3] || '').replace(/^GST:\s*/i, '')
-              }));
-            }}
-          />
-        </div>
-        <div className="flex-1 space-y-2">
-          <label className="text-[11px] text-slate-500">To (Customer / Vendor)</label>
-          <textarea
-            className="w-full px-3 py-2 rounded-xl border border-slate-200 h-24"
-            value={`${toInfo.name}\n${toInfo.address}\n${toInfo.contact}\nGST: ${toInfo.gst}`}
-            onChange={(e) => {
-              const lines = e.target.value.split('\n');
-              setToInfo((p) => ({
-                ...p,
-                name: lines[0] || '',
-                address: lines[1] || '',
-                contact: lines[2] || '',
-                gst: (lines[3] || '').replace(/^GST:\s*/i, '')
-              }));
-            }}
-          />
-        </div>
-      </div>
-
-      <div className="flex justify-end">
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.97 }}
-          onClick={() => window.print()}
-          className="px-4 py-2 text-xs font-semibold rounded-full text-white bg-gradient-to-r from-indigo-500 to-purple-500 shadow"
-        >
-          Print / Save as PDF
-        </motion.button>
-      </div>
-
-      <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 max-w-4xl mx-auto print:w-[210mm] print:h-[297mm]">
+      <div className="bg-white rounded-3xl shadow-[0_20px_40px_rgba(15,23,42,0.08)] border border-slate-100 p-8 max-w-5xl mx-auto print:w-[210mm] print:h-[297mm]">
         <div className="flex items-start justify-between mb-6">
           <div>
-            <div className="text-[11px] uppercase tracking-wide text-indigo-600">{docMeta.title}</div>
+            <div className="text-[11px] uppercase tracking-wide text-blue-600">{docMeta.title}</div>
             <h2 className="text-lg font-semibold text-slate-900">Matrix Office</h2>
             <div className="text-xs text-slate-500 whitespace-pre-line">
               {fromInfo.address}
