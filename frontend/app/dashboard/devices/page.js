@@ -230,7 +230,7 @@ export default function DevicesPage() {
   return (
     <div className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6">
       <div className="space-y-3">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(15,23,42,0.2)]">
           <span>Device shelf</span>
         </div>
         <div>
@@ -266,14 +266,14 @@ export default function DevicesPage() {
             <h2 className="text-lg font-semibold text-slate-900">
               Add new device
             </h2>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-600">
               Register equipment and assign owners.
             </p>
           </div>
         </div>
 
         {createError && (
-          <div className="mb-3 text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-3 py-2">
+          <div className="mb-3 text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-xl px-3 py-2">
             {createError}
           </div>
         )}
@@ -377,7 +377,7 @@ export default function DevicesPage() {
             <h2 className="text-lg font-semibold text-slate-900">
               Devices inventory
             </h2>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-600">
               {devices.length} devices
             </p>
           </div>
@@ -385,7 +385,7 @@ export default function DevicesPage() {
 
         {error && (
           <div className="px-6 pt-4">
-            <div className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-3 py-2">
+            <div className="text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-xl px-3 py-2">
               {error}
             </div>
           </div>
@@ -393,7 +393,7 @@ export default function DevicesPage() {
 
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
-            <thead className="bg-slate-50 text-xs text-slate-500 uppercase tracking-wider">
+            <thead className="bg-slate-50 text-xs text-slate-600 uppercase tracking-wider">
               <tr>
                 <th className="text-left px-6 py-3 font-semibold">Name</th>
                 <th className="text-left px-6 py-3 font-semibold">Type</th>
@@ -409,7 +409,7 @@ export default function DevicesPage() {
                 <tr>
                   <td
                     colSpan={7}
-                    className="px-6 py-8 text-center text-xs text-slate-400"
+                    className="px-6 py-8 text-center text-xs text-slate-500"
                   >
                     Loading devices...
                   </td>
@@ -418,7 +418,7 @@ export default function DevicesPage() {
                 <tr>
                   <td
                     colSpan={7}
-                    className="px-6 py-8 text-center text-xs text-slate-400"
+                    className="px-6 py-8 text-center text-xs text-slate-500"
                   >
                     No devices found.
                   </td>
@@ -489,7 +489,7 @@ export default function DevicesPage() {
             </div>
 
             {editError && (
-              <div className="mb-3 text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-3 py-2">
+              <div className="mb-3 text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-xl px-3 py-2">
                 {editError}
               </div>
             )}
@@ -622,4 +622,5 @@ export default function DevicesPage() {
     </div>
   );
 }
+
 

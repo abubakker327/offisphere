@@ -331,7 +331,7 @@ export default function TimesheetsPage() {
 
           <div className="md:col-span-2 flex flex-col gap-2 mt-2">
             {createError && (
-              <p className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-3 py-2">
+              <p className="text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-xl px-3 py-2">
                 {createError}
               </p>
             )}
@@ -422,7 +422,7 @@ export default function TimesheetsPage() {
         </div>
 
         {listError && (
-          <p className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-3 py-2 mb-3">
+          <p className="text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-xl px-3 py-2 mb-3">
             {listError}
           </p>
         )}
@@ -532,4 +532,5 @@ export default function TimesheetsPage() {
     </div>
   );
 }
+
 

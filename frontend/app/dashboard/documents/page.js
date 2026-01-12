@@ -263,7 +263,7 @@ export default function DocumentsPage() {
         </div>
 
         {createError && (
-          <div className="mb-3 text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-3 py-2">
+          <div className="mb-3 text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-xl px-3 py-2">
             {createError}
           </div>
         )}
@@ -375,7 +375,7 @@ export default function DocumentsPage() {
 
         {error && (
           <div className="px-6 pt-4">
-            <div className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-3 py-2">
+            <div className="text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-xl px-3 py-2">
               {error}
             </div>
           </div>
@@ -491,7 +491,7 @@ export default function DocumentsPage() {
             </div>
 
             {editError && (
-              <div className="mb-3 text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-3 py-2">
+              <div className="mb-3 text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-xl px-3 py-2">
                 {editError}
               </div>
             )}
@@ -603,4 +603,5 @@ export default function DocumentsPage() {
     </div>
   );
 }
+
 

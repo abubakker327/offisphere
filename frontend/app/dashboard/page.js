@@ -38,6 +38,7 @@ export default function DashboardHome() {
     users: [],
     devices: []
   });
+  const [activeResultIndex, setActiveResultIndex] = useState(-1);
   const [searchError, setSearchError] = useState('');
   const [usersCache, setUsersCache] = useState(null);
   const [devicesCache, setDevicesCache] = useState(null);
@@ -142,6 +143,7 @@ export default function DashboardHome() {
     if (!trimmed) {
       setSearchResults({ features: [], users: [], devices: [] });
       setSearchOpen(false);
+      setActiveResultIndex(-1);
       setSearchError('');
       return;
     }
@@ -204,11 +206,13 @@ export default function DashboardHome() {
       };
 
       setSearchResults(nextResults);
+      setActiveResultIndex(-1);
       setSearchOpen(true);
     } catch (err) {
       console.error('Search error:', err);
       setSearchError('Error searching');
       setSearchResults({ features: [], users: [], devices: [] });
+      setActiveResultIndex(-1);
       setSearchOpen(true);
     } finally {
       setSearchLoading(false);
@@ -226,6 +230,7 @@ export default function DashboardHome() {
     if (!href) return;
     setSearchOpen(false);
     setSearchQuery('');
+    setActiveResultIndex(-1);
     router.push(href);
   };
 
@@ -234,6 +239,34 @@ export default function DashboardHome() {
     if (searchResults.users[0]) return '/dashboard/users';
     if (searchResults.devices[0]) return '/dashboard/devices';
     return '';
+  };
+
+  const getFlatResults = () => {
+    const items = [];
+    searchResults.features.forEach((item) =>
+      items.push({
+        type: 'feature',
+        label: item.label,
+        href: item.href
+      })
+    );
+    searchResults.users.forEach((user) =>
+      items.push({
+        type: 'user',
+        label: user.full_name || user.email,
+        meta: user.full_name && user.email ? user.email : '',
+        href: '/dashboard/users'
+      })
+    );
+    searchResults.devices.forEach((device) =>
+      items.push({
+        type: 'device',
+        label: device.name || 'Device',
+        meta: device.serial_number || '',
+        href: '/dashboard/devices'
+      })
+    );
+    return items;
   };
 
   const renderKpiIcon = (name, color = '#0f172a') => {
@@ -506,16 +539,60 @@ export default function DashboardHome() {
                   setTimeout(() => setSearchOpen(false), 150);
                 }}
                 onKeyDown={(e) => {
+                  const flat = getFlatResults();
                   if (e.key === 'Enter') {
-                    const href = getTopResult();
+                    const href =
+                      activeResultIndex >= 0 && flat[activeResultIndex]
+                        ? flat[activeResultIndex].href
+                        : getTopResult();
                     if (href) {
                       e.preventDefault();
                       handleSearchSelect(href);
                     }
+                  } else if (e.key === 'ArrowDown') {
+                    if (!searchOpen) setSearchOpen(true);
+                    e.preventDefault();
+                    setActiveResultIndex((prev) =>
+                      Math.min(prev + 1, flat.length - 1)
+                    );
+                  } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    setActiveResultIndex((prev) => Math.max(prev - 1, 0));
+                  } else if (e.key === 'Escape') {
+                    setSearchOpen(false);
+                    setActiveResultIndex(-1);
                   }
                 }}
                 className="w-full rounded-full border border-slate-200 bg-white pl-11 pr-4 py-2 text-sm text-slate-700 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
+
+              {searchQuery && (
+                <button
+                  type="button"
+                  onMouseDown={() => {
+                    setSearchQuery('');
+                    setSearchResults({ features: [], users: [], devices: [] });
+                    setSearchOpen(false);
+                    setActiveResultIndex(-1);
+                  }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  aria-label="Clear search"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </button>
+              )}
 
               {searchOpen && (
                 <div className="absolute left-0 right-0 mt-2 rounded-2xl border border-slate-200 bg-white shadow-lg p-2 z-30">
@@ -541,7 +618,18 @@ export default function DashboardHome() {
                               key={item.href}
                               type="button"
                               onMouseDown={() => handleSearchSelect(item.href)}
-                              className="w-full text-left px-3 py-2 rounded-xl text-sm text-slate-700 hover:bg-slate-100"
+                              onMouseEnter={() => {
+                                const idx = getFlatResults().findIndex(
+                                  (result) => result.href === item.href && result.type === 'feature'
+                                );
+                                setActiveResultIndex(idx);
+                              }}
+                              className={`w-full text-left px-3 py-2 rounded-xl text-sm text-slate-700 hover:bg-slate-100 ${
+                                getFlatResults()[activeResultIndex]?.href === item.href &&
+                                getFlatResults()[activeResultIndex]?.type === 'feature'
+                                  ? 'bg-slate-100'
+                                  : ''
+                              }`}
                             >
                               {item.label}
                             </button>
@@ -559,7 +647,18 @@ export default function DashboardHome() {
                               key={user.id}
                               type="button"
                               onMouseDown={() => handleSearchSelect('/dashboard/users')}
-                              className="w-full text-left px-3 py-2 rounded-xl text-sm text-slate-700 hover:bg-slate-100"
+                              onMouseEnter={() => {
+                                const idx = getFlatResults().findIndex(
+                                  (result) => result.type === 'user' && result.label === (user.full_name || user.email)
+                                );
+                                setActiveResultIndex(idx);
+                              }}
+                              className={`w-full text-left px-3 py-2 rounded-xl text-sm text-slate-700 hover:bg-slate-100 ${
+                                getFlatResults()[activeResultIndex]?.type === 'user' &&
+                                getFlatResults()[activeResultIndex]?.label === (user.full_name || user.email)
+                                  ? 'bg-slate-100'
+                                  : ''
+                              }`}
                             >
                               <span className="font-medium">{user.full_name || user.email}</span>
                               {user.full_name && user.email && (
@@ -580,7 +679,18 @@ export default function DashboardHome() {
                               key={device.id}
                               type="button"
                               onMouseDown={() => handleSearchSelect('/dashboard/devices')}
-                              className="w-full text-left px-3 py-2 rounded-xl text-sm text-slate-700 hover:bg-slate-100"
+                              onMouseEnter={() => {
+                                const idx = getFlatResults().findIndex(
+                                  (result) => result.type === 'device' && result.label === (device.name || 'Device')
+                                );
+                                setActiveResultIndex(idx);
+                              }}
+                              className={`w-full text-left px-3 py-2 rounded-xl text-sm text-slate-700 hover:bg-slate-100 ${
+                                getFlatResults()[activeResultIndex]?.type === 'device' &&
+                                getFlatResults()[activeResultIndex]?.label === (device.name || 'Device')
+                                  ? 'bg-slate-100'
+                                  : ''
+                              }`}
                             >
                               <span className="font-medium">{device.name || 'Device'}</span>
                               {device.serial_number && (
@@ -634,7 +744,7 @@ export default function DashboardHome() {
 
       {/* Error banner */}
       {error && (
-        <div className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-3 py-2">
+        <div className="text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-xl px-3 py-2">
           {error}
         </div>
       )}
@@ -1095,6 +1205,7 @@ export default function DashboardHome() {
     </motion.div>
   );
 }
+
 
 
 

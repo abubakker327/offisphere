@@ -234,7 +234,7 @@ export default function PaymentsPage() {
     >
       <div className="flex items-center justify-between">
         <div className="space-y-3">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(124,58,237,0.25)]">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(15,23,42,0.2)]">
             <span>Payment log</span>
           </div>
           <div>
@@ -271,7 +271,7 @@ export default function PaymentsPage() {
             <h2 className="text-lg font-semibold text-slate-900">
               Record payment
             </h2>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-600">
               Log payments tied to leads and invoices.
             </p>
           </div>
@@ -288,7 +288,7 @@ export default function PaymentsPage() {
           className="grid grid-cols-1 md:grid-cols-6 gap-3 text-sm"
         >
           <div className="md:col-span-2 space-y-1">
-            <label className="text-xs text-slate-500">Lead</label>
+            <label className="text-xs text-slate-600">Lead</label>
             <select
               value={form.lead_id}
               onChange={(e) => handleChange('lead_id', e.target.value)}
@@ -305,7 +305,7 @@ export default function PaymentsPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs text-slate-500">Amount</label>
+            <label className="text-xs text-slate-600">Amount</label>
             <input
               type="number"
               step="0.01"
@@ -318,7 +318,7 @@ export default function PaymentsPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs text-slate-500">Currency</label>
+            <label className="text-xs text-slate-600">Currency</label>
             <input
               type="text"
               value={form.currency}
@@ -328,7 +328,7 @@ export default function PaymentsPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs text-slate-500">Status</label>
+            <label className="text-xs text-slate-600">Status</label>
             <select
               value={form.status}
               onChange={(e) => handleChange('status', e.target.value)}
@@ -343,7 +343,7 @@ export default function PaymentsPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs text-slate-500">Method</label>
+            <label className="text-xs text-slate-600">Method</label>
             <input
               type="text"
               value={form.method}
@@ -354,7 +354,7 @@ export default function PaymentsPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs text-slate-500">
+            <label className="text-xs text-slate-600">
               Paid date (optional)
             </label>
             <input
@@ -366,7 +366,7 @@ export default function PaymentsPage() {
           </div>
 
           <div className="md:col-span-3 space-y-1">
-            <label className="text-xs text-slate-500">Reference</label>
+            <label className="text-xs text-slate-600">Reference</label>
             <input
               type="text"
               value={form.reference}
@@ -377,7 +377,7 @@ export default function PaymentsPage() {
           </div>
 
           <div className="md:col-span-3 space-y-1">
-            <label className="text-xs text-slate-500">Notes</label>
+            <label className="text-xs text-slate-600">Notes</label>
             <input
               type="text"
               value={form.notes}
@@ -411,8 +411,8 @@ export default function PaymentsPage() {
               onClick={() => handleStatusFilter(f.value)}
               className={`px-3 py-1.5 rounded-full border transition ${
                 active
-                  ? 'bg-blue-600 text-white border-blue-600'
-                  : 'bg-white text-slate-700 border-slate-200 hover:border-blue-200'
+                  ? 'bg-blue-600 text-white border-transparent shadow'
+                  : 'bg-white text-slate-600 border-slate-200 hover:border-blue-200'
               }`}
             >
               {f.label}
@@ -424,13 +424,31 @@ export default function PaymentsPage() {
       {/* Payments list */}
       <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
         <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-4 border-b border-slate-100">
-          <div>
-            <h2 className="text-lg font-semibold text-slate-900">
-              Payment history
-            </h2>
-            <p className="text-xs text-slate-500">
-              {payments.length} payments
-            </p>
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect x="2" y="5" width="20" height="14" rx="2" />
+                <circle cx="12" cy="12" r="3" />
+                <path d="M7 10h.01M17 14h.01" />
+              </svg>
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-slate-900">
+                Payment history
+              </h2>
+              <p className="text-xs text-slate-600">
+                {payments.length} payments
+              </p>
+            </div>
           </div>
           {isAdminManager && (
             <span className="text-[11px] text-slate-500">
@@ -441,7 +459,7 @@ export default function PaymentsPage() {
 
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
-            <thead className="bg-slate-50 text-xs text-slate-500 uppercase tracking-wider">
+            <thead className="bg-slate-50 text-xs text-slate-600 uppercase tracking-wider">
               <tr>
                 <th className="text-left px-6 py-3 font-semibold">Lead</th>
                 <th className="text-left px-6 py-3 font-semibold">Amount</th>
@@ -458,7 +476,7 @@ export default function PaymentsPage() {
                 <tr>
                   <td
                     colSpan={8}
-                    className="px-6 py-8 text-center text-xs text-slate-400"
+                    className="px-6 py-8 text-center text-xs text-slate-500"
                   >
                     Loading payments...
                   </td>
@@ -467,7 +485,7 @@ export default function PaymentsPage() {
                 <tr>
                   <td
                     colSpan={8}
-                    className="px-6 py-8 text-center text-xs text-slate-400"
+                    className="px-6 py-8 text-center text-xs text-slate-500"
                   >
                     No payments found.
                   </td>
@@ -481,10 +499,10 @@ export default function PaymentsPage() {
                     <td className="px-6 py-4 text-slate-900">
                       {p.lead_name || leadNameById(p.lead_id) || '--'}
                     </td>
-                    <td className="px-6 py-4 text-xs text-slate-500">
+                    <td className="px-6 py-4 text-xs text-slate-600">
                       {p.amount} {p.currency}
                     </td>
-                    <td className="px-6 py-4 text-xs text-slate-500">
+                    <td className="px-6 py-4 text-xs text-slate-600">
                       {p.method || '--'}
                     </td>
                     <td className="px-6 py-4 text-xs">
@@ -518,16 +536,16 @@ export default function PaymentsPage() {
                         </span>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-xs text-slate-500">
+                    <td className="px-6 py-4 text-xs text-slate-600">
                       {p.reference || '--'}
                     </td>
-                    <td className="px-6 py-4 text-xs text-slate-500">
+                    <td className="px-6 py-4 text-xs text-slate-600">
                       {p.recorded_by_name || '--'}
                     </td>
-                    <td className="px-6 py-4 text-xs text-slate-500">
+                    <td className="px-6 py-4 text-xs text-slate-600">
                       {formatDate(p.paid_at)}
                     </td>
-                    <td className="px-6 py-4 text-xs text-slate-500">
+                    <td className="px-6 py-4 text-xs text-slate-600">
                       {formatDate(p.created_at)}
                     </td>
                   </tr>
@@ -540,5 +558,7 @@ export default function PaymentsPage() {
     </motion.div>
   );
 }
+
+
 
 
