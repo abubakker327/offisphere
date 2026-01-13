@@ -335,9 +335,7 @@ export default function DashboardLayout({ children }) {
                 <div className="text-base font-semibold text-white">
                   Offisphere
                 </div>
-                <div className="text-xs text-white/70">
-                  Workplace OS
-                </div>
+            
               </div>
             )}
           </button>

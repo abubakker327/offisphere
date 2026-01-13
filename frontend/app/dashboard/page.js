@@ -226,9 +226,8 @@ export default function DashboardHome() {
       case 'money':
         return (
           <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="9" />
-            <path d="M12 7v10" />
-            <path d="M8.5 9.5A3.5 3.5 0 0 1 12 7h1a3 3 0 1 1 0 6h-2a3 3 0 1 0 0 6h1.5a3.5 3.5 0 0 0 3.5-3.5" />
+            <path d="M12 2v20" />
+            <path d="M16.5 6.5c0-1.9-2-3.5-4.5-3.5S7.5 4.1 7.5 6s1.3 3 4.5 3 4.5 1.1 4.5 3-2 3.5-4.5 3.5-4.5-1.1-4.5-3" />
           </svg>
         );
       default:
