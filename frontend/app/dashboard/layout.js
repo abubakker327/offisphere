@@ -445,33 +445,35 @@ export default function DashboardLayout({ children }) {
         }`}
       >
         <main className="min-h-screen p-4 md:p-6">
-          <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-end">
-            <div className="w-full md:max-w-md">
-              <GlobalSearch />
-            </div>
-            <motion.button
-              whileHover={{ scale: 1.05, y: -1 }}
-              whileTap={{ scale: 0.95, y: 0 }}
-              onClick={goToNotifications}
-              className="relative flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-sm border border-slate-200 text-slate-500 hover:text-blue-600 hover:shadow-md transition"
-              aria-label="Notifications"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+          {pathname !== '/dashboard' && (
+            <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-end">
+              <div className="w-full md:max-w-md">
+                <GlobalSearch />
+              </div>
+              <motion.button
+                whileHover={{ scale: 1.05, y: -1 }}
+                whileTap={{ scale: 0.95, y: 0 }}
+                onClick={goToNotifications}
+                className="relative flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-sm border border-slate-200 text-slate-500 hover:text-blue-600 hover:shadow-md transition"
+                aria-label="Notifications"
               >
-                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
-                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-              </svg>
-              <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-rose-500 rounded-full" />
-            </motion.button>
-          </div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                </svg>
+                <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-rose-500 rounded-full" />
+              </motion.button>
+            </div>
+          )}
           <AnimatePresence mode="wait">
             <motion.div
               key={pathname}

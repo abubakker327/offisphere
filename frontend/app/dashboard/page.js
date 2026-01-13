@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import GlobalSearch from './components/GlobalSearch';
 
 export default function DashboardHome() {
   const [summary, setSummary] = useState(null);
@@ -178,36 +179,82 @@ export default function DashboardHome() {
             <path d="M7 10h.01M17 14h.01" />
           </svg>
         );
+      case 'user':
+        return (
+          <svg className={base} viewBox="0 0 24 24" {...props}>
+            <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+          </svg>
+        );
+      case 'check':
+        return (
+          <svg className={base} viewBox="0 0 24 24" {...props}>
+            <path d="M20 6 9 17l-5-5" />
+          </svg>
+        );
+      case 'tasks':
+        return (
+          <svg className={base} viewBox="0 0 24 24" {...props}>
+            <path d="M9 6h11" />
+            <path d="M9 12h11" />
+            <path d="M9 18h11" />
+            <path d="m3 6 1.5 1.5L6 6" />
+            <path d="m3 12 1.5 1.5L6 12" />
+            <path d="m3 18 1.5 1.5L6 18" />
+          </svg>
+        );
+      case 'monitor':
+        return (
+          <svg className={base} viewBox="0 0 24 24" {...props}>
+            <rect x="3" y="4" width="18" height="14" rx="2" />
+            <path d="M8 20h8" />
+          </svg>
+        );
+      case 'money':
+        return (
+          <svg className={base} viewBox="0 0 24 24" {...props}>
+            <path d="M12 2v20" />
+            <path d="M16.5 6.5c0-1.9-2-3.5-4.5-3.5S7.5 4.1 7.5 6s1.3 3 4.5 3 4.5 1.1 4.5 3-2 3.5-4.5 3.5-4.5-1.1-4.5-3" />
+          </svg>
+        );
       default:
         return <span className={base}>???</span>;
     }
   };
+
   const renderQAIcon = (name) => {
-    const common = 'w-4 h-4 text-white';
+    const common = 'w-5 h-5 text-white';
+    const props = {
+      fill: 'none',
+      stroke: 'currentColor',
+      strokeWidth: '2',
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round'
+    };
     switch (name) {
       case 'user':
         return (
-          <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className={common} viewBox="0 0 24 24" {...props}>
             <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
             <circle cx="9" cy="7" r="4" />
           </svg>
         );
       case 'clock':
         return (
-          <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className={common} viewBox="0 0 24 24" {...props}>
             <circle cx="12" cy="12" r="10" />
             <path d="M12 6v6l3 3" />
           </svg>
         );
       case 'check':
         return (
-          <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className={common} viewBox="0 0 24 24" {...props}>
             <path d="M20 6 9 17l-5-5" />
           </svg>
         );
       case 'tasks':
         return (
-          <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className={common} viewBox="0 0 24 24" {...props}>
             <path d="M9 6h11" />
             <path d="M9 12h11" />
             <path d="M9 18h11" />
@@ -218,20 +265,20 @@ export default function DashboardHome() {
         );
       case 'device':
         return (
-          <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className={common} viewBox="0 0 24 24" {...props}>
             <rect x="3" y="4" width="18" height="14" rx="2" />
             <path d="M8 20h8" />
           </svg>
         );
       case 'money':
         return (
-          <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className={common} viewBox="0 0 24 24" {...props}>
             <path d="M12 2v20" />
             <path d="M16.5 6.5c0-1.9-2-3.5-4.5-3.5S7.5 4.1 7.5 6s1.3 3 4.5 3 4.5 1.1 4.5 3-2 3.5-4.5 3.5-4.5-1.1-4.5-3" />
           </svg>
         );
       default:
-        return <span className={common}>???</span>;
+        return <span className={common}>?</span>;
     }
   };
 
@@ -262,8 +309,8 @@ export default function DashboardHome() {
           {children}
         </div>
       </div>
-      
-      <div 
+
+      <div
         className="flex-shrink-0 h-14 w-14 rounded-2xl bg-white shadow-[0_10px_25px_rgba(0,0,0,0.06)] border border-slate-50 flex items-center justify-center overflow-hidden"
         style={{ color: accent.iconColor }}
       >
@@ -281,6 +328,7 @@ export default function DashboardHome() {
       <div className="h-3 w-24 bg-slate-100 rounded-full" />
     </div>
   );
+
   return (
     <motion.div
       className="space-y-6"
@@ -289,7 +337,7 @@ export default function DashboardHome() {
       transition={{ duration: 0.25 }}
     >
       {/* Header */}
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-xl font-semibold text-slate-900">
             Hello Admin 👋
@@ -298,6 +346,31 @@ export default function DashboardHome() {
             Overview of users, attendance, leaves, tasks, devices and
             documents.
           </p>
+        </div>
+        <div className="flex w-full flex-col gap-3 md:w-auto md:flex-row md:items-center">
+          <div className="w-full md:w-[360px]">
+            <GlobalSearch />
+          </div>
+          <Link
+            href="/dashboard/notifications"
+            className="relative flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-sm border border-slate-200 text-slate-500 hover:text-blue-600 hover:shadow-md transition"
+            aria-label="Notifications"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+            </svg>
+            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-rose-500 rounded-full" />
+          </Link>
         </div>
       </div>
 
@@ -403,10 +476,10 @@ export default function DashboardHome() {
             </GlowCard>
           </>
         )}
-      </div>
+        </div>
 
-      {/* Operations overview row */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {/* KPI row */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {loading ? (
           <>
             {skeletonCard}
@@ -416,7 +489,6 @@ export default function DashboardHome() {
           </>
         ) : (
           <>
-            {/* Timesheets */}
             <GlowCard
               index={4}
               title="Timesheets"
@@ -427,15 +499,14 @@ export default function DashboardHome() {
             >
               <div>
                 <div className="text-3xl font-bold text-slate-900 tracking-tight">
-                  {s.timesheets?.entries_today ?? 0}
+                  {s.timesheets?.pending ?? 0}
                 </div>
                 <p className="text-xs text-slate-400 font-medium mt-0.5">
-                  {s.timesheets?.hours_today ?? 0}h logged today
+                  Pending approvals
                 </p>
               </div>
             </GlowCard>
 
-            {/* Tasks */}
             <GlowCard
               index={5}
               title="Tasks"
@@ -450,13 +521,12 @@ export default function DashboardHome() {
                 </div>
                 <div className="flex items-center gap-2 mt-1 px-2 py-0.5 bg-rose-50 border border-rose-100/60 rounded-full w-fit">
                   <span className="text-[9px] font-bold text-rose-600 uppercase tracking-tighter">
-                    {s.tasks?.overdue ?? 0} Overdue
+                    Overdue {s.tasks?.overdue ?? 0}
                   </span>
                 </div>
               </div>
             </GlowCard>
 
-            {/* Devices */}
             <GlowCard
               index={6}
               title="Devices"
@@ -467,47 +537,37 @@ export default function DashboardHome() {
             >
               <div>
                 <div className="text-3xl font-bold text-slate-900 tracking-tight">
-                  {s.devices?.total ?? 0}
+                  {s.devices?.assigned ?? 0}
                 </div>
                 <p className="text-xs text-slate-400 font-medium mt-0.5">
-                  {s.devices?.available ?? 0} available
+                  Active assignments
                 </p>
               </div>
             </GlowCard>
 
-            {/* Documents */}
             <GlowCard
               index={7}
-              cardKey="documents"
-              title="DOCUMENTS"
+              title="Documents"
               accent={{
-                border: 'border-indigo-100/70',
-                bg: 'bg-gradient-to-br from-indigo-400/12 via-indigo-200/10 to-white',
-                glowA: 'bg-indigo-300/16',
-                glowB: 'bg-blue-200/12',
-                title: 'text-indigo-600',
-                pill: 'bg-indigo-400/70',
                 icon: 'file',
                 iconColor: '#4f46e5'
               }}
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-2xl font-semibold text-slate-900">
-                    {s.documents?.total ?? 0}
-                  </div>
-                  <p className="text-xs text-slate-500">
-                    Documents in library
-                  </p>
+              <div>
+                <div className="text-3xl font-bold text-slate-900 tracking-tight">
+                  {s.documents?.total ?? 0}
                 </div>
+                <p className="text-xs text-slate-400 font-medium mt-0.5">
+                  Files stored
+                </p>
               </div>
             </GlowCard>
           </>
         )}
-      </div>
+        </div>
 
-      {/* Sales & Accounts snapshots */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Sales & Accounts snapshots */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {loading ? (
           <>
             {skeletonCard}
@@ -518,255 +578,191 @@ export default function DashboardHome() {
           <>
             <GlowCard
               index={8}
-              cardKey="sales_quotes"
-              title="SALES QUOTES"
+              title="Sales Quotes"
               accent={{
-                border: 'border-fuchsia-100/70',
-                bg: 'bg-gradient-to-br from-fuchsia-400/14 via-pink-200/12 to-white',
-                glowA: 'bg-fuchsia-300/16',
-                glowB: 'bg-pink-200/14',
-                title: 'text-fuchsia-600',
-                pill: 'bg-fuchsia-400/70',
                 icon: 'quote',
                 iconColor: '#c026d3'
               }}
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-2xl font-semibold text-slate-900">
-                    {s.sales?.quotations ?? 0}
-                  </div>
-                  <p className="text-xs text-slate-500">Quotations created</p>
+              <div>
+                <div className="text-3xl font-bold text-slate-900 tracking-tight">
+                  {s.sales?.quotes ?? 0}
                 </div>
-                <div className="text-right text-xs text-slate-600">
-                  <p>
-                    Open:{' '}
-                    <span className="font-semibold text-fuchsia-600">
-                      {s.sales?.quotations_open ?? 0}
-                    </span>
-                  </p>
-                </div>
+                <p className="text-xs text-slate-400 font-medium mt-0.5">Quotes sent</p>
               </div>
             </GlowCard>
 
             <GlowCard
               index={9}
-              cardKey="orders_delivery"
-              title="ORDERS & DELIVERY"
+              title="Orders & Delivery"
               accent={{
-                border: 'border-sky-100/70',
-                bg: 'bg-gradient-to-br from-sky-400/14 via-blue-200/12 to-white',
-                glowA: 'bg-blue-300/16',
-                glowB: 'bg-sky-200/14',
-                title: 'text-sky-600',
-                pill: 'bg-sky-400/70',
                 icon: 'truck',
                 iconColor: '#0ea5e9'
               }}
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-2xl font-semibold text-slate-900">
-                    {s.sales?.orders ?? 0}
-                  </div>
-                  <p className="text-xs text-slate-500">Sales orders</p>
+              <div>
+                <div className="text-3xl font-bold text-slate-900 tracking-tight">
+                  {s.sales?.orders ?? 0}
                 </div>
-                <div className="text-right text-xs text-slate-600 space-y-1">
-                  <p>
-                    Deliveries:{' '}
-                    <span className="font-semibold text-sky-600">
-                      {s.sales?.deliveries ?? 0}
-                    </span>
-                  </p>
-                  <p>
-                    Pending:{' '}
-                    <span className="font-semibold text-amber-600">
-                      {s.sales?.orders_pending ?? 0}
-                    </span>
-                  </p>
-                </div>
+                <p className="text-xs text-slate-400 font-medium mt-0.5">Orders shipped</p>
               </div>
             </GlowCard>
 
             <GlowCard
               index={10}
-              cardKey="invoices_cash"
-              title="INVOICES & CASH"
+              title="Invoices & Cash"
               accent={{
-                border: 'border-emerald-100/70',
-                bg: 'bg-gradient-to-br from-emerald-400/14 via-teal-200/12 to-white',
-                glowA: 'bg-emerald-300/16',
-                glowB: 'bg-teal-200/14',
-                title: 'text-emerald-600',
-                pill: 'bg-emerald-400/70',
                 icon: 'cash',
                 iconColor: '#059669'
               }}
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-2xl font-semibold text-slate-900">
-                    {s.sales?.invoices ?? 0}
-                  </div>
-                  <p className="text-xs text-slate-500">Invoices posted</p>
+              <div>
+                <div className="text-3xl font-bold text-slate-900 tracking-tight">
+                  {s.sales?.invoices ?? 0}
                 </div>
-                <div className="text-right text-xs text-slate-600 space-y-1">
-                  <p>
-                    Cash in:{' '}
-                    <span className="font-semibold text-emerald-600">
-                      {s.sales?.payments_in ?? 0}
-                    </span>
-                  </p>
-                  <p>
-                    Cash out:{' '}
-                    <span className="font-semibold text-rose-600">
-                      {s.sales?.payments_out ?? 0}
-                    </span>
-                  </p>
+                <div className="text-xs text-slate-500 mt-1">
+                  Collections: <span className="text-emerald-600 font-semibold">{s.sales?.collections ?? 0}</span>
                 </div>
               </div>
             </GlowCard>
           </>
         )}
-      </div>
-
-      </div> {/* end drag container */}
-
-      {/* Quick actions */}
-      <motion.div
-        custom={8}
-        variants={cardVariants}
-        initial="hidden"
-        animate="visible"
-        className="space-y-4"
-      >
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-slate-900">
-            Quick actions
-          </h2>
-          <span className="text-[11px] text-slate-400">
-            Jump to common workflows
-          </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[
-            {
-              href: '/dashboard/users',
-              title: 'Add user',
-              desc: 'Create a new employee',
-              color: '#a855f7',
-              icon: 'user'
-            },
-            {
-              href: '/dashboard/attendance',
-              title: 'Record attendance',
-              desc: 'Check-in / Check-out',
-              color: '#06b6d4',
-              icon: 'clock'
-            },
-            {
-              href: '/dashboard/leaves',
-              title: 'Review leaves',
-              desc: 'Approve / reject requests',
-              color: '#10b981',
-              icon: 'check'
-            },
-            {
-              href: '/dashboard/tasks',
-              title: 'Create task',
-              desc: 'Assign work to team',
-              color: '#f97316',
-              icon: 'tasks'
-            },
-            {
-              href: '/dashboard/devices',
-              title: 'Assign device',
-              desc: 'Laptop / phone / assets',
-              color: '#f43f5e',
-              icon: 'device'
-            },
-            {
-              href: '/dashboard/sales-accounts',
-              title: 'Sales & Accounts',
-              desc: 'Quotes, orders, invoices, payments',
-              color: '#7c3aed',
-              icon: 'money'
+        {/* Quick actions */}
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          className="space-y-4"
+          variants={{
+            hidden: {},
+            visible: {
+              transition: { staggerChildren: 0.05 }
             }
-          ].map((item) => (
-            <motion.div
-              key={item.href}
-              whileHover="hover"
-              whileTap={{ scale: 0.98 }}
-              className="relative group cursor-pointer"
-            >
-              <Link
-                href={item.href}
-                className="relative block overflow-hidden rounded-2xl p-6 text-white h-44 shadow-[0_15px_30px_rgba(0,0,0,0.12)] transition-all duration-300"
-                style={{ backgroundColor: item.color }}
-                variants={{
-                  hover: { 
-                    y: -4, 
-                    scale: 1.02,
-                    boxShadow: "0 20px 40px rgba(0,0,0,0.18)"
-                  }
-                }}
-              >
-                {/* Corner highlight shape */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-bl-full translate-x-12 -translate-y-12 transition-transform duration-500 group-hover:translate-x-8 group-hover:-translate-y-8" />
-                
-                {/* Hover Arrow */}
-                <motion.div
-                  variants={{
-                    hover: { opacity: 1, x: 0 }
-                  }}
-                  initial={{ opacity: 0, x: -10 }}
-                  className="absolute top-6 right-6 z-20"
-                >
-                  <svg 
-                    width="24" 
-                    height="24" 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    strokeWidth="2.5" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    className="text-white/90 drop-shadow-sm"
-                  >
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
-                </motion.div>
+          }}
+        >
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-sm font-semibold text-slate-900">
+              Quick Actions
+            </h2>
+            <span className="text-[11px] text-slate-400">
+              Jump into workflows
+            </span>
+          </div>
 
-                <div className="relative z-10 h-full flex flex-col justify-between">
-                  <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-white/20 backdrop-blur-md border border-white/20 shadow-inner">
-                    <div className="scale-110 drop-shadow-sm">
-                      {renderQAIcon(item.icon)}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              {
+                href: '/dashboard/users',
+                title: 'Invite user',
+                desc: 'Add people to the workspace',
+                color: '#6366f1',
+                icon: 'user'
+              },
+              {
+                href: '/dashboard/attendance',
+                title: 'Record attendance',
+                desc: 'Check-in / Check-out',
+                color: '#06b6d4',
+                icon: 'clock'
+              },
+              {
+                href: '/dashboard/leaves',
+                title: 'Review leaves',
+                desc: 'Approve / reject requests',
+                color: '#10b981',
+                icon: 'check'
+              },
+              {
+                href: '/dashboard/tasks',
+                title: 'Create task',
+                desc: 'Assign work to team',
+                color: '#f97316',
+                icon: 'tasks'
+              },
+              {
+                href: '/dashboard/devices',
+                title: 'Assign device',
+                desc: 'Laptop / phone / assets',
+                color: '#f43f5e',
+                icon: 'device'
+              },
+              {
+                href: '/dashboard/sales-accounts',
+                title: 'Sales & Accounts',
+                desc: 'Quotes, orders, invoices, payments',
+                color: '#7c3aed',
+                icon: 'money'
+              }
+            ].map((item) => (
+              <motion.div
+                key={item.href}
+                whileHover="hover"
+                whileTap={{ scale: 0.98 }}
+                className="relative group cursor-pointer"
+              >
+                <Link
+                  href={item.href}
+                  className="relative block overflow-hidden rounded-2xl p-6 text-white h-44 shadow-[0_15px_30px_rgba(0,0,0,0.12)] transition-all duration-300"
+                  style={{ backgroundColor: item.color }}
+                  variants={{
+                    hover: {
+                      y: -4,
+                      scale: 1.02,
+                      boxShadow: "0 20px 40px rgba(0,0,0,0.18)"
+                    }
+                  }}
+                >
+                  {/* Corner highlight shape */}
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-bl-full translate-x-12 -translate-y-12 transition-transform duration-500 group-hover:translate-x-8 group-hover:-translate-y-8" />
+
+                  {/* Hover Arrow */}
+                  <motion.div
+                    variants={{
+                      hover: { opacity: 1, x: 0 }
+                    }}
+                    initial={{ opacity: 0, x: -10 }}
+                    className="absolute top-6 right-6 z-20"
+                  >
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="text-white/90 drop-shadow-sm"
+                    >
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </motion.div>
+
+                  <div className="relative z-10 h-full flex flex-col justify-between">
+                    <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-white/20 backdrop-blur-md border border-white/20 shadow-inner">
+                      <div className="scale-110 drop-shadow-sm">
+                        {renderQAIcon(item.icon)}
+                      </div>
+                    </div>
+
+                    <div className="space-y-0.5">
+                      <h3 className="font-bold text-lg leading-tight tracking-tight drop-shadow-md">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs text-white/80 font-medium">
+                        {item.desc}
+                      </p>
                     </div>
                   </div>
-                  
-                  <div className="space-y-0.5">
-                    <h3 className="font-bold text-lg leading-tight tracking-tight drop-shadow-md">
-                      {item.title}
-                    </h3>
-                    <p className="text-xs text-white/80 font-medium">
-                      {item.desc}
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
 
+      </div>
     </motion.div>
   );
 }
-
-
-
-
-
-
