@@ -345,7 +345,7 @@ export default function DashboardLayout({ children }) {
             className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition ${
               isActive('/dashboard', true)
                 ? 'bg-white text-blue-700 shadow-[0_8px_20px_rgba(0,0,0,0.18)]'
-                : 'bg-white/10 text-white/90 hover:bg-white/15'
+                : 'text-white/90 hover:bg-white/15'
             }`}
           >
             <span className="text-base drop-shadow-sm">

@@ -500,7 +500,7 @@ export default function DashboardHome() {
           </h1>
           <p className="text-sm text-slate-500">
             Overview of users, attendance, leaves, tasks, devices and
-            documents. Welcome to Offisphere.
+            documents.
           </p>
         </div>
 
