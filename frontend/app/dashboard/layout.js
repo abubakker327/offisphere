@@ -13,6 +13,7 @@ const navGroups = [
     label: 'HR Management',
     icon: 'users',
     items: [
+      { href: '/dashboard/hr', label: 'Overview', permission: 'hr:users' },
       { href: '/dashboard/users', label: 'Users', permission: 'hr:users' },
       { href: '/dashboard/attendance', label: 'Attendance', permission: 'hr:attendance' },
       { href: '/dashboard/timesheets', label: 'Timesheets', permission: 'hr:timesheets' },
@@ -25,6 +26,7 @@ const navGroups = [
     label: 'Assets & Operations',
     icon: 'box',
     items: [
+      { href: '/dashboard/ops', label: 'Overview', permission: 'ops:devices' },
       { href: '/dashboard/devices', label: 'Devices', permission: 'ops:devices' },
       { href: '/dashboard/documents', label: 'Documents', permission: 'ops:documents' },
       { href: '/dashboard/reimbursements', label: 'Reimbursements', permission: 'ops:reimbursements' }
@@ -35,6 +37,7 @@ const navGroups = [
     label: 'Sales & CRM',
     icon: 'chart',
     items: [
+      { href: '/dashboard/sales', label: 'Overview', permission: 'sales:leads' },
       { href: '/dashboard/leads', label: 'Leads', permission: 'sales:leads' },
       { href: '/dashboard/payments', label: 'Payments', permission: 'sales:payments' },
       { href: '/dashboard/sales-reports', label: 'Sales Reports', permission: 'sales:reports' }
@@ -59,6 +62,7 @@ const navGroups = [
     label: 'Finance & Admin',
     icon: 'card',
     items: [
+      { href: '/dashboard/finance', label: 'Overview', permission: 'fin:payroll' },
       { href: '/dashboard/payroll', label: 'Payroll', permission: 'fin:payroll' },
       { href: '/dashboard/recognition', label: 'Recognition', permission: 'fin:recognition' },
       { href: '/dashboard/email', label: 'Email', permission: 'fin:email' },
@@ -163,7 +167,6 @@ export default function DashboardLayout({ children }) {
 
   const [userName, setUserName] = useState('');
   const [roles, setRoles] = useState([]);
-  const [openGroups, setOpenGroups] = useState({});
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   // Auth + user info
@@ -213,18 +216,6 @@ export default function DashboardLayout({ children }) {
     [permissions]
   );
 
-  // Open correct groups based on current route
-  useEffect(() => {
-    const initial = {};
-    visibleGroups.forEach((group) => {
-      const containsActive = group.items.some((item) =>
-        pathname.startsWith(item.href)
-      );
-      initial[group.id] = containsActive;
-    });
-    setOpenGroups(initial);
-  }, [pathname, visibleGroups]);
-
   useEffect(() => {
     const required = getRequiredPermissionForPath(pathname);
     if (!required || permissions.has('*')) return;
@@ -240,13 +231,6 @@ export default function DashboardLayout({ children }) {
         .forEach((k) => window.localStorage.removeItem(k));
     }
     router.replace('/');
-  };
-
-  const toggleGroup = (id) => {
-    setOpenGroups((prev) => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
   };
 
   const isActive = (href, exact = false) =>
@@ -374,18 +358,19 @@ export default function DashboardLayout({ children }) {
         {/* Grouped nav (no internal scroll) */}
         <nav className="flex-1 px-4 pb-3 space-y-3 text-sm">
           {visibleGroups.map((group) => {
-            const open = openGroups[group.id];
+            const overviewItem =
+              group.items.find((item) => item.label === 'Overview') || group.items[0];
+            const groupActive = group.items.some((item) => isActive(item.href));
 
             return (
               <div key={group.id} className="space-y-1">
-                {/* Group header */}
-                <button
-                  type="button"
-                  onClick={() => toggleGroup(group.id)}
+                {/* Group link */}
+                <Link
+                  href={overviewItem.href}
                   className={`w-full flex items-center ${
                     sidebarCollapsed ? 'justify-center' : 'justify-between'
                   } px-4 py-3 rounded-2xl text-sm font-semibold transition ${
-                    open && !sidebarCollapsed
+                    groupActive
                       ? 'bg-white text-blue-700 shadow-[0_10px_25px_rgba(0,0,0,0.18)]'
                       : 'text-white/90 hover:bg-white/12 hover:text-white'
                   }`}
@@ -394,62 +379,12 @@ export default function DashboardLayout({ children }) {
                     <span className="text-base drop-shadow-sm">
                       {renderIcon(
                         group.icon,
-                        open && !sidebarCollapsed ? 'text-blue-700' : 'text-white/90'
+                        groupActive ? 'text-blue-700' : 'text-white/90'
                       )}
                     </span>
                     {!sidebarCollapsed && <span>{group.label}</span>}
                   </span>
-                  {!sidebarCollapsed && (
-                    <motion.span
-                      animate={{ rotate: open ? 90 : 0 }}
-                      transition={{ duration: 0.15 }}
-                      className={open ? 'text-blue-700' : 'text-white/70'}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <polyline points="9 18 15 12 9 6" />
-                      </svg>
-                    </motion.span>
-                  )}
-                </button>
-
-                {/* Items */}
-                <AnimatePresence initial={false}>
-                  {open && !sidebarCollapsed && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.18 }}
-                      className="pl-2 space-y-0.5"
-                    >
-                      {group.items.map((item) => {
-                        const active = isActive(item.href);
-                        return (
-                          <Link
-                            key={item.href}
-                            href={item.href}
-                            className={`block px-4 py-2 rounded-xl text-[11px] transition ${
-                              (item.label === 'Overview' ? pathname === item.href : active)
-                                ? 'bg-white text-blue-700 font-semibold shadow-[0_8px_20px_rgba(0,0,0,0.15)]'
-                                : 'text-white/80 hover:bg-white/10 hover:text-white'
-                            }`}
-                          >
-                            {item.label}
-                          </Link>
-                        );
-                      })}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                </Link>
               </div>
             );
           })}

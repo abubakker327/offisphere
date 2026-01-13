@@ -10,42 +10,42 @@ const tiles = [
     desc: 'Products, Vendors, Customers, GST',
     href: '/dashboard/sales-accounts/masters',
     color: '#0fb472',
-    iconSrc: '/icons/masters-3d.png'
+    iconSrc: '/icons/masters-material.svg'
   },
   {
     title: 'Procurement',
     desc: 'PO, GRN, Vendor Bills',
     href: '/dashboard/sales-accounts/procurement',
     color: '#f61b63',
-    iconSrc: '/icons/procurement-3d.png'
+    iconSrc: '/icons/procurement-material.svg'
   },
   {
     title: 'Inventory',
     desc: 'Stock Ledger, Serials, Warehouses',
     href: '/dashboard/sales-accounts/inventory',
     color: '#1a7dff',
-    iconSrc: '/icons/inventory-3d.png'
+    iconSrc: '/icons/inventory-material.svg'
   },
   {
     title: 'Sales',
     desc: 'Quotations, Orders, Delivery, Invoices',
     href: '/dashboard/sales-accounts/sales',
     color: '#f48c06',
-    iconSrc: '/icons/sales-3d.png'
+    iconSrc: '/icons/sales-material.svg'
   },
   {
     title: 'Payments',
     desc: 'Cash In (customers) & Out (vendors)',
     href: '/dashboard/sales-accounts/payments',
     color: '#00b3d8',
-    iconSrc: '/icons/payments-3d.png'
+    iconSrc: '/icons/payments-material.svg'
   },
   {
     title: 'Accounting',
     desc: 'Ledger entries, Profit & Loss',
     href: '/dashboard/sales-accounts/accounting',
     color: '#7c4dff',
-    iconSrc: '/icons/accounting-3d.png'
+    iconSrc: '/icons/accounting-material.svg'
   }
 ];
 

@@ -528,7 +528,7 @@ export default function DashboardHome() {
               </span>
               <input
                 id="dashboard-search"
-                type="search"
+                type="text"
                 placeholder="Search features, people, or docs..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -563,19 +563,20 @@ export default function DashboardHome() {
                     setActiveResultIndex(-1);
                   }
                 }}
-                className="w-full rounded-full border border-slate-200 bg-white pl-11 pr-4 py-2 text-sm text-slate-700 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full rounded-full border border-slate-200 bg-white pl-11 pr-10 py-2 text-sm text-slate-700 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
 
               {searchQuery && (
                 <button
                   type="button"
-                  onMouseDown={() => {
+                  onMouseDown={(event) => {
+                    event.preventDefault();
                     setSearchQuery('');
                     setSearchResults({ features: [], users: [], devices: [] });
                     setSearchOpen(false);
                     setActiveResultIndex(-1);
                   }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 rounded-full bg-slate-100/80 text-slate-500 hover:bg-slate-200 hover:text-slate-700 flex items-center justify-center"
                   aria-label="Clear search"
                 >
                   <svg
