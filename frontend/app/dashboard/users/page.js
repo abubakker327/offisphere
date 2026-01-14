@@ -26,6 +26,8 @@ export default function UsersPage() {
   });
   const [editSaving, setEditSaving] = useState(false);
   const [editError, setEditError] = useState('');
+  const API_BASE =
+    process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
 
   // Fetch users
   useEffect(() => {
@@ -38,7 +40,8 @@ export default function UsersPage() {
           return;
         }
 
-        const res = await fetch('http://localhost:5000/api/users', {
+        const res = await fetch(`${API_BASE}/api/users`, {
+          cache: 'no-store',
           headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -153,8 +156,9 @@ export default function UsersPage() {
         return;
       }
 
-      const res = await fetch('http://localhost:5000/api/users', {
+      const res = await fetch(`${API_BASE}/api/users`, {
         method: 'POST',
+        cache: 'no-store',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
@@ -238,9 +242,10 @@ export default function UsersPage() {
       }
 
       const res = await fetch(
-        `http://localhost:5000/api/users/${editingUser.id}`,
+        `${API_BASE}/api/users/${editingUser.id}`,
         {
           method: 'PUT',
+          cache: 'no-store',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`
