@@ -1,6 +1,8 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useState } from 'react';
+
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
 
 const STATUS_COLORS = {
   submitted: 'bg-amber-50 text-amber-700 border-amber-100',
@@ -71,7 +73,7 @@ export default function TimesheetsPage() {
     setListError('');
 
     try {
-      const res = await fetch('http://localhost:5000/api/timesheets', {
+      const res = await fetch(`${API_BASE}/api/timesheets`, {
         headers: authHeaders
       });
 
@@ -102,7 +104,7 @@ export default function TimesheetsPage() {
     setCreateSuccess('');
 
     try {
-      const res = await fetch('http://localhost:5000/api/timesheets', {
+      const res = await fetch(`${API_BASE}/api/timesheets`, {
         method: 'POST',
         headers: authHeaders,
         body: JSON.stringify({
@@ -140,7 +142,7 @@ export default function TimesheetsPage() {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/timesheets/${id}/status`,
+        `${API_BASE}/api/timesheets/${id}/status`,
         {
           method: 'PATCH',
           headers: authHeaders,
@@ -174,7 +176,7 @@ export default function TimesheetsPage() {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/timesheets/${id}`,
+        `${API_BASE}/api/timesheets/${id}`,
         {
           method: 'DELETE',
           headers: authHeaders
@@ -532,5 +534,6 @@ export default function TimesheetsPage() {
     </div>
   );
 }
+
 
 

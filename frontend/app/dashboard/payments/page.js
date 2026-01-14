@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -38,7 +38,7 @@ export default function PaymentsPage() {
     paid_at: ''
   });
 
-  const API_BASE = 'http://localhost:5000';
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
 
   const triggerToast = (type, message) => {
     window.dispatchEvent(
@@ -558,6 +558,7 @@ export default function PaymentsPage() {
     </motion.div>
   );
 }
+
 
 
 

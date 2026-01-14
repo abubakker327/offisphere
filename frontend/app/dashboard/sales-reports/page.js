@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -8,7 +8,7 @@ export default function SalesReportsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const API_BASE = 'http://localhost:5000';
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
 
   const formatCurrency = (value) => {
     const number = Number(value || 0);
@@ -414,6 +414,7 @@ export default function SalesReportsPage() {
     </motion.div>
   );
 }
+
 
 
 

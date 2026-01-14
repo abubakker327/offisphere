@@ -1,10 +1,10 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:5000';
+  process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
 
 export default function RecognitionPage() {
   const [recognitions, setRecognitions] = useState([]);
@@ -291,4 +291,5 @@ export default function RecognitionPage() {
     </motion.div>
   );
 }
+
 

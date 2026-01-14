@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -7,7 +7,7 @@ export default function NotificationsPage() {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const API = 'http://localhost:5000';
+  const API = process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
 
   async function fetchNotifications() {
     try {
@@ -108,4 +108,5 @@ export default function NotificationsPage() {
     </motion.div>
   );
 }
+
 

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useState } from 'react';
 
@@ -31,7 +31,7 @@ export default function DevicesPage() {
   const [editError, setEditError] = useState('');
   const [editSaving, setEditSaving] = useState(false);
 
-  const API_BASE = 'http://localhost:5000';
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
 
   useEffect(() => {
     const fetchData = async () => {
@@ -622,5 +622,6 @@ export default function DevicesPage() {
     </div>
   );
 }
+
 
 

@@ -1,6 +1,8 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useState } from 'react';
+
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
 
 const LEAVE_TYPES = [
   { value: 'CL', label: 'Casual Leave (CL)' },
@@ -95,7 +97,7 @@ export default function LeavesPage() {
     setListError('');
 
     try {
-      const res = await fetch('http://localhost:5000/api/leaves', {
+      const res = await fetch(`${API_BASE}/api/leaves`, {
         headers: authHeaders
       });
 
@@ -126,7 +128,7 @@ export default function LeavesPage() {
     setApplySuccess('');
 
     try {
-      const res = await fetch('http://localhost:5000/api/leaves/apply', {
+      const res = await fetch(`${API_BASE}/api/leaves/apply`, {
         method: 'POST',
         headers: authHeaders,
         body: JSON.stringify({
@@ -162,7 +164,7 @@ export default function LeavesPage() {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/leaves/${id}/status`,
+        `${API_BASE}/api/leaves/${id}/status`,
         {
           method: 'PATCH',
           headers: authHeaders,
@@ -511,5 +513,6 @@ export default function LeavesPage() {
     </div>
   );
 }
+
 
 

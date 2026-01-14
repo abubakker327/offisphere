@@ -1,10 +1,10 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:5000';
+  process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
 
 export default function ExportsPage() {
   const [fromDate, setFromDate] = useState('');
@@ -249,4 +249,5 @@ export default function ExportsPage() {
     </motion.div>
   );
 }
+
 
