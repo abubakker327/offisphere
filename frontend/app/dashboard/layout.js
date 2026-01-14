@@ -169,6 +169,7 @@ export default function DashboardLayout({ children }) {
   const [userName, setUserName] = useState('');
   const [roles, setRoles] = useState([]);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Auth + user info
   useEffect(() => {
@@ -304,13 +305,21 @@ export default function DashboardLayout({ children }) {
 
   return (
     <div className="min-h-screen bg-slate-50">
+      {/* Mobile sidebar backdrop */}
+      {sidebarOpen && (
+        <button
+          type="button"
+          aria-label="Close sidebar"
+          className="fixed inset-0 z-30 bg-slate-900/30 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Fixed sidebar on the left */}
       <aside
-        className={`hidden md:flex md:flex-col fixed inset-y-0 left-0 overflow-hidden ${
-          sidebarCollapsed ? 'w-20' : 'w-72'
-        } bg-gradient-to-b from-blue-700 via-blue-600 to-blue-800 text-white transition-[width,transform] duration-500 ease-in-out will-change-[width,transform] ${
-          sidebarCollapsed ? '-translate-x-0' : 'translate-x-0'
-        }`}
+        className={`fixed inset-y-0 left-0 z-40 flex flex-col overflow-hidden w-72 md:w-auto bg-gradient-to-b from-blue-700 via-blue-600 to-blue-800 text-white transition-[width,transform] duration-500 ease-in-out will-change-[width,transform] ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        } md:translate-x-0 ${sidebarCollapsed ? 'md:w-20' : 'md:w-72'}`}
       >
         {/* Brand */}
         <div className="px-5 pt-6 pb-4">
@@ -345,6 +354,7 @@ export default function DashboardLayout({ children }) {
         <div className="px-4 pb-1">
           <Link
             href="/dashboard"
+            onClick={() => setSidebarOpen(false)}
             className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition ${
               isActive('/dashboard', true)
                 ? 'bg-white text-blue-700 shadow-[0_8px_20px_rgba(0,0,0,0.18)]'
@@ -370,6 +380,7 @@ export default function DashboardLayout({ children }) {
                 {/* Group link */}
                 <Link
                   href={overviewItem.href}
+                  onClick={() => setSidebarOpen(false)}
                   className={`w-full flex items-center ${
                     sidebarCollapsed ? 'justify-center' : 'justify-between'
                   } px-4 py-3 rounded-2xl text-sm font-semibold transition ${
@@ -445,6 +456,31 @@ export default function DashboardLayout({ children }) {
         }`}
       >
         <main className="min-h-screen p-4 md:p-6">
+          <div className="mb-4 flex items-center justify-between md:hidden">
+            <button
+              type="button"
+              onClick={() => setSidebarOpen(true)}
+              className="inline-flex items-center justify-center h-10 w-10 rounded-2xl bg-white shadow-sm border border-slate-200 text-slate-600"
+              aria-label="Open sidebar"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </svg>
+            </button>
+            <div className="text-sm font-semibold text-slate-700">Menu</div>
+            <div className="w-10" />
+          </div>
           {pathname !== '/dashboard' && (
             <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-end">
               <div className="w-full md:max-w-md">
