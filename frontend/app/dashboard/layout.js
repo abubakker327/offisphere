@@ -455,7 +455,7 @@ export default function DashboardLayout({ children }) {
           sidebarCollapsed ? 'md:ml-20' : 'md:ml-72'
         }`}
       >
-        <main className="min-h-screen p-4 md:p-6">
+        <main className="min-h-screen p-4 md:p-5">
           <div className="mb-4 flex items-center justify-between md:hidden">
             <button
               type="button"
@@ -478,7 +478,6 @@ export default function DashboardLayout({ children }) {
                 <line x1="3" y1="18" x2="21" y2="18" />
               </svg>
             </button>
-            <div className="text-sm font-semibold text-slate-700">Menu</div>
             <div className="w-10" />
           </div>
           {pathname !== '/dashboard' && (
