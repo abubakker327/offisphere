@@ -181,7 +181,8 @@ export default function DashboardLayout({ children }) {
     const loadSession = async () => {
       try {
         const res = await fetch(`${API_BASE}/api/auth/me`, {
-          credentials: 'include'
+          credentials: 'include',
+          cache: 'no-store'
         });
 
         if (!res.ok) {

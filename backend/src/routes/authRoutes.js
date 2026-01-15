@@ -109,6 +109,7 @@ router.post('/login', loginLimiter, async (req, res) => {
  * Returns current user from cookie-auth token
  */
 router.get('/me', async (req, res) => {
+  res.set('Cache-Control', 'no-store');
   const authHeader = req.headers.authorization || '';
   let token = authHeader.startsWith('Bearer ')
     ? authHeader.slice(7)
