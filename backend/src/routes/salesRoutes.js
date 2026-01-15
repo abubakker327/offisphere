@@ -63,8 +63,8 @@ router.get(
           status,
           paid_at,
           created_at,
-          lead_id,
-          leads!payments_lead_id_fkey(name)
+          reference_type,
+          reference_id
         `
         )
         .order('paid_at', { ascending: false, nullsFirst: false })
@@ -74,6 +74,20 @@ router.get(
         console.error('Sales summary recent payments error:', recentPaymentsError);
       }
 
+      const leadIds = (recentPaymentsRaw || [])
+        .filter((p) => p.reference_type === 'lead' && p.reference_id)
+        .map((p) => p.reference_id);
+      const { data: leadRows } = leadIds.length
+        ? await supabase
+            .from('leads')
+            .select('id, name')
+            .in('id', leadIds)
+        : { data: [] };
+      const leadMap = (leadRows || []).reduce((acc, row) => {
+        acc[row.id] = row.name;
+        return acc;
+      }, {});
+
       const recentPayments = (recentPaymentsRaw || []).map((p) => ({
         id: p.id,
         amount: p.amount,
@@ -81,7 +95,8 @@ router.get(
         status: p.status,
         paid_at: p.paid_at,
         created_at: p.created_at,
-        lead_name: p.leads?.name || null
+        lead_name:
+          p.reference_type === 'lead' ? leadMap[p.reference_id] || null : null
       }));
 
       // ---- Aggregations in JS ----

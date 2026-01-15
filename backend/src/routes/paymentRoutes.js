@@ -11,10 +11,15 @@ function isAdminOrManager(user) {
   return roles.includes('admin') || roles.includes('manager');
 }
 
-const toNumericLeadId = (value) => {
+const normalizeLeadId = (value) => {
   if (value === null || value === undefined || value === '') return null;
-  const num = Number(value);
-  return Number.isNaN(num) ? null : num;
+  return value;
+};
+
+const extractLeadId = (notes) => {
+  if (!notes) return null;
+  const match = String(notes).match(/LeadId:\s*([0-9a-f-]{36})/i);
+  return match ? match[1] : null;
 };
 
 /**
@@ -34,9 +39,7 @@ router.get('/', authenticate, authorize([]), async (req, res) => {
       .select('*')
       .order('created_at', { ascending: false });
 
-    if (!adminManager) {
-      query = query.eq('user_id', user.id);
-    }
+    // payments table does not include user_id; keep list unfiltered
 
     if (status && status !== 'all') {
       query = query.eq('status', status);
@@ -49,8 +52,14 @@ router.get('/', authenticate, authorize([]), async (req, res) => {
       return res.status(500).json({ message: 'Error fetching payments' });
     }
 
-    // Return raw payments without joining lead/user names
-    res.json(data || []);
+    const mapped = (data || []).map((row) => ({
+      ...row,
+      lead_id:
+        row.reference_type === 'lead'
+          ? row.reference_id
+          : row.lead_id || extractLeadId(row.notes) || null
+    }));
+    res.json(mapped);
   } catch (err) {
     console.error('List payments catch error:', err);
     res.status(500).json({ message: 'Error fetching payments' });
@@ -81,15 +90,32 @@ router.post('/', authenticate, authorize([]), async (req, res) => {
         .json({ message: 'Amount is required for payment' });
     }
 
+    const normalizedLeadId = normalizeLeadId(lead_id);
+    const normalizedMethod =
+      method && String(method).trim()
+        ? String(method).trim().toLowerCase()
+        : null;
+
+    const leadTag = normalizedLeadId ? `LeadId: ${normalizedLeadId}` : '';
+    const normalizedNotes = [
+      notes || '',
+      reference ? `Reference: ${reference}` : '',
+      leadTag
+    ]
+      .filter(Boolean)
+      .join(' | ')
+      .trim() || null;
+
     const insertPayload = {
-      lead_id: toNumericLeadId(lead_id),
-      user_id: user.id,
+      type: 'in',
+      payment_direction: 'inward',
+      reference_type: 'invoice',
+      reference_id: normalizedLeadId,
       amount,
       currency: currency || 'INR',
       status: status || 'received',
-      method: method || null,
-      reference: reference || null,
-      notes: notes || null,
+      method: normalizedMethod,
+      notes: normalizedNotes,
       paid_at: paid_at || new Date().toISOString()
     };
 
@@ -99,7 +125,11 @@ router.post('/', authenticate, authorize([]), async (req, res) => {
 
     if (insertError) {
       console.error('Create payment error:', insertError);
-      return res.status(500).json({ message: 'Error recording payment' });
+      return res.status(500).json({
+        message: insertError.message || 'Error recording payment',
+        code: insertError.code || null,
+        details: insertError.details || null
+      });
     }
 
     // Reload list for user / admin
@@ -109,9 +139,7 @@ router.post('/', authenticate, authorize([]), async (req, res) => {
       .select('*')
       .order('created_at', { ascending: false });
 
-    if (!adminManager) {
-      reloadQuery = reloadQuery.eq('user_id', user.id);
-    }
+    // payments table does not include user_id; keep list unfiltered
 
     const { data: list, error: listError } = await reloadQuery;
 
@@ -120,7 +148,14 @@ router.post('/', authenticate, authorize([]), async (req, res) => {
       return res.json([]);
     }
 
-    res.status(201).json(list || []);
+    const mapped = (list || []).map((row) => ({
+      ...row,
+      lead_id:
+        row.reference_type === 'lead'
+          ? row.reference_id
+          : row.lead_id || extractLeadId(row.notes) || null
+    }));
+    res.status(201).json(mapped);
   } catch (err) {
     console.error('Create payment catch error:', err);
     res.status(500).json({ message: 'Error recording payment' });
@@ -143,8 +178,16 @@ router.put(
       const updatePayload = {};
 
       if (status !== undefined) updatePayload.status = status;
-      if (notes !== undefined) updatePayload.notes = notes || null;
-      if (reference !== undefined) updatePayload.reference = reference || null;
+      if (notes !== undefined || reference !== undefined) {
+        const normalizedNotes = [
+          notes || '',
+          reference ? `Reference: ${reference}` : ''
+        ]
+          .filter(Boolean)
+          .join(' | ')
+          .trim() || null;
+        updatePayload.notes = normalizedNotes;
+      }
       if (method !== undefined) updatePayload.method = method || null;
       if (paid_at !== undefined)
         updatePayload.paid_at = paid_at || new Date().toISOString();
@@ -169,7 +212,14 @@ router.put(
         return res.json([]);
       }
 
-      res.json(data || []);
+      const mapped = (data || []).map((row) => ({
+        ...row,
+        lead_id:
+          row.reference_type === 'lead'
+            ? row.reference_id
+            : row.lead_id || extractLeadId(row.notes) || null
+      }));
+      res.json(mapped);
     } catch (err) {
       console.error('Update payment catch error:', err);
       res.status(500).json({ message: 'Error updating payment' });
