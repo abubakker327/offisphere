@@ -22,15 +22,8 @@ export default function SalesReportsPage() {
   useEffect(() => {
     const fetchSummary = async () => {
       try {
-        const token = window.localStorage.getItem('offisphere_token');
-        if (!token) {
-          setError('Not authenticated');
-          setLoading(false);
-          return;
-        }
-
         const res = await fetch(`${API_BASE}/api/sales/summary`, {
-          headers: { Authorization: `Bearer ${token}` }
+        credentials: 'include',
         });
 
         const data = await res.json();
@@ -414,6 +407,10 @@ export default function SalesReportsPage() {
     </motion.div>
   );
 }
+
+
+
+
 
 
 

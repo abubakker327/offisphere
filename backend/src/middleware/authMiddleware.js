@@ -2,9 +2,17 @@ const jwt = require('jsonwebtoken');
 
 const authenticate = (req, res, next) => {
   const authHeader = req.headers.authorization || '';
-  const token = authHeader.startsWith('Bearer ')
+  let token = authHeader.startsWith('Bearer ')
     ? authHeader.slice(7)
     : null;
+
+  if (token === 'null' || token === 'undefined' || token === '') {
+    token = null;
+  }
+
+  if (!token && req.cookies?.offisphere_token) {
+    token = req.cookies.offisphere_token;
+  }
 
   if (!token) {
     return res.status(401).json({ message: 'No token provided' });

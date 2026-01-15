@@ -33,15 +33,8 @@ export default function DocumentsPage() {
   useEffect(() => {
     const fetchDocs = async () => {
       try {
-        const token = window.localStorage.getItem('offisphere_token');
-        if (!token) {
-          setError('Not authenticated');
-          setLoading(false);
-          return;
-        }
-
         const res = await fetch(`${API_BASE}/api/documents`, {
-          headers: { Authorization: `Bearer ${token}` }
+        credentials: 'include',
         });
         const data = await res.json();
 
@@ -76,18 +69,11 @@ export default function DocumentsPage() {
     setCreating(true);
 
     try {
-      const token = window.localStorage.getItem('offisphere_token');
-      if (!token) {
-        setCreateError('Not authenticated');
-        setCreating(false);
-        return;
-      }
-
       const res = await fetch(`${API_BASE}/api/documents`, {
+        credentials: 'include',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(form)
       });
@@ -143,20 +129,13 @@ export default function DocumentsPage() {
     setEditError('');
 
     try {
-      const token = window.localStorage.getItem('offisphere_token');
-      if (!token) {
-        setEditError('Not authenticated');
-        setEditSaving(false);
-        return;
-      }
-
       const res = await fetch(
         `${API_BASE}/api/documents/${editingDoc.id}`,
         {
+        credentials: 'include',
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
           },
           body: JSON.stringify(editForm)
         }
@@ -183,18 +162,12 @@ export default function DocumentsPage() {
     if (!window.confirm('Delete this document?')) return;
 
     try {
-      const token = window.localStorage.getItem('offisphere_token');
-      if (!token) {
-        alert('Not authenticated');
-        return;
-      }
-
       const res = await fetch(
         `${API_BASE}/api/documents/${docId}`,
         {
+        credentials: 'include',
           method: 'DELETE',
           headers: {
-            Authorization: `Bearer ${token}`
           }
         }
       );
@@ -603,6 +576,10 @@ export default function DocumentsPage() {
     </div>
   );
 }
+
+
+
+
 
 
 

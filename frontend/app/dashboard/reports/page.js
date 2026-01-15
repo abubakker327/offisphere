@@ -27,13 +27,6 @@ export default function ReportsPage() {
       setLoading(true);
       setError('');
 
-      const token = window.localStorage.getItem('offisphere_token');
-      if (!token) {
-        setError('Not authenticated');
-        setLoading(false);
-        return;
-      }
-
       const params = new URLSearchParams();
       if (fromDate) params.append('from', fromDate);
       if (toDate) params.append('to', toDate);
@@ -43,8 +36,8 @@ export default function ReportsPage() {
       }`;
 
       const res = await fetch(url, {
+        credentials: 'include',
         headers: {
-          Authorization: `Bearer ${token}`
         }
       });
 
@@ -394,5 +387,8 @@ export default function ReportsPage() {
     </motion.div>
   );
 }
+
+
+
 
 

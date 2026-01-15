@@ -14,15 +14,8 @@ export default function AttendancePage() {
 
   const fetchAttendance = async () => {
     try {
-      const token = window.localStorage.getItem('offisphere_token');
-      if (!token) {
-        setError('Not authenticated');
-        setLoading(false);
-        return;
-      }
-
       const res = await fetch(`${API_BASE}/api/attendance`, {
-        headers: { Authorization: `Bearer ${token}` }
+        credentials: 'include',
       });
 
       const data = await res.json();
@@ -59,21 +52,14 @@ export default function AttendancePage() {
     setError('');
 
     try {
-      const token = window.localStorage.getItem('offisphere_token');
-      if (!token) {
-        setError('Not authenticated');
-        setActionLoading(false);
-        return;
-      }
-
       const endpoint =
         type === 'in'
           ? `${API_BASE}/api/attendance/check-in`
           : `${API_BASE}/api/attendance/check-out`;
 
       const res = await fetch(endpoint, {
+        credentials: 'include',
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}` }
       });
 
       const data = await res.json();
@@ -346,5 +332,9 @@ export default function AttendancePage() {
     </motion.div>
   );
 }
+
+
+
+
 
 

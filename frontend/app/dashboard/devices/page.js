@@ -36,16 +36,9 @@ export default function DevicesPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = window.localStorage.getItem('offisphere_token');
-        if (!token) {
-          setError('Not authenticated');
-          setLoading(false);
-          return;
-        }
-
         // devices
         const devRes = await fetch(`${API_BASE}/api/devices`, {
-          headers: { Authorization: `Bearer ${token}` }
+        credentials: 'include',
         });
         const devData = await devRes.json();
 
@@ -58,7 +51,7 @@ export default function DevicesPage() {
 
         // users (for assign dropdown)
         const usersRes = await fetch(`${API_BASE}/api/users`, {
-          headers: { Authorization: `Bearer ${token}` }
+        credentials: 'include',
         });
         const usersData = await usersRes.json();
 
@@ -90,23 +83,16 @@ export default function DevicesPage() {
     setCreating(true);
 
     try {
-      const token = window.localStorage.getItem('offisphere_token');
-      if (!token) {
-        setCreateError('Not authenticated');
-        setCreating(false);
-        return;
-      }
-
       const payload = {
         ...form,
         assigned_to: form.assigned_to || null
       };
 
       const res = await fetch(`${API_BASE}/api/devices`, {
+        credentials: 'include',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(payload)
       });
@@ -164,13 +150,6 @@ export default function DevicesPage() {
     setEditError('');
 
     try {
-      const token = window.localStorage.getItem('offisphere_token');
-      if (!token) {
-        setEditError('Not authenticated');
-        setEditSaving(false);
-        return;
-      }
-
       const payload = {
         ...editForm,
         assigned_to: editForm.assigned_to || null
@@ -179,10 +158,10 @@ export default function DevicesPage() {
       const res = await fetch(
         `${API_BASE}/api/devices/${editingDevice.id}`,
         {
+        credentials: 'include',
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
           },
           body: JSON.stringify(payload)
         }
@@ -622,6 +601,10 @@ export default function DevicesPage() {
     </div>
   );
 }
+
+
+
+
 
 
 

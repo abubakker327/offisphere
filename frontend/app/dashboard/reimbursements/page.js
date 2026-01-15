@@ -46,15 +46,8 @@ export default function ReimbursementsPage() {
 
   const fetchReimbursements = async () => {
     try {
-      const token = window.localStorage.getItem('offisphere_token');
-      if (!token) {
-        setError('Not authenticated');
-        setLoading(false);
-        return;
-      }
-
       const res = await fetch(`${API_BASE}/api/reimbursements`, {
-        headers: { Authorization: `Bearer ${token}` }
+        credentials: 'include',
       });
 
       const data = await res.json();
@@ -88,18 +81,11 @@ export default function ReimbursementsPage() {
     setError('');
 
     try {
-      const token = window.localStorage.getItem('offisphere_token');
-      if (!token) {
-        setError('Not authenticated');
-        setSaving(false);
-        return;
-      }
-
       const res = await fetch(`${API_BASE}/api/reimbursements`, {
+        credentials: 'include',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(form)
       });
@@ -133,17 +119,11 @@ export default function ReimbursementsPage() {
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      const token = window.localStorage.getItem('offisphere_token');
-      if (!token) {
-        triggerToast('error', 'Not authenticated');
-        return;
-      }
-
       const res = await fetch(`${API_BASE}/api/reimbursements/${id}`, {
+        credentials: 'include',
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({ status: newStatus })
       });
@@ -415,5 +395,9 @@ export default function ReimbursementsPage() {
     </motion.div>
   );
 }
+
+
+
+
 
 

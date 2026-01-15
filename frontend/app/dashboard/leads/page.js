@@ -13,18 +13,13 @@ const STAGE_OPTIONS = [
 ];
 
 const apiFetch = async (path, options = {}) => {
-  const token =
-    typeof window !== 'undefined'
-      ? window.localStorage.getItem('offisphere_token')
-      : null;
-
   const headers = {
     'Content-Type': 'application/json',
     ...(options.headers || {}),
-    ...(token ? { Authorization: `Bearer ${token}` } : {})
   };
 
   const res = await fetch(`${API_BASE}${path}`, {
+        credentials: 'include',
     ...options,
     headers
   });
@@ -477,6 +472,10 @@ export default function LeadsPage() {
     </motion.div>
   );
 }
+
+
+
+
 
 
 

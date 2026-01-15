@@ -92,19 +92,6 @@ export default function GlobalSearch({ className = '' }) {
     setSearchError('');
 
     try {
-      const token =
-        typeof window !== 'undefined'
-          ? window.localStorage.getItem('offisphere_token')
-          : null;
-
-      if (!token) {
-        setSearchError('Not authenticated');
-        setSearchResults({ features: [], users: [], devices: [] });
-        setSearchLoading(false);
-        setSearchOpen(true);
-        return;
-      }
-
       let users = usersCache;
       let devices = devicesCache;
 
@@ -112,14 +99,14 @@ export default function GlobalSearch({ className = '' }) {
       if (!users) {
         fetches.push(
           fetch(`${API_BASE}/api/users`, {
-            headers: { Authorization: `Bearer ${token}` }
+        credentials: 'include',
           }).then((res) => res.json().then((data) => ({ res, data, type: 'users' })))
         );
       }
       if (!devices) {
         fetches.push(
           fetch(`${API_BASE}/api/devices`, {
-            headers: { Authorization: `Bearer ${token}` }
+        credentials: 'include',
           }).then((res) => res.json().then((data) => ({ res, data, type: 'devices' })))
         );
       }
@@ -417,3 +404,7 @@ export default function GlobalSearch({ className = '' }) {
     </div>
   );
 }
+
+
+
+

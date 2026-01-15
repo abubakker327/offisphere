@@ -64,11 +64,9 @@ export default function PaymentsPage() {
 
   const fetchLeads = async () => {
     try {
-      const token = window.localStorage.getItem('offisphere_token');
-      if (!token) return;
 
       const res = await fetch(`${API_BASE}/api/leads?status=all`, {
-        headers: { Authorization: `Bearer ${token}` }
+        credentials: 'include',
       });
 
       const data = await res.json();
@@ -82,16 +80,9 @@ export default function PaymentsPage() {
 
   const fetchPayments = async (status = 'all') => {
     try {
-      const token = window.localStorage.getItem('offisphere_token');
-      if (!token) {
-        setError('Not authenticated');
-        setLoading(false);
-        return;
-      }
-
       const qs = status ? `?status=${status}` : '';
       const res = await fetch(`${API_BASE}/api/payments${qs}`, {
-        headers: { Authorization: `Bearer ${token}` }
+        credentials: 'include',
       });
 
       const data = await res.json();
@@ -127,13 +118,6 @@ export default function PaymentsPage() {
     setError('');
 
     try {
-      const token = window.localStorage.getItem('offisphere_token');
-      if (!token) {
-        setError('Not authenticated');
-        setSaving(false);
-        return;
-      }
-
       const body = {
         ...form,
         amount:
@@ -143,10 +127,10 @@ export default function PaymentsPage() {
       };
 
       const res = await fetch(`${API_BASE}/api/payments`, {
+        credentials: 'include',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(body)
       });
@@ -193,17 +177,11 @@ export default function PaymentsPage() {
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      const token = window.localStorage.getItem('offisphere_token');
-      if (!token) {
-        triggerToast('error', 'Not authenticated');
-        return;
-      }
-
       const res = await fetch(`${API_BASE}/api/payments/${id}`, {
+        credentials: 'include',
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({ status: newStatus })
       });
@@ -558,6 +536,10 @@ export default function PaymentsPage() {
     </motion.div>
   );
 }
+
+
+
+
 
 
 

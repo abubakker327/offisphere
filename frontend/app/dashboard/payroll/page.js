@@ -19,15 +19,8 @@ export default function PayrollPage() {
   const fetchRuns = async () => {
     try {
       setLoading(true);
-      const token = window.localStorage.getItem('offisphere_token');
-      if (!token) {
-        setError('Not authenticated');
-        setLoading(false);
-        return;
-      }
-
       const res = await fetch(`${API_BASE}/api/payroll/runs`, {
-        headers: { Authorization: `Bearer ${token}` }
+        credentials: 'include',
       });
 
       const data = await res.json();
@@ -61,12 +54,11 @@ export default function PayrollPage() {
 
     try {
       setCreating(true);
-      const token = window.localStorage.getItem('offisphere_token');
       const res = await fetch(`${API_BASE}/api/payroll/runs`, {
+        credentials: 'include',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(form)
       });
@@ -264,5 +256,9 @@ export default function PayrollPage() {
     </motion.div>
   );
 }
+
+
+
+
 
 

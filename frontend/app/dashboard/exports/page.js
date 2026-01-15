@@ -17,13 +17,6 @@ export default function ExportsPage() {
     setDownloading(type);
 
     try {
-      const token = window.localStorage.getItem('offisphere_token');
-      if (!token) {
-        setError('Not authenticated');
-        setDownloading(null);
-        return;
-      }
-
       const params = new URLSearchParams();
       if (fromDate) params.append('from', fromDate);
       if (toDate) params.append('to', toDate);
@@ -33,8 +26,8 @@ export default function ExportsPage() {
       }`;
 
       const res = await fetch(url, {
+        credentials: 'include',
         headers: {
-          Authorization: `Bearer ${token}`
         }
       });
 
@@ -249,5 +242,8 @@ export default function ExportsPage() {
     </motion.div>
   );
 }
+
+
+
 
 

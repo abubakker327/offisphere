@@ -72,18 +72,7 @@ export default function LeavesPage() {
       }
     }
   }, []);
-
-  const token =
-    typeof window !== 'undefined'
-      ? window.localStorage.getItem('offisphere_token')
-      : null;
-
-  const authHeaders = token
-    ? {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    : { 'Content-Type': 'application/json' };
+  const authHeaders = { 'Content-Type': 'application/json' };
 
   const isAdmin =
     roles.includes('admin') ||
@@ -98,6 +87,7 @@ export default function LeavesPage() {
 
     try {
       const res = await fetch(`${API_BASE}/api/leaves`, {
+        credentials: 'include',
         headers: authHeaders
       });
 
@@ -129,6 +119,7 @@ export default function LeavesPage() {
 
     try {
       const res = await fetch(`${API_BASE}/api/leaves/apply`, {
+        credentials: 'include',
         method: 'POST',
         headers: authHeaders,
         body: JSON.stringify({
@@ -166,6 +157,7 @@ export default function LeavesPage() {
       const res = await fetch(
         `${API_BASE}/api/leaves/${id}/status`,
         {
+        credentials: 'include',
           method: 'PATCH',
           headers: authHeaders,
           body: JSON.stringify({ status: newStatus })
@@ -513,6 +505,9 @@ export default function LeavesPage() {
     </div>
   );
 }
+
+
+
 
 
 

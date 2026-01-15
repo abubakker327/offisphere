@@ -25,15 +25,8 @@ export default function EmailPage() {
   const fetchTemplates = async () => {
     try {
       setLoading(true);
-      const token = window.localStorage.getItem('offisphere_token');
-      if (!token) {
-        setError('Not authenticated');
-        setLoading(false);
-        return;
-      }
-
       const res = await fetch(`${API_BASE}/api/email/templates`, {
-        headers: { Authorization: `Bearer ${token}` }
+        credentials: 'include',
       });
 
       const data = await res.json();
@@ -93,7 +86,6 @@ export default function EmailPage() {
 
     try {
       setSaving(true);
-      const token = window.localStorage.getItem('offisphere_token');
       const isEditing = !!editingId;
 
       const url = isEditing
@@ -111,10 +103,10 @@ export default function EmailPage() {
 
       // backend ignores template_key on update, that's fine
       const res = await fetch(url, {
+        credentials: 'include',
         method,
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(body)
       });
@@ -350,5 +342,9 @@ export default function EmailPage() {
     </motion.div>
   );
 }
+
+
+
+
 
 

@@ -7,6 +7,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import GlobalSearch from './components/GlobalSearch';
 
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+
 // Only grouped sections now (Dashboard is separate, not a dropdown)
 const navGroups = [
   {
@@ -173,43 +176,40 @@ export default function DashboardLayout({ children }) {
 
   // Auth + user info
   useEffect(() => {
-    try {
-      const token =
-        typeof window !== 'undefined'
-          ? window.localStorage.getItem('offisphere_token')
-          : null;
+    let mounted = true;
 
-      if (!token) {
-        router.replace('/');
-        return;
-      }
+    const loadSession = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/api/auth/me`, {
+          credentials: 'include'
+        });
 
-      const userStr =
-        typeof window !== 'undefined'
-          ? window.localStorage.getItem('offisphere_user')
-          : null;
-
-      if (userStr) {
-        const user = JSON.parse(userStr);
-        setUserName(user.full_name || user.name || user.email || 'User');
-      }
-
-      const rolesStr =
-        typeof window !== 'undefined'
-          ? window.localStorage.getItem('offisphere_roles')
-          : null;
-
-      if (rolesStr) {
-        try {
-          const parsed = JSON.parse(rolesStr);
-          setRoles(Array.isArray(parsed) ? parsed : []);
-        } catch {
-          setRoles([]);
+        if (!res.ok) {
+          router.replace('/');
+          return;
         }
+
+        const data = await res.json();
+        const user = data.user || {};
+        const nextRoles = Array.isArray(user.roles) ? user.roles : [];
+
+        if (!mounted) return;
+        setUserName(user.full_name || user.name || user.email || 'User');
+        setRoles(nextRoles);
+
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('offisphere_user', JSON.stringify(user));
+          localStorage.setItem('offisphere_roles', JSON.stringify(nextRoles));
+        }
+      } catch {
+        router.replace('/');
       }
-    } catch {
-      router.replace('/');
-    }
+    };
+
+    loadSession();
+    return () => {
+      mounted = false;
+    };
   }, [router]);
 
   const permissions = useMemo(() => getPermissionsForRoles(roles), [roles]);
@@ -226,7 +226,16 @@ export default function DashboardLayout({ children }) {
     }
   }, [pathname, permissions, router]);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await fetch(`${API_BASE}/api/auth/logout`, {
+        method: 'POST',
+        credentials: 'include'
+      });
+    } catch {
+      // ignore logout errors
+    }
+
     if (typeof window !== 'undefined') {
       Object.keys(window.localStorage)
         .filter((k) => k.startsWith('offisphere_'))

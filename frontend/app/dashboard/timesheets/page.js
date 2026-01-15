@@ -52,17 +52,7 @@ export default function TimesheetsPage() {
     }
   }, []);
 
-  const token =
-    typeof window !== 'undefined'
-      ? window.localStorage.getItem('offisphere_token')
-      : null;
-
-  const authHeaders = token
-    ? {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    : { 'Content-Type': 'application/json' };
+  const authHeaders = { 'Content-Type': 'application/json' };
 
   const isAdmin = roles.includes('admin');
   const isManager = roles.includes('manager');
@@ -74,6 +64,7 @@ export default function TimesheetsPage() {
 
     try {
       const res = await fetch(`${API_BASE}/api/timesheets`, {
+        credentials: 'include',
         headers: authHeaders
       });
 
@@ -105,6 +96,7 @@ export default function TimesheetsPage() {
 
     try {
       const res = await fetch(`${API_BASE}/api/timesheets`, {
+        credentials: 'include',
         method: 'POST',
         headers: authHeaders,
         body: JSON.stringify({
@@ -144,6 +136,7 @@ export default function TimesheetsPage() {
       const res = await fetch(
         `${API_BASE}/api/timesheets/${id}/status`,
         {
+        credentials: 'include',
           method: 'PATCH',
           headers: authHeaders,
           body: JSON.stringify({ status: newStatus })
@@ -178,6 +171,7 @@ export default function TimesheetsPage() {
       const res = await fetch(
         `${API_BASE}/api/timesheets/${id}`,
         {
+        credentials: 'include',
           method: 'DELETE',
           headers: authHeaders
         }
@@ -534,6 +528,9 @@ export default function TimesheetsPage() {
     </div>
   );
 }
+
+
+
 
 
 

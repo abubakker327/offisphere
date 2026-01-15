@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useState } from 'react';
 
@@ -33,16 +33,9 @@ export default function UsersPage() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const token = window.localStorage.getItem('offisphere_token');
-        if (!token) {
-          setError('Not authenticated');
-          setLoading(false);
-          return;
-        }
-
         const res = await fetch(`${API_BASE}/api/users`, {
+        credentials: 'include',
           cache: 'no-store',
-          headers: { Authorization: `Bearer ${token}` }
         });
 
         const data = await res.json();
@@ -149,19 +142,12 @@ export default function UsersPage() {
     setCreating(true);
 
     try {
-      const token = window.localStorage.getItem('offisphere_token');
-      if (!token) {
-        setCreateError('Not authenticated');
-        setCreating(false);
-        return;
-      }
-
       const res = await fetch(`${API_BASE}/api/users`, {
+        credentials: 'include',
         method: 'POST',
         cache: 'no-store',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(form)
       });
@@ -234,21 +220,14 @@ export default function UsersPage() {
     setEditError('');
 
     try {
-      const token = window.localStorage.getItem('offisphere_token');
-      if (!token) {
-        setEditError('Not authenticated');
-        setEditSaving(false);
-        return;
-      }
-
       const res = await fetch(
         `${API_BASE}/api/users/${editingUser.id}`,
         {
+        credentials: 'include',
           method: 'PUT',
           cache: 'no-store',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
           },
           body: JSON.stringify(editForm)
         }
@@ -660,6 +639,10 @@ export default function UsersPage() {
     </div>
   );
 }
+
+
+
+
 
 
 

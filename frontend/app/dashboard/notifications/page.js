@@ -11,11 +11,10 @@ export default function NotificationsPage() {
 
   async function fetchNotifications() {
     try {
-      const token = localStorage.getItem('offisphere_token');
 
       const res = await fetch(`${API}/api/notifications`, {
+        credentials: 'include',
         headers: {
-          Authorization: `Bearer ${token}`
         }
       });
 
@@ -30,12 +29,11 @@ export default function NotificationsPage() {
 
   async function markRead(id) {
     try {
-      const token = localStorage.getItem('offisphere_token');
 
       await fetch(`${API}/api/notifications/${id}/read`, {
+        credentials: 'include',
         method: 'PATCH',
         headers: {
-          Authorization: `Bearer ${token}`
         }
       });
 
@@ -108,5 +106,7 @@ export default function NotificationsPage() {
     </motion.div>
   );
 }
+
+
 
 

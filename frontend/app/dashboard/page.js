@@ -16,21 +16,8 @@ export default function DashboardHome() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const token =
-          typeof window !== 'undefined'
-            ? window.localStorage.getItem('offisphere_token')
-            : null;
-
-        if (!token) {
-          setError('Not authenticated');
-          setLoading(false);
-          return;
-        }
-
         const res = await fetch(`${API_BASE}/api/dashboard/summary`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+          credentials: 'include'
         });
 
         const data = await res.json();

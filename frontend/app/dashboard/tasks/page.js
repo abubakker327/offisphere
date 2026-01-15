@@ -28,15 +28,8 @@ export default function TasksPage() {
 
   const fetchTasks = async () => {
     try {
-      const token = window.localStorage.getItem('offisphere_token');
-      if (!token) {
-        setError('Not authenticated');
-        setLoading(false);
-        return;
-      }
-
       const res = await fetch(`${API_BASE}/api/tasks`, {
-        headers: { Authorization: `Bearer ${token}` }
+        credentials: 'include',
       });
 
       const data = await res.json();
@@ -69,18 +62,11 @@ export default function TasksPage() {
     setError('');
 
     try {
-      const token = window.localStorage.getItem('offisphere_token');
-      if (!token) {
-        setError('Not authenticated');
-        setSaving(false);
-        return;
-      }
-
       const res = await fetch(`${API_BASE}/api/tasks`, {
+        credentials: 'include',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(form)
       });
@@ -112,17 +98,11 @@ export default function TasksPage() {
 
   const handleStatusChange = async (taskId, newStatus) => {
     try {
-      const token = window.localStorage.getItem('offisphere_token');
-      if (!token) {
-        triggerToast('error', 'Not authenticated');
-        return;
-      }
-
       const res = await fetch(`${API_BASE}/api/tasks/${taskId}`, {
+        credentials: 'include',
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({ status: newStatus })
       });
@@ -361,5 +341,9 @@ export default function TasksPage() {
     </motion.div>
   );
 }
+
+
+
+
 
 
