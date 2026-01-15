@@ -327,9 +327,9 @@ export default function DashboardLayout({ children }) {
 
       {/* Fixed sidebar on the left */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex flex-col overflow-hidden w-72 md:w-auto bg-gradient-to-b from-blue-700 via-blue-600 to-blue-800 text-white transition-[width,transform] duration-500 ease-in-out will-change-[width,transform] ${
+        className={`fixed inset-y-0 left-0 z-40 flex flex-col overflow-hidden w-64 md:w-auto bg-gradient-to-b from-blue-700 via-blue-600 to-blue-800 text-white transition-[width,transform] duration-500 ease-in-out will-change-[width,transform] ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } md:translate-x-0 ${sidebarCollapsed ? 'md:w-20' : 'md:w-72'}`}
+        } md:translate-x-0 ${sidebarCollapsed ? 'md:w-20' : 'md:w-64'}`}
       >
         {/* Brand */}
         <div className="px-5 pt-6 pb-4">
@@ -462,36 +462,38 @@ export default function DashboardLayout({ children }) {
       {/* Main content area, shifted right by sidebar width on desktop */}
       <div
         className={`md:transition-[margin-left] duration-500 ease-in-out ${
-          sidebarCollapsed ? 'md:ml-20' : 'md:ml-72'
+          sidebarCollapsed ? 'md:ml-20' : 'md:ml-64'
         }`}
       >
-        <main className="min-h-screen p-4 md:p-5">
-          <div className="mb-4 flex items-center justify-between md:hidden">
-            <button
-              type="button"
-              onClick={() => setSidebarOpen(true)}
-              className="inline-flex items-center justify-center h-10 w-10 rounded-2xl bg-white shadow-sm border border-slate-200 text-slate-600"
-              aria-label="Open sidebar"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="18" x2="21" y2="18" />
-              </svg>
-            </button>
-            <div className="w-10" />
-          </div>
+        <main className="min-h-screen px-3 pb-4 pt-3 md:pl-0 md:pr-4 md:pb-5 md:pt-4">
           {pathname !== '/dashboard' && (
             <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-end">
+              <div className="flex items-center justify-between gap-3 md:hidden">
+                <div className="text-sm font-semibold text-slate-700">
+                  Offisphere
+                </div>
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setSidebarOpen(true)}
+                  className="inline-flex items-center justify-center h-9 w-9 rounded-full bg-white shadow-sm border border-slate-200 text-slate-600"
+                  aria-label="Open sidebar"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <line x1="3" y1="12" x2="21" y2="12" />
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <line x1="3" y1="18" x2="21" y2="18" />
+                  </svg>
+                </motion.button>
+              </div>
               <div className="w-full md:max-w-md">
                 <GlobalSearch />
               </div>

@@ -325,7 +325,7 @@ export default function DashboardHome() {
       transition={{ duration: 0.25 }}
     >
       {/* Header */}
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-xl font-semibold text-slate-900">
             Hello Admin 👋
