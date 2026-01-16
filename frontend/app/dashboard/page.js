@@ -52,6 +52,7 @@ export default function DashboardHome() {
       : '--';
 
   const s = summary || {};
+  const toNumber = (value) => (Number.isFinite(Number(value)) ? Number(value) : 0);
 
   const leaveSummary = s.leave_summary || {
     cl_days: 0,
@@ -277,6 +278,27 @@ export default function DashboardHome() {
       y: 0,
       transition: { delay: 0.05 * i, duration: 0.25 }
     })
+  };
+
+  const barData = [
+    { label: 'Attendance', value: toNumber(s.attendance?.checkins_today), color: '#0ea5e9' },
+    { label: 'Tasks', value: toNumber(s.tasks?.open), color: '#f59e0b' },
+    { label: 'Leaves', value: toNumber(s.leaves?.pending), color: '#6366f1' },
+    { label: 'Devices', value: toNumber(s.devices?.assigned), color: '#ec4899' },
+    { label: 'Docs', value: toNumber(s.documents?.total), color: '#4f46e5' }
+  ];
+  const barMax = Math.max(1, ...barData.map((item) => item.value));
+
+  const totalUsers = toNumber(s.users?.total);
+  const adminUsers = toNumber(s.users?.admins);
+  const otherUsers = Math.max(totalUsers - adminUsers, 0);
+  const pieTotal = totalUsers || 1;
+  const adminPct = Math.round((adminUsers / pieTotal) * 100);
+  const otherPct = 100 - adminPct;
+  const adminColor = '#2563eb';
+  const otherColor = '#94a3b8';
+  const pieStyle = {
+    background: `conic-gradient(${adminColor} 0 ${adminPct}%, ${otherColor} ${adminPct}% 100%)`
   };
 
   const GlowCard = ({ title, accent, index = 0, children }) => (
@@ -615,6 +637,82 @@ export default function DashboardHome() {
             </GlowCard>
           </>
         )}
+        </div>
+
+        {/* Insights */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
+            className="rounded-3xl bg-white border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-5"
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-semibold text-slate-900">Activity mix</h3>
+                <p className="text-xs text-slate-500">Today&apos;s operational signals</p>
+              </div>
+              <span className="text-[11px] text-slate-400">Bar graph</span>
+            </div>
+            <div className="mt-5 flex items-end justify-between gap-3">
+              {barData.map((item) => (
+                <div key={item.label} className="flex flex-col items-center gap-2 flex-1">
+                  <div className="w-full h-28 flex items-end justify-center overflow-hidden">
+                    <div
+                      className="w-4/5 rounded-[18px] shadow-sm"
+                      style={{
+                        height: `${(item.value / barMax) * 100}%`,
+                        minHeight: item.value > 0 ? '16px' : '8px',
+                        background: item.color
+                      }}
+                    />
+                  </div>
+                  <div className="text-[10px] font-semibold text-slate-500">{item.label}</div>
+                  <div className="text-[11px] font-bold text-slate-800">{item.value}</div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
+            className="rounded-3xl bg-white border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-5"
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-semibold text-slate-900">User roles</h3>
+                <p className="text-xs text-slate-500">Admins vs others</p>
+              </div>
+              <span className="text-[11px] text-slate-400">Pie chart</span>
+            </div>
+            <div className="mt-6 flex items-center gap-6">
+              <div className="relative h-28 w-28 rounded-full ring-8 ring-white shadow-[0_12px_30px_rgba(15,23,42,0.12)]" style={pieStyle}>
+                <div className="h-full w-full rounded-full bg-white/70 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-sm font-bold text-slate-900">{totalUsers}</div>
+                    <div className="text-[10px] text-slate-500">users</div>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-2 text-xs">
+                <div className="flex items-center gap-2">
+                  <span className="h-2.5 w-2.5 rounded-full" style={{ background: adminColor }} />
+                  <span className="text-slate-600">Admins</span>
+                  <span className="font-semibold text-slate-900">{adminUsers}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="h-2.5 w-2.5 rounded-full" style={{ background: otherColor }} />
+                  <span className="text-slate-600">Others</span>
+                  <span className="font-semibold text-slate-900">{otherUsers}</span>
+                </div>
+                <div className="text-[10px] text-slate-400">
+                  {adminPct}% admins / {otherPct}% others
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
 
         {/* Quick actions */}
