@@ -329,7 +329,7 @@ export default function DashboardLayout({ children }) {
       <aside
         className={`fixed inset-y-0 left-0 z-40 flex flex-col overflow-hidden w-64 md:w-auto bg-gradient-to-b from-blue-700 via-blue-600 to-blue-800 text-white transition-[width,transform] duration-500 ease-in-out will-change-[width,transform] ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } md:translate-x-0 ${sidebarCollapsed ? 'md:w-20' : 'md:w-64'}`}
+        } md:translate-x-0 ${sidebarCollapsed ? 'md:w-16' : 'md:w-64'}`}
       >
         {/* Brand */}
         <div className="px-5 pt-6 pb-4">
@@ -462,10 +462,14 @@ export default function DashboardLayout({ children }) {
       {/* Main content area, shifted right by sidebar width on desktop */}
       <div
         className={`md:transition-[margin-left] duration-500 ease-in-out ${
-          sidebarCollapsed ? 'md:ml-20' : 'md:ml-64'
+          sidebarCollapsed ? 'md:ml-16' : 'md:ml-64'
         }`}
       >
-        <main className="min-h-screen px-3 pb-4 pt-3 md:pl-0 md:pr-4 md:pb-5 md:pt-4">
+        <main
+          className={`min-h-screen px-3 pb-4 pt-3 md:pr-4 md:pb-5 md:pt-4 ${
+            sidebarCollapsed ? 'md:pl-10' : 'md:pl-1'
+          }`}
+        >
           {pathname !== '/dashboard' && (
             <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-end">
               <div className="flex items-center justify-between gap-3 md:hidden">
