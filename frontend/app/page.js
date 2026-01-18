@@ -11,9 +11,9 @@ const API_BASE =
 export default function LoginPage() {
   const router = useRouter();
 
-  const [email, setEmail] = useState('admin@offisphere.local');
-  const [password, setPassword] = useState('Admin@123');
-  const [remember, setRemember] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [remember, setRemember] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
