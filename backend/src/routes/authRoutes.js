@@ -3,6 +3,8 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const rateLimit = require('express-rate-limit');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 const supabase = require('../supabaseClient');
 
 const router = express.Router();
@@ -14,6 +16,26 @@ const loginLimiter = rateLimit({
   legacyHeaders: false,
   message: { message: 'Too many login attempts. Try again later.' }
 });
+
+const getMailer = () => {
+  const host = process.env.SMTP_HOST;
+  const user = process.env.SMTP_USER;
+  const pass = process.env.SMTP_PASS;
+  if (!host || !user || !pass) return null;
+
+  return nodemailer.createTransport({
+    host,
+    port: Number(process.env.SMTP_PORT || 587),
+    secure: process.env.SMTP_SECURE === 'true',
+    auth: { user, pass }
+  });
+};
+
+const buildResetToken = () => {
+  const token = crypto.randomBytes(32).toString('hex');
+  const hash = crypto.createHash('sha256').update(token).digest('hex');
+  return { token, hash };
+};
 
 /**
  * POST /api/auth/login
@@ -101,6 +123,133 @@ router.post('/login', loginLimiter, async (req, res) => {
   } catch (err) {
     console.error('Login catch error:', err);
     return res.status(500).json({ message: 'Login failed' });
+  }
+});
+
+/**
+ * POST /api/auth/forgot
+ * body: { email }
+ * Sends reset link if user exists.
+ */
+router.post('/forgot', async (req, res) => {
+  const { email } = req.body || {};
+  if (!email) {
+    return res.status(400).json({ message: 'Email is required' });
+  }
+
+  try {
+    const normalizedEmail = String(email).trim().toLowerCase();
+    const { data: users, error: userError } = await supabase
+      .from('users')
+      .select('id, email')
+      .eq('email', normalizedEmail)
+      .limit(1);
+
+    if (userError) {
+      console.error('Forgot password user lookup error:', userError);
+      return res.status(500).json({ message: 'Unable to process request' });
+    }
+
+    if (!users || users.length === 0) {
+      return res.json({ message: 'If the email exists, a reset link was sent.' });
+    }
+
+    const user = users[0];
+    const { token, hash } = buildResetToken();
+    const expiresAt = new Date(Date.now() + 1000 * 60 * 30).toISOString();
+
+    const { error: insertError } = await supabase
+      .from('password_resets')
+      .insert([
+        {
+          user_id: user.id,
+          token_hash: hash,
+          expires_at: expiresAt
+        }
+      ]);
+
+    if (insertError) {
+      console.error('Forgot password insert error:', insertError);
+      return res.status(500).json({ message: 'Unable to process request' });
+    }
+
+    const mailer = getMailer();
+    if (!mailer) {
+      return res.status(500).json({ message: 'Email service not configured' });
+    }
+
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const resetUrl = `${frontendUrl}/reset-password?token=${token}`;
+    const from = process.env.SMTP_FROM || 'no-reply@offisphere.com';
+
+    await mailer.sendMail({
+      from,
+      to: user.email,
+      subject: 'Reset your Offisphere password',
+      text: `Reset your password using this link: ${resetUrl}`,
+      html: `<p>Reset your password using this link:</p><p><a href="${resetUrl}">${resetUrl}</a></p>`
+    });
+
+    return res.json({ message: 'If the email exists, a reset link was sent.' });
+  } catch (err) {
+    console.error('Forgot password catch error:', err);
+    return res.status(500).json({ message: 'Unable to process request' });
+  }
+});
+
+/**
+ * POST /api/auth/reset
+ * body: { token, password }
+ */
+router.post('/reset', async (req, res) => {
+  const { token, password } = req.body || {};
+  if (!token || !password) {
+    return res.status(400).json({ message: 'Token and password are required' });
+  }
+  if (String(password).length < 8) {
+    return res.status(400).json({ message: 'Password must be at least 8 characters' });
+  }
+
+  try {
+    const hash = crypto.createHash('sha256').update(token).digest('hex');
+    const nowIso = new Date().toISOString();
+
+    const { data: resets, error: resetError } = await supabase
+      .from('password_resets')
+      .select('id, user_id, expires_at, used_at')
+      .eq('token_hash', hash)
+      .limit(1);
+
+    if (resetError) {
+      console.error('Reset lookup error:', resetError);
+      return res.status(500).json({ message: 'Unable to reset password' });
+    }
+
+    const record = resets && resets[0];
+    if (!record || record.used_at || record.expires_at <= nowIso) {
+      return res.status(400).json({ message: 'Invalid or expired reset token' });
+    }
+
+    const password_hash = await bcrypt.hash(password, 10);
+    const { error: updateError } = await supabase
+      .from('users')
+      .update({ password_hash })
+      .eq('id', record.user_id);
+
+    if (updateError) {
+      console.error('Reset update error:', updateError);
+      return res.status(500).json({ message: 'Unable to reset password' });
+    }
+
+    await supabase
+      .from('password_resets')
+      .update({ used_at: nowIso })
+      .eq('id', record.id);
+
+    return res.json({ message: 'Password updated' });
+  } catch (err) {
+    console.error('Reset catch error:', err);
+    return res.status(500).json({ message: 'Unable to reset password' });
   }
 });
 
