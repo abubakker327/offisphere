@@ -196,6 +196,9 @@ export default function GlobalSearch({ className = '' }) {
     return items;
   };
 
+  const flatResults = getFlatResults();
+  const totalResults = flatResults.length;
+
   return (
     <div className={className}>
       <div className="relative w-full">
@@ -219,7 +222,7 @@ export default function GlobalSearch({ className = '' }) {
         </span>
         <input
           id="global-search"
-          type="text"
+          type="search"
           placeholder="Search features, people, or docs..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -230,11 +233,10 @@ export default function GlobalSearch({ className = '' }) {
             setTimeout(() => setSearchOpen(false), 150);
           }}
           onKeyDown={(e) => {
-            const flat = getFlatResults();
             if (e.key === 'Enter') {
               const href =
-                activeResultIndex >= 0 && flat[activeResultIndex]
-                  ? flat[activeResultIndex].href
+                activeResultIndex >= 0 && flatResults[activeResultIndex]
+                  ? flatResults[activeResultIndex].href
                   : getTopResult();
               if (href) {
                 e.preventDefault();
@@ -244,7 +246,7 @@ export default function GlobalSearch({ className = '' }) {
               if (!searchOpen) setSearchOpen(true);
               e.preventDefault();
               setActiveResultIndex((prev) =>
-                Math.min(prev + 1, flat.length - 1)
+                Math.min(prev + 1, flatResults.length - 1)
               );
             } else if (e.key === 'ArrowUp') {
               e.preventDefault();
@@ -252,9 +254,10 @@ export default function GlobalSearch({ className = '' }) {
             } else if (e.key === 'Escape') {
               setSearchOpen(false);
               setActiveResultIndex(-1);
+              setSearchQuery('');
             }
           }}
-          className="w-full rounded-full border border-slate-200 bg-white pl-11 pr-10 py-2 text-sm text-slate-700 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="of-search-input w-full rounded-full border border-slate-200 bg-white pl-11 pr-10 py-2 text-sm text-slate-700 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
 
         {searchQuery && (
@@ -288,6 +291,10 @@ export default function GlobalSearch({ className = '' }) {
 
         {searchOpen && (
           <div className="absolute left-0 right-0 mt-2 rounded-2xl border border-slate-200 bg-white shadow-lg p-2 z-30">
+            <div className="flex items-center justify-between px-3 pb-1 text-[11px] text-slate-500">
+              <span>Search results</span>
+              <span>{totalResults} found</span>
+            </div>
             {searchLoading && (
               <div className="px-3 py-2 text-xs text-slate-500">Searching...</div>
             )}
@@ -307,14 +314,14 @@ export default function GlobalSearch({ className = '' }) {
                         type="button"
                         onMouseDown={() => handleSearchSelect(item.href)}
                         onMouseEnter={() => {
-                          const idx = getFlatResults().findIndex(
+                          const idx = flatResults.findIndex(
                             (result) => result.href === item.href && result.type === 'feature'
                           );
                           setActiveResultIndex(idx);
                         }}
                         className={`w-full text-left px-3 py-2 rounded-xl text-sm text-slate-700 hover:bg-slate-100 ${
-                          getFlatResults()[activeResultIndex]?.href === item.href &&
-                          getFlatResults()[activeResultIndex]?.type === 'feature'
+                          flatResults[activeResultIndex]?.href === item.href &&
+                          flatResults[activeResultIndex]?.type === 'feature'
                             ? 'bg-slate-100'
                             : ''
                         }`}
@@ -336,21 +343,21 @@ export default function GlobalSearch({ className = '' }) {
                         type="button"
                         onMouseDown={() => handleSearchSelect('/dashboard/users')}
                         onMouseEnter={() => {
-                          const idx = getFlatResults().findIndex(
+                          const idx = flatResults.findIndex(
                             (result) => result.type === 'user' && result.label === (user.full_name || user.email)
                           );
                           setActiveResultIndex(idx);
                         }}
                         className={`w-full text-left px-3 py-2 rounded-xl text-sm text-slate-700 hover:bg-slate-100 ${
-                          getFlatResults()[activeResultIndex]?.type === 'user' &&
-                          getFlatResults()[activeResultIndex]?.label === (user.full_name || user.email)
+                          flatResults[activeResultIndex]?.type === 'user' &&
+                          flatResults[activeResultIndex]?.label === (user.full_name || user.email)
                             ? 'bg-slate-100'
                             : ''
                         }`}
                       >
                         <span className="font-medium">{user.full_name || user.email}</span>
                         {user.full_name && user.email && (
-                          <span className="text-xs text-slate-400"> · {user.email}</span>
+                          <span className="text-xs text-slate-400"> - {user.email}</span>
                         )}
                       </button>
                     ))}
@@ -368,21 +375,21 @@ export default function GlobalSearch({ className = '' }) {
                         type="button"
                         onMouseDown={() => handleSearchSelect('/dashboard/devices')}
                         onMouseEnter={() => {
-                          const idx = getFlatResults().findIndex(
+                          const idx = flatResults.findIndex(
                             (result) => result.type === 'device' && result.label === (device.name || 'Device')
                           );
                           setActiveResultIndex(idx);
                         }}
                         className={`w-full text-left px-3 py-2 rounded-xl text-sm text-slate-700 hover:bg-slate-100 ${
-                          getFlatResults()[activeResultIndex]?.type === 'device' &&
-                          getFlatResults()[activeResultIndex]?.label === (device.name || 'Device')
+                          flatResults[activeResultIndex]?.type === 'device' &&
+                          flatResults[activeResultIndex]?.label === (device.name || 'Device')
                             ? 'bg-slate-100'
                             : ''
                         }`}
                       >
                         <span className="font-medium">{device.name || 'Device'}</span>
                         {device.serial_number && (
-                          <span className="text-xs text-slate-400"> · {device.serial_number}</span>
+                          <span className="text-xs text-slate-400"> - {device.serial_number}</span>
                         )}
                       </button>
                     ))}

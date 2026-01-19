@@ -212,22 +212,18 @@ export default function PaymentsPage() {
     >
       <div className="flex items-center justify-between">
         <div className="space-y-3">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(15,23,42,0.2)]">
+          <div className="of-pill">
             <span>Payment log</span>
           </div>
           <div>
-            <h1 className="text-3xl font-semibold text-slate-900">
-              Payments
-            </h1>
-            <p className="text-sm text-slate-500">
-              Track incoming payments against leads.
-            </p>
+            <h1 className="page-title">Payments</h1>
+            <p className="page-subtitle">Track incoming payments against leads.</p>
           </div>
         </div>
       </div>
 
       {/* Record payment */}
-      <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6">
+      <div className="of-card p-6">
         <div className="flex items-center gap-3 mb-4">
           <div className="h-10 w-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center">
             <svg
@@ -246,19 +242,15 @@ export default function PaymentsPage() {
             </svg>
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">
-              Record payment
-            </h2>
-            <p className="text-xs text-slate-600">
+            <h2 className="section-title">Record payment</h2>
+            <p className="section-subtitle">
               Log payments tied to leads and invoices.
             </p>
           </div>
         </div>
 
         {error && (
-          <div className="mb-3 text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-xl px-3 py-2">
-            {error}
-          </div>
+          <div className="mb-3 of-banner-error">{error}</div>
         )}
 
         <form
@@ -266,11 +258,11 @@ export default function PaymentsPage() {
           className="grid grid-cols-1 md:grid-cols-6 gap-3 text-sm"
         >
           <div className="md:col-span-2 space-y-1">
-            <label className="text-xs text-slate-600">Lead</label>
+            <label className="of-label">Lead</label>
             <select
               value={form.lead_id}
               onChange={(e) => handleChange('lead_id', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
+              className="of-input text-xs"
             >
               <option value="">No lead</option>
               {leads.map((lead) => (
@@ -283,34 +275,34 @@ export default function PaymentsPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs text-slate-600">Amount</label>
+            <label className="of-label">Amount</label>
             <input
               type="number"
               step="0.01"
               value={form.amount}
               onChange={(e) => handleChange('amount', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="of-input"
               placeholder="25000"
               required
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs text-slate-600">Currency</label>
+            <label className="of-label">Currency</label>
             <input
               type="text"
               value={form.currency}
               onChange={(e) => handleChange('currency', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
+              className="of-input text-xs"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs text-slate-600">Status</label>
+            <label className="of-label">Status</label>
             <select
               value={form.status}
               onChange={(e) => handleChange('status', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
+              className="of-input text-xs"
             >
               {STATUS_OPTIONS.map((s) => (
                 <option key={s.value} value={s.value}>
@@ -321,46 +313,44 @@ export default function PaymentsPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs text-slate-600">Method</label>
+            <label className="of-label">Method</label>
             <input
               type="text"
               value={form.method}
               onChange={(e) => handleChange('method', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="of-input"
               placeholder="UPI / Bank / Card"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs text-slate-600">
-              Paid date (optional)
-            </label>
+            <label className="of-label">Paid date (optional)</label>
             <input
               type="date"
               value={form.paid_at}
               onChange={(e) => handleChange('paid_at', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
+              className="of-input text-xs"
             />
           </div>
 
           <div className="md:col-span-3 space-y-1">
-            <label className="text-xs text-slate-600">Reference</label>
+            <label className="of-label">Reference</label>
             <input
               type="text"
               value={form.reference}
               onChange={(e) => handleChange('reference', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="of-input"
               placeholder="TXN ID / invoice no"
             />
           </div>
 
           <div className="md:col-span-3 space-y-1">
-            <label className="text-xs text-slate-600">Notes</label>
+            <label className="of-label">Notes</label>
             <input
               type="text"
               value={form.notes}
               onChange={(e) => handleChange('notes', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="of-input"
               placeholder="Optional notes"
             />
           </div>
@@ -371,7 +361,7 @@ export default function PaymentsPage() {
               whileTap={{ scale: 0.97 }}
               type="submit"
               disabled={saving}
-              className="px-5 py-2.5 rounded-2xl text-sm font-semibold text-white bg-blue-600 shadow-lg shadow-blue-300/40 hover:bg-blue-700 disabled:opacity-60"
+              className="of-button-primary"
             >
               {saving ? 'Saving...' : 'Record payment'}
             </motion.button>
@@ -387,10 +377,10 @@ export default function PaymentsPage() {
             <button
               key={f.value}
               onClick={() => handleStatusFilter(f.value)}
-              className={`px-3 py-1.5 rounded-full border transition ${
+              className={`of-chip transition ${
                 active
                   ? 'bg-blue-600 text-white border-transparent shadow'
-                  : 'bg-white text-slate-600 border-slate-200 hover:border-blue-200'
+                  : 'hover:border-blue-200'
               }`}
             >
               {f.label}
@@ -400,7 +390,7 @@ export default function PaymentsPage() {
       </div>
 
       {/* Payments list */}
-      <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
+      <div className="of-card">
         <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-4 border-b border-slate-100">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center">
@@ -420,12 +410,8 @@ export default function PaymentsPage() {
               </svg>
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-slate-900">
-                Payment history
-              </h2>
-              <p className="text-xs text-slate-600">
-                {payments.length} payments
-              </p>
+              <h2 className="section-title">Payment history</h2>
+              <p className="section-subtitle">{payments.length} payments</p>
             </div>
           </div>
           {isAdminManager && (
@@ -454,7 +440,7 @@ export default function PaymentsPage() {
                 <tr>
                   <td
                     colSpan={8}
-                    className="px-6 py-8 text-center text-xs text-slate-500"
+                    className="px-6 py-8 of-loading"
                   >
                     Loading payments...
                   </td>
@@ -463,7 +449,7 @@ export default function PaymentsPage() {
                 <tr>
                   <td
                     colSpan={8}
-                    className="px-6 py-8 text-center text-xs text-slate-500"
+                    className="px-6 py-8 of-empty"
                   >
                     No payments found.
                   </td>

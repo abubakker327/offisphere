@@ -97,3 +97,85 @@ button {
 .border-blue-600 { border-color: var(--brand-blue); }
 .border-blue-700 { border-color: var(--brand-blue-dark); }
 .ring-blue-500 { --tw-ring-color: var(--brand-blue); }
+
+@layer components {
+  .page-title {
+    @apply text-3xl md:text-4xl font-semibold text-slate-900 tracking-tight;
+  }
+
+  .page-subtitle {
+    @apply text-sm md:text-base text-slate-500;
+  }
+
+  .section-title {
+    @apply text-lg md:text-xl font-semibold text-slate-900;
+  }
+
+  .section-subtitle {
+    @apply text-xs md:text-sm text-slate-500;
+  }
+
+  .of-pill {
+    @apply inline-flex items-center gap-2 rounded-full bg-blue-600 text-white text-xs font-semibold px-3 py-1 shadow-[0_10px_24px_rgba(15,23,42,0.2)];
+  }
+
+  .of-card {
+    @apply rounded-3xl bg-white border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)];
+  }
+
+  .of-input {
+    @apply w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-transparent;
+  }
+
+  .of-search-input {
+    @apply h-10 md:h-11;
+  }
+
+  .of-label {
+    @apply text-xs text-slate-500;
+  }
+
+  .of-button {
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl px-4 py-2 text-sm font-medium transition focus-visible:ring-2 focus-visible:ring-blue-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white;
+  }
+
+  .of-button-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl px-4 py-2 text-sm font-medium transition focus-visible:ring-2 focus-visible:ring-blue-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white bg-blue-600 text-white shadow-lg shadow-blue-300/40 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed;
+  }
+
+  .of-button-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl px-4 py-2 text-sm font-medium transition focus-visible:ring-2 focus-visible:ring-blue-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white bg-slate-100 text-slate-700 hover:bg-slate-200;
+  }
+
+  .of-chip {
+    @apply inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs text-slate-600;
+  }
+
+  .of-banner {
+    @apply rounded-2xl border px-3 py-2 text-xs;
+  }
+
+  .of-banner-error {
+    @apply rounded-2xl border px-3 py-2 text-xs border-rose-100 bg-rose-50 text-rose-600;
+  }
+
+  .of-banner-info {
+    @apply rounded-2xl border px-3 py-2 text-xs border-blue-100 bg-blue-50 text-blue-700;
+  }
+
+  .of-banner-success {
+    @apply rounded-2xl border px-3 py-2 text-xs border-emerald-100 bg-emerald-50 text-emerald-700;
+  }
+
+  .of-empty {
+    @apply text-xs text-slate-500 text-center;
+  }
+
+  .of-loading {
+    @apply text-xs text-slate-500 text-center;
+  }
+
+  .of-skeleton {
+    @apply animate-pulse rounded-2xl bg-slate-100;
+  }
+}

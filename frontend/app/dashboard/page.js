@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import GlobalSearch from './components/GlobalSearch';
 
 export default function DashboardHome() {
   const [summary, setSummary] = useState(null);
@@ -329,47 +328,15 @@ export default function DashboardHome() {
       {/* Header */}
       <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-slate-900">
-            Hello Admin 👋
-          </h1>
-          <p className="text-sm text-slate-500">
-            Overview of users, attendance, leaves, tasks, devices and
-            documents.
+          <h1 className="page-title">Hello Admin</h1>
+          <p className="page-subtitle">
+            Overview of users, attendance, leaves, tasks, devices and documents.
           </p>
-        </div>
-        <div className="flex w-full flex-col gap-3 md:w-auto md:flex-row md:items-center">
-          <div className="w-full md:w-[360px]">
-            <GlobalSearch />
-          </div>
-          <Link
-            href="/dashboard/notifications"
-            className="relative flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-sm border border-slate-200 text-slate-500 hover:text-blue-600 hover:shadow-md transition"
-            aria-label="Notifications"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
-              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-            </svg>
-            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-rose-500 rounded-full" />
-          </Link>
         </div>
       </div>
 
       {/* Error banner */}
-      {error && (
-        <div className="text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-xl px-3 py-2">
-          {error}
-        </div>
-      )}
+      {error && <div className="of-banner-error">{error}</div>}
 
       <div className="space-y-4">
         {/* Top row: Leaves + Attendance + Users + Leave Summary */}

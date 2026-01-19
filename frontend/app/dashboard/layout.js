@@ -253,6 +253,7 @@ export default function DashboardLayout({ children }) {
     exact ? pathname === href : pathname === href || pathname.startsWith(href + '/');
 
   const primaryRoleLabel = roles[0] ? roles[0].toUpperCase() : 'SUPER ADMIN';
+  const showTopBar = true;
 
   const renderIcon = (name, className = 'text-white') => {
     const common = `w-4 h-4 ${className}`;
@@ -365,9 +366,9 @@ export default function DashboardLayout({ children }) {
           <Link
             href="/dashboard"
             onClick={() => setSidebarOpen(false)}
-            className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition ${
+            className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-700 ${
               isActive('/dashboard', true)
-                ? 'bg-white text-blue-700 shadow-[0_8px_20px_rgba(0,0,0,0.18)]'
+                ? 'bg-white text-blue-700 shadow-[0_8px_20px_rgba(0,0,0,0.18)] ring-1 ring-white/30'
                 : 'text-white/90 hover:bg-white/15'
             }`}
           >
@@ -393,9 +394,9 @@ export default function DashboardLayout({ children }) {
                   onClick={() => setSidebarOpen(false)}
                   className={`w-full flex items-center ${
                     sidebarCollapsed ? 'justify-center' : 'justify-between'
-                  } px-4 py-3 rounded-2xl text-sm font-semibold transition ${
+                  } px-4 py-3 rounded-2xl text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-700 ${
                     groupActive
-                      ? 'bg-white text-blue-700 shadow-[0_10px_25px_rgba(0,0,0,0.18)]'
+                      ? 'bg-white text-blue-700 shadow-[0_10px_25px_rgba(0,0,0,0.18)] ring-1 ring-white/30'
                       : 'text-white/90 hover:bg-white/12 hover:text-white'
                   }`}
                 >
@@ -466,63 +467,67 @@ export default function DashboardLayout({ children }) {
         }`}
       >
         <main
-          className={`min-h-screen px-3 pb-4 pt-3 md:pr-4 md:pb-5 md:pt-4 ${
+          className={`min-h-screen px-3 pb-6 pt-4 md:pr-4 md:pb-8 md:pt-6 ${
             sidebarCollapsed ? 'md:pl-10' : 'md:pl-1'
           }`}
         >
-          {pathname !== '/dashboard' && (
-            <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-end">
-              <div className="flex items-center justify-between gap-3 md:hidden">
-                <div className="text-sm font-semibold text-slate-700">
-                  Offisphere
-                </div>
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setSidebarOpen(true)}
-                  className="inline-flex items-center justify-center h-9 w-9 rounded-full bg-white shadow-sm border border-slate-200 text-slate-600"
-                  aria-label="Open sidebar"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+          {showTopBar && (
+            <div className="sticky top-0 z-20 -mx-3 mb-4 px-3 md:-mx-4 md:px-4">
+              <div className="rounded-2xl border border-slate-200/70 bg-white/85 px-3 py-3 shadow-sm backdrop-blur">
+                <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                  <div className="flex items-center justify-between gap-3 md:hidden">
+                    <div className="text-sm font-semibold text-slate-700">
+                      Offisphere
+                    </div>
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setSidebarOpen(true)}
+                      className="inline-flex items-center justify-center h-9 w-9 rounded-full bg-white shadow-sm border border-slate-200 text-slate-600"
+                      aria-label="Open sidebar"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                      </svg>
+                    </motion.button>
+                  </div>
+                  <div className="w-full md:max-w-md">
+                    <GlobalSearch />
+                  </div>
+                  <motion.button
+                    whileHover={{ scale: 1.05, y: -1 }}
+                    whileTap={{ scale: 0.95, y: 0 }}
+                    onClick={goToNotifications}
+                    className="relative flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-sm border border-slate-200 text-slate-500 hover:text-blue-600 hover:shadow-md transition"
+                    aria-label="Notifications"
                   >
-                    <line x1="3" y1="12" x2="21" y2="12" />
-                    <line x1="3" y1="6" x2="21" y2="6" />
-                    <line x1="3" y1="18" x2="21" y2="18" />
-                  </svg>
-                </motion.button>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+                      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                    </svg>
+                    <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-rose-500 rounded-full" />
+                  </motion.button>
+                </div>
               </div>
-              <div className="w-full md:max-w-md">
-                <GlobalSearch />
-              </div>
-              <motion.button
-                whileHover={{ scale: 1.05, y: -1 }}
-                whileTap={{ scale: 0.95, y: 0 }}
-                onClick={goToNotifications}
-                className="relative flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-sm border border-slate-200 text-slate-500 hover:text-blue-600 hover:shadow-md transition"
-                aria-label="Notifications"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
-                  <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                </svg>
-                <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-rose-500 rounded-full" />
-              </motion.button>
             </div>
           )}
           <AnimatePresence mode="wait">
@@ -532,6 +537,7 @@ export default function DashboardLayout({ children }) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 6 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
+              className="space-y-6"
             >
               {children}
             </motion.div>

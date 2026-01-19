@@ -253,19 +253,19 @@ export default function UsersPage() {
   return (
     <div className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6">
       <div className="space-y-3">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(15,23,42,0.2)]">
+        <div className="of-pill">
           <span>User directory</span>
         </div>
         <div>
-          <h1 className="text-3xl font-semibold text-slate-900">Users</h1>
-          <p className="text-sm text-slate-500">
+          <h1 className="page-title">Users</h1>
+          <p className="page-subtitle">
             Manage Offisphere admins, managers and employees.
           </p>
         </div>
       </div>
 
       {/* Create user form */}
-      <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6">
+      <div className="of-card p-6">
         <div className="flex items-center gap-3 mb-4">
           <div className="h-10 w-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center">
             <svg
@@ -285,19 +285,13 @@ export default function UsersPage() {
             </svg>
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">
-              Create new user
-            </h2>
-            <p className="text-xs text-slate-600">
-              Add admins, managers, or employees.
-            </p>
+            <h2 className="section-title">Create new user</h2>
+            <p className="section-subtitle">Add admins, managers, or employees.</p>
           </div>
         </div>
 
         {createError && (
-          <div className="mb-3 text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-xl px-3 py-2">
-            {createError}
-          </div>
+          <div className="mb-3 of-banner-error">{createError}</div>
         )}
 
         <form
@@ -305,47 +299,47 @@ export default function UsersPage() {
           className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm"
         >
           <div className="space-y-1">
-            <label className="text-xs text-slate-600">Full name</label>
+            <label className="of-label">Full name</label>
             <input
               type="text"
               value={form.full_name}
               onChange={(e) =>
                 handleChange('full_name', e.target.value)
               }
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="of-input"
               placeholder="Enter full name"
               required
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs text-slate-600">Email</label>
+            <label className="of-label">Email</label>
             <input
               type="email"
               value={form.email}
               onChange={(e) => handleChange('email', e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="of-input"
               placeholder="Enter email"
               required
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs text-slate-600">Password</label>
+            <label className="of-label">Password</label>
             <input
               type="password"
               value={form.password}
               onChange={(e) =>
                 handleChange('password', e.target.value)
               }
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="of-input"
               placeholder="Enter password"
               required
             />
           </div>
 
           <div className="space-y-1 md:col-span-3">
-            <label className="text-xs text-slate-600">
+            <label className="of-label">
               Roles
               <span className="text-[11px] text-slate-400 ml-1">
                 (at least one, default employee)
@@ -376,7 +370,7 @@ export default function UsersPage() {
             <button
               type="submit"
               disabled={creating}
-              className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-blue-600 shadow-lg shadow-blue-300/50 hover:bg-blue-700 disabled:opacity-60"
+              className="of-button-primary"
             >
               {creating ? 'Creating...' : 'Create user'}
             </button>
@@ -385,7 +379,7 @@ export default function UsersPage() {
       </div>
 
       {/* Users table */}
-      <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
+      <div className="of-card">
         <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-4 border-b border-slate-100">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center">
@@ -406,19 +400,15 @@ export default function UsersPage() {
               </svg>
             </div>
             <div>
-              <div className="text-lg font-semibold text-slate-900">Users</div>
-              <div className="text-xs text-slate-600">
-                {users.length} total
-              </div>
+              <div className="section-title">Users</div>
+              <div className="section-subtitle">{users.length} total</div>
             </div>
           </div>
         </div>
 
         {error && (
           <div className="px-6 pt-4">
-            <div className="text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-xl px-3 py-2">
-              {error}
-            </div>
+            <div className="of-banner-error">{error}</div>
           </div>
         )}
 
@@ -439,7 +429,7 @@ export default function UsersPage() {
                 <tr>
                   <td
                     colSpan={6}
-                    className="px-6 py-8 text-center text-xs text-slate-500"
+                    className="px-6 py-8 of-loading"
                   >
                     Loading users...
                   </td>
@@ -448,7 +438,7 @@ export default function UsersPage() {
                 <tr>
                   <td
                     colSpan={6}
-                    className="px-6 py-8 text-center text-xs text-slate-500"
+                    className="px-6 py-8 of-empty"
                   >
                     No users found.
                   </td>
@@ -518,9 +508,7 @@ export default function UsersPage() {
             </div>
 
             {editError && (
-              <div className="mb-3 text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-xl px-3 py-2">
-                {editError}
-              </div>
+              <div className="mb-3 of-banner-error">{editError}</div>
             )}
 
             <form
@@ -528,39 +516,33 @@ export default function UsersPage() {
               className="space-y-3 text-sm"
             >
               <div className="space-y-1">
-                <label className="text-xs text-slate-600">
-                  Full name
-                </label>
+                <label className="of-label">Full name</label>
                 <input
                   type="text"
                   value={editForm.full_name}
                   onChange={(e) =>
                     handleEditChange('full_name', e.target.value)
                   }
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="of-input"
                   required
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs text-slate-600">
-                  Email
-                </label>
+                <label className="of-label">Email</label>
                 <input
                   type="email"
                   value={editForm.email}
                   onChange={(e) =>
                     handleEditChange('email', e.target.value)
                   }
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="of-input"
                   required
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs text-slate-600">
-                  Status
-                </label>
+                <label className="of-label">Status</label>
                 <div className="flex items-center gap-3 text-xs">
                   <button
                     type="button"
@@ -592,9 +574,7 @@ export default function UsersPage() {
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs text-slate-600">
-                  Roles
-                </label>
+                <label className="of-label">Roles</label>
                 <div className="flex flex-wrap gap-2">
                   {['admin', 'manager', 'employee'].map((role) => {
                     const selected = editForm.roles.includes(role);
@@ -620,14 +600,14 @@ export default function UsersPage() {
                 <button
                   type="button"
                   onClick={closeEdit}
-                  className="px-4 py-2 rounded-2xl text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200"
+                  className="of-button-secondary"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={editSaving}
-                  className="px-5 py-2 rounded-2xl text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-60"
+                  className="of-button-primary"
                 >
                   {editSaving ? 'Saving...' : 'Save changes'}
                 </button>

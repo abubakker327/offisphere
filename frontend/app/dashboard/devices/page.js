@@ -209,21 +209,19 @@ export default function DevicesPage() {
   return (
     <div className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6">
       <div className="space-y-3">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-[0_8px_20px_rgba(15,23,42,0.2)]">
+        <div className="of-pill">
           <span>Device shelf</span>
         </div>
         <div>
-          <h1 className="text-3xl font-semibold text-slate-900">
-            Devices
-          </h1>
-          <p className="text-sm text-slate-500">
+          <h1 className="page-title">Devices</h1>
+          <p className="page-subtitle">
             Track company laptops, phones, and other equipment.
           </p>
         </div>
       </div>
 
       {/* Create device */}
-      <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6">
+      <div className="of-card p-6">
         <div className="flex items-center gap-3 mb-4">
           <div className="h-10 w-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center">
             <svg
@@ -242,19 +240,15 @@ export default function DevicesPage() {
             </svg>
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">
-              Add new device
-            </h2>
-            <p className="text-xs text-slate-600">
+            <h2 className="section-title">Add new device</h2>
+            <p className="section-subtitle">
               Register equipment and assign owners.
             </p>
           </div>
         </div>
 
         {createError && (
-          <div className="mb-3 text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-xl px-3 py-2">
-            {createError}
-          </div>
+          <div className="mb-3 of-banner-error">{createError}</div>
         )}
 
         <form
@@ -262,56 +256,52 @@ export default function DevicesPage() {
           className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm"
         >
           <div className="space-y-1">
-            <label className="text-xs text-slate-600">Name</label>
+            <label className="of-label">Name</label>
             <input
               type="text"
               value={form.name}
               onChange={(e) =>
                 handleFormChange('name', e.target.value)
               }
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="of-input"
               placeholder="Dell XPS 13, iPhone 14..."
               required
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs text-slate-600">
-              Device type
-            </label>
+            <label className="of-label">Device type</label>
             <input
               type="text"
               value={form.device_type}
               onChange={(e) =>
                 handleFormChange('device_type', e.target.value)
               }
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="of-input"
               placeholder="Laptop, Phone, Monitor"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs text-slate-600">
-              Serial number
-            </label>
+            <label className="of-label">Serial number</label>
             <input
               type="text"
               value={form.serial_number}
               onChange={(e) =>
                 handleFormChange('serial_number', e.target.value)
               }
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="of-input"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs text-slate-600">Assign to</label>
+            <label className="of-label">Assign to</label>
             <select
               value={form.assigned_to}
               onChange={(e) =>
                 handleFormChange('assigned_to', e.target.value)
               }
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
+              className="of-input text-xs"
             >
               <option value="">Unassigned</option>
               {users.map((u) => (
@@ -323,16 +313,14 @@ export default function DevicesPage() {
           </div>
 
           <div className="md:col-span-4 space-y-1">
-            <label className="text-xs text-slate-600">
-              Notes
-            </label>
+            <label className="of-label">Notes</label>
             <textarea
               value={form.notes}
               onChange={(e) =>
                 handleFormChange('notes', e.target.value)
               }
               rows={2}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs resize-none"
+              className="of-input text-xs resize-none"
               placeholder="Add purchase date, condition, accessories, etc."
             />
           </div>
@@ -341,7 +329,7 @@ export default function DevicesPage() {
             <button
               type="submit"
               disabled={creating}
-              className="px-5 py-2.5 rounded-2xl text-sm font-semibold text-white bg-blue-600 shadow-lg shadow-blue-300/40 hover:bg-blue-700 disabled:opacity-60"
+              className="of-button-primary"
             >
               {creating ? 'Saving...' : 'Add device'}
             </button>
@@ -350,23 +338,17 @@ export default function DevicesPage() {
       </div>
 
       {/* Devices table */}
-      <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
+      <div className="of-card">
         <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-4 border-b border-slate-100">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">
-              Devices inventory
-            </h2>
-            <p className="text-xs text-slate-600">
-              {devices.length} devices
-            </p>
+            <h2 className="section-title">Devices inventory</h2>
+            <p className="section-subtitle">{devices.length} devices</p>
           </div>
         </div>
 
         {error && (
           <div className="px-6 pt-4">
-            <div className="text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-xl px-3 py-2">
-              {error}
-            </div>
+            <div className="of-banner-error">{error}</div>
           </div>
         )}
 
@@ -388,7 +370,7 @@ export default function DevicesPage() {
                 <tr>
                   <td
                     colSpan={7}
-                    className="px-6 py-8 text-center text-xs text-slate-500"
+                    className="px-6 py-8 of-loading"
                   >
                     Loading devices...
                   </td>
@@ -397,7 +379,7 @@ export default function DevicesPage() {
                 <tr>
                   <td
                     colSpan={7}
-                    className="px-6 py-8 text-center text-xs text-slate-500"
+                    className="px-6 py-8 of-empty"
                   >
                     No devices found.
                   </td>
@@ -468,9 +450,7 @@ export default function DevicesPage() {
             </div>
 
             {editError && (
-              <div className="mb-3 text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-xl px-3 py-2">
-                {editError}
-              </div>
+              <div className="mb-3 of-banner-error">{editError}</div>
             )}
 
             <form
@@ -478,22 +458,20 @@ export default function DevicesPage() {
               className="space-y-3 text-sm"
             >
               <div className="space-y-1">
-                <label className="text-xs text-slate-600">Name</label>
+                <label className="of-label">Name</label>
                 <input
                   type="text"
                   value={editForm.name}
                   onChange={(e) =>
                     handleFormChange('name', e.target.value, true)
                   }
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="of-input"
                   required
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs text-slate-600">
-                  Device type
-                </label>
+                <label className="of-label">Device type</label>
                 <input
                   type="text"
                   value={editForm.device_type}
@@ -504,14 +482,12 @@ export default function DevicesPage() {
                       true
                     )
                   }
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="of-input"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs text-slate-600">
-                  Serial number
-                </label>
+                <label className="of-label">Serial number</label>
                 <input
                   type="text"
                   value={editForm.serial_number}
@@ -522,18 +498,18 @@ export default function DevicesPage() {
                       true
                     )
                   }
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="of-input"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs text-slate-600">Status</label>
+                <label className="of-label">Status</label>
                 <select
                   value={editForm.status}
                   onChange={(e) =>
                     handleFormChange('status', e.target.value, true)
                   }
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
+                  className="of-input text-xs"
                 >
                   <option value="available">Available</option>
                   <option value="assigned">Assigned</option>
@@ -543,9 +519,7 @@ export default function DevicesPage() {
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs text-slate-600">
-                  Assign to
-                </label>
+                <label className="of-label">Assign to</label>
                 <select
                   value={editForm.assigned_to || ''}
                   onChange={(e) =>
@@ -555,7 +529,7 @@ export default function DevicesPage() {
                       true
                     )
                   }
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
+                  className="of-input text-xs"
                 >
                   <option value="">Unassigned</option>
                   {users.map((u) => (
@@ -567,14 +541,14 @@ export default function DevicesPage() {
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs text-slate-600">Notes</label>
+                <label className="of-label">Notes</label>
                 <textarea
                   value={editForm.notes}
                   onChange={(e) =>
                     handleFormChange('notes', e.target.value, true)
                   }
                   rows={2}
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs resize-none"
+                  className="of-input text-xs resize-none"
                 />
               </div>
 
@@ -582,14 +556,14 @@ export default function DevicesPage() {
                 <button
                   type="button"
                   onClick={closeEdit}
-                  className="px-4 py-2 rounded-2xl text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200"
+                  className="of-button-secondary"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={editSaving}
-                  className="px-5 py-2 rounded-2xl text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-60"
+                  className="of-button-primary"
                 >
                   {editSaving ? 'Saving...' : 'Save changes'}
                 </button>

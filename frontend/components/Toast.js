@@ -49,6 +49,12 @@ export default function ToastContainer() {
     };
   };
 
+  const getIcon = (type) => {
+    if (type === 'error') return '!';
+    if (type === 'info') return 'i';
+    return 'OK';
+  };
+
   return (
     <div className="pointer-events-none fixed top-4 right-4 z-50 flex flex-col gap-2">
       <AnimatePresence>
@@ -63,13 +69,7 @@ export default function ToastContainer() {
               transition={{ duration: 0.2 }}
               className={`pointer-events-auto ${colors.bg} ${colors.border} ${colors.text} border rounded-xl shadow-md px-3 py-2 text-xs flex items-center gap-2`}
             >
-              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-white/70 text-[10px]">
-                {toast.type === 'error'
-                  ? '⚠'
-                  : toast.type === 'info'
-                  ? 'ℹ'
-                  : '✔'}
-              </span>
+              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-white/70 text-[10px]">{getIcon(toast.type)}</span>
               <span className="flex-1">{toast.message}</span>
             </motion.div>
           );
@@ -78,8 +78,4 @@ export default function ToastContainer() {
     </div>
   );
 }
-window.dispatchEvent(
-  new CustomEvent('offisphere-toast', {
-    detail: { type: 'success', message: 'Checked in successfully' }
-  })
-);
+
