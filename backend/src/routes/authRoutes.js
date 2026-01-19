@@ -31,6 +31,54 @@ const getMailer = () => {
   });
 };
 
+const sendResetEmail = async ({ to, resetUrl }) => {
+  const resendKey = process.env.RESEND_API_KEY;
+  const from =
+    process.env.RESEND_FROM ||
+    process.env.SMTP_FROM ||
+    'onboarding@resend.dev';
+  const subject = 'Reset your Offisphere password';
+  const text = `Reset your password using this link: ${resetUrl}`;
+  const html = `<p>Reset your password using this link:</p><p><a href="${resetUrl}">${resetUrl}</a></p>`;
+
+  if (resendKey) {
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${resendKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        from,
+        to,
+        subject,
+        text,
+        html
+      })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Resend error: ${response.status} ${errorText}`);
+    }
+
+    return;
+  }
+
+  const mailer = getMailer();
+  if (!mailer) {
+    throw new Error('Email service not configured');
+  }
+
+  await mailer.sendMail({
+    from,
+    to,
+    subject,
+    text,
+    html
+  });
+};
+
 const buildResetToken = () => {
   const token = crypto.randomBytes(32).toString('hex');
   const hash = crypto.createHash('sha256').update(token).digest('hex');
@@ -173,22 +221,9 @@ router.post('/forgot', async (req, res) => {
       return res.status(500).json({ message: 'Unable to process request' });
     }
 
-    const mailer = getMailer();
-    if (!mailer) {
-      return res.status(500).json({ message: 'Email service not configured' });
-    }
-
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
     const resetUrl = `${frontendUrl}/reset-password?token=${token}`;
-    const from = process.env.SMTP_FROM || 'no-reply@offisphere.com';
-
-    await mailer.sendMail({
-      from,
-      to: user.email,
-      subject: 'Reset your Offisphere password',
-      text: `Reset your password using this link: ${resetUrl}`,
-      html: `<p>Reset your password using this link:</p><p><a href="${resetUrl}">${resetUrl}</a></p>`
-    });
+    await sendResetEmail({ to: user.email, resetUrl });
 
     return res.json({ message: 'If the email exists, a reset link was sent.' });
   } catch (err) {
