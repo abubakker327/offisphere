@@ -66,17 +66,9 @@ export default function SalesAccountsHome() {
           <div>
             <h1 className="text-2xl font-bold text-slate-900">Sales & Accounts</h1>
             <p className="text-sm text-slate-500">
-              End-to-end cycle: masters, procurement, inventory, sales, payments, accounting.
+              Manage sales, purchases, inventory, and accounts.
             </p>
           </div>
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.25 }}
-            className="hidden md:flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 text-white text-xs font-semibold shadow-lg"
-          >
-            Live workflow map
-          </motion.div>
         </div>
       </div>
 
