@@ -33,8 +33,12 @@ app.set('trust proxy', 1);
 app.use(
   cors({
     origin: (origin, callback) => {
-      const allowed = (process.env.CORS_ORIGINS ||
-        'http://localhost:3000,http://127.0.0.1:3000,https://offisphere.vercel.app')
+      const defaultOrigins =
+        process.env.NODE_ENV === 'production'
+          ? 'https://offisphere.vercel.app'
+          : 'http://localhost:3000,http://127.0.0.1:3000,https://offisphere.vercel.app';
+
+      const allowed = (process.env.CORS_ORIGINS || defaultOrigins)
         .split(',')
         .map((item) => item.trim())
         .filter(Boolean);
