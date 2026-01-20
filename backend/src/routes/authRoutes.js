@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const rateLimit = require('express-rate-limit');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
+const https = require('https');
+const { URL } = require('url');
 const supabase = require('../supabaseClient');
 
 const router = express.Router();
@@ -31,6 +33,37 @@ const getMailer = () => {
   });
 };
 
+const postJson = (url, headers, payload) =>
+  new Promise((resolve, reject) => {
+    const data = JSON.stringify(payload);
+    const parsed = new URL(url);
+    const req = https.request(
+      {
+        method: 'POST',
+        hostname: parsed.hostname,
+        path: `${parsed.pathname}${parsed.search}`,
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(data),
+          ...headers
+        }
+      },
+      (res) => {
+        let body = '';
+        res.on('data', (chunk) => {
+          body += chunk;
+        });
+        res.on('end', () => {
+          resolve({ statusCode: res.statusCode, body });
+        });
+      }
+    );
+
+    req.on('error', reject);
+    req.write(data);
+    req.end();
+  });
+
 const sendResetEmail = async ({ to, resetUrl }) => {
   const resendKey = process.env.RESEND_API_KEY;
   const from =
@@ -42,24 +75,30 @@ const sendResetEmail = async ({ to, resetUrl }) => {
   const html = `<p>Reset your password using this link:</p><p><a href="${resetUrl}">${resetUrl}</a></p>`;
 
   if (resendKey) {
-    const response = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${resendKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        from,
-        to,
-        subject,
-        text,
-        html
-      })
-    });
+    const payload = { from, to, subject, text, html };
+    if (typeof fetch === 'function') {
+      const response = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${resendKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Resend error: ${response.status} ${errorText}`);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Resend error: ${response.status} ${errorText}`);
+      }
+    } else {
+      const { statusCode, body } = await postJson(
+        'https://api.resend.com/emails',
+        { Authorization: `Bearer ${resendKey}` },
+        payload
+      );
+      if (statusCode < 200 || statusCode >= 300) {
+        throw new Error(`Resend error: ${statusCode} ${body}`);
+      }
     }
 
     return;
