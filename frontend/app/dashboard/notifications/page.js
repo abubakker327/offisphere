@@ -1,27 +1,26 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 export default function NotificationsPage() {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const API = process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+  const API =
+    process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
   async function fetchNotifications() {
     try {
-
       const res = await fetch(`${API}/api/notifications`, {
-        credentials: 'include',
-        headers: {
-        }
+        credentials: "include",
+        headers: {},
       });
 
       const data = await res.json();
       setNotifications(Array.isArray(data) ? data : []);
     } catch (err) {
-      console.error('Fetch notifications error:', err);
+      console.error("Fetch notifications error:", err);
     } finally {
       setLoading(false);
     }
@@ -29,17 +28,15 @@ export default function NotificationsPage() {
 
   async function markRead(id) {
     try {
-
       await fetch(`${API}/api/notifications/${id}/read`, {
-        credentials: 'include',
-        method: 'PATCH',
-        headers: {
-        }
+        credentials: "include",
+        method: "PATCH",
+        headers: {},
       });
 
       fetchNotifications();
     } catch (err) {
-      console.error('Mark read error:', err);
+      console.error("Mark read error:", err);
     }
   }
 
@@ -59,7 +56,9 @@ export default function NotificationsPage() {
           <span>Activity feed</span>
         </div>
         <div>
-          <h1 className="text-3xl text-slate-900 font-semibold">Notifications</h1>
+          <h1 className="text-3xl text-slate-900 font-semibold">
+            Notifications
+          </h1>
           <p className="text-sm text-slate-500">
             All system alerts and updates.
           </p>
@@ -70,7 +69,9 @@ export default function NotificationsPage() {
         {loading ? (
           <p className="px-6 py-6 text-sm text-slate-400">Loading...</p>
         ) : notifications.length === 0 ? (
-          <p className="px-6 py-6 text-sm text-slate-900">No notifications yet.</p>
+          <p className="px-6 py-6 text-sm text-slate-900">
+            No notifications yet.
+          </p>
         ) : (
           <div className="divide-y divide-slate-100">
             {notifications.map((n) => (
@@ -81,11 +82,13 @@ export default function NotificationsPage() {
                 <div className="flex items-start gap-3">
                   <span
                     className={`mt-1 h-2 w-2 rounded-full ${
-                      n.is_read ? 'bg-slate-200' : 'bg-blue-500'
+                      n.is_read ? "bg-slate-200" : "bg-blue-500"
                     }`}
                   />
                   <div>
-                    <p className="text-sm text-slate-900 font-semibold">{n.title}</p>
+                    <p className="text-sm text-slate-900 font-semibold">
+                      {n.title}
+                    </p>
                     <p className="text-xs text-slate-600">{n.message}</p>
                   </div>
                 </div>
@@ -106,7 +109,3 @@ export default function NotificationsPage() {
     </motion.div>
   );
 }
-
-
-
-

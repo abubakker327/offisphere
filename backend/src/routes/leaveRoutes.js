@@ -1,7 +1,7 @@
 // backend/src/routes/leaveRoutes.js
-const express = require('express');
-const supabase = require('../supabaseClient');
-const { authenticate, authorize } = require('../middleware/authMiddleware');
+const express = require("express");
+const supabase = require("../supabaseClient");
+const { authenticate, authorize } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
@@ -14,12 +14,12 @@ async function attachUserNames(records) {
   const userIds = [...new Set(records.map((r) => r.user_id))];
 
   const { data: users, error } = await supabase
-    .from('users')
-    .select('id, full_name')
-    .in('id', userIds);
+    .from("users")
+    .select("id, full_name")
+    .in("id", userIds);
 
   if (error) {
-    console.error('Leaves users error:', error);
+    console.error("Leaves users error:", error);
     return records;
   }
 
@@ -30,7 +30,7 @@ async function attachUserNames(records) {
 
   return records.map((r) => ({
     ...r,
-    full_name: map[r.user_id] || ''
+    full_name: map[r.user_id] || "",
   }));
 }
 
@@ -39,102 +39,94 @@ async function attachUserNames(records) {
  * - admin/manager: all leaves
  * - employee: own leaves
  */
-router.get('/', authenticate, authorize([]), async (req, res) => {
+router.get("/", authenticate, authorize([]), async (req, res) => {
   const userId = req.user.id;
   const roles = req.user.roles || [];
-  const isAdminOrManager =
-    roles.includes('admin') || roles.includes('manager');
+  const isAdminOrManager = roles.includes("admin") || roles.includes("manager");
 
   try {
     let query = supabase
-      .from('leaves')
+      .from("leaves")
       .select(
-        'id, user_id, leave_type, start_date, end_date, total_days, reason, status, created_at'
+        "id, user_id, leave_type, start_date, end_date, total_days, reason, status, created_at",
       )
-      .order('created_at', { ascending: false });
+      .order("created_at", { ascending: false });
 
     if (!isAdminOrManager) {
-      query = query.eq('user_id', userId);
+      query = query.eq("user_id", userId);
     }
 
     const { data, error } = await query;
 
     if (error) {
-      console.error('List leaves error:', error);
-      return res.status(500).json({ message: 'Error fetching leaves' });
+      console.error("List leaves error:", error);
+      return res.status(500).json({ message: "Error fetching leaves" });
     }
 
     const enriched = await attachUserNames(data || []);
     res.json(enriched);
   } catch (err) {
-    console.error('List leaves catch error:', err);
-    res.status(500).json({ message: 'Error fetching leaves' });
+    console.error("List leaves catch error:", err);
+    res.status(500).json({ message: "Error fetching leaves" });
   }
 });
 
 /**
  * POST /api/leaves/apply
  */
-router.post(
-  '/apply',
-  authenticate,
-  authorize([]),
-  async (req, res) => {
-    const userId = req.user.id;
-    const { leave_type, start_date, end_date, reason } = req.body;
+router.post("/apply", authenticate, authorize([]), async (req, res) => {
+  const userId = req.user.id;
+  const { leave_type, start_date, end_date, reason } = req.body;
 
-    if (!leave_type || !start_date || !end_date) {
-      return res.status(400).json({
-        message: 'leave_type, start_date and end_date are required'
-      });
-    }
-
-    const start = new Date(start_date);
-    const end = new Date(end_date);
-    const msPerDay = 24 * 60 * 60 * 1000;
-    const total_days = Math.round((end - start) / msPerDay) + 1;
-
-    try {
-      const { error } = await supabase.from('leaves').insert({
-        user_id: userId,
-        leave_type,
-        start_date,
-        end_date,
-        total_days,
-        reason: reason || null,
-        status: 'pending'
-      });
-
-      if (error) {
-        console.error('Apply leave error:', error);
-        return res
-          .status(500)
-          .json({ message: 'Failed to submit leave request' });
-      }
-
-      res.status(201).json({ message: 'Leave request submitted' });
-    } catch (err) {
-      console.error('Apply leave catch error:', err);
-      res
-        .status(500)
-        .json({ message: 'Failed to submit leave request' });
-    }
+  if (!leave_type || !start_date || !end_date) {
+    return res.status(400).json({
+      message: "leave_type, start_date and end_date are required",
+    });
   }
-);
+
+  const start = new Date(start_date);
+  const end = new Date(end_date);
+  const msPerDay = 24 * 60 * 60 * 1000;
+  const total_days = Math.round((end - start) / msPerDay) + 1;
+
+  try {
+    const { error } = await supabase.from("leaves").insert({
+      user_id: userId,
+      leave_type,
+      start_date,
+      end_date,
+      total_days,
+      reason: reason || null,
+      status: "pending",
+    });
+
+    if (error) {
+      console.error("Apply leave error:", error);
+      return res
+        .status(500)
+        .json({ message: "Failed to submit leave request" });
+    }
+
+    res.status(201).json({ message: "Leave request submitted" });
+  } catch (err) {
+    console.error("Apply leave catch error:", err);
+    res.status(500).json({ message: "Failed to submit leave request" });
+  }
+});
 
 /**
  * PATCH /api/leaves/:id/status
  * Admin only
  */
 router.patch(
-  '/:id/status',
+  "/:id/status",
   authenticate,
-  authorize(['admin']),
+  authorize(["admin"]),
   async (req, res) => {
     const leaveId = req.params.id;
     const { status } = req.body;
 
-    if (!['approved', 'rejected'].includes(status)) {
+    if (!["approved", "rejected"].includes(status)) {
       return res
         .status(400)
         .json({ message: "status must be 'approved' or 'rejected'" });
@@ -142,26 +134,23 @@ router.patch(
 
     try {
       const { error } = await supabase
-        .from('leaves')
+        .from("leaves")
         .update({ status })
-        .eq('id', leaveId);
+        .eq("id", leaveId);
 
       if (error) {
-        console.error('Update leave status error:', error);
+        console.error("Update leave status error:", error);
         return res
           .status(500)
-          .json({ message: 'Failed to update leave status' });
+          .json({ message: "Failed to update leave status" });
       }
 
       res.json({ message: `Leave ${status}` });
     } catch (err) {
-      console.error('Update leave status catch error:', err);
-      res
-        .status(500)
-        .json({ message: 'Failed to update leave status' });
+      console.error("Update leave status catch error:", err);
+      res.status(500).json({ message: "Failed to update leave status" });
     }
-  }
+  },
 );
-
 
 module.exports = router;

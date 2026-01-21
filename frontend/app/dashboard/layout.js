@@ -1,138 +1,218 @@
-﻿'use client';
+﻿"use client";
 
-import { usePathname, useRouter } from 'next/navigation';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import GlobalSearch from './components/GlobalSearch';
+import { usePathname, useRouter } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import GlobalSearch from "./components/GlobalSearch";
 
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+  process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
 // Only grouped sections now (Dashboard is separate, not a dropdown)
 const navGroups = [
   {
-    id: 'hr',
-    label: 'HR Management',
-    icon: 'users',
+    id: "hr",
+    label: "HR Management",
+    icon: "users",
     items: [
-      { href: '/dashboard/hr', label: 'Overview', permission: 'hr:users' },
-      { href: '/dashboard/users', label: 'Users', permission: 'hr:users' },
-      { href: '/dashboard/attendance', label: 'Attendance', permission: 'hr:attendance' },
-      { href: '/dashboard/timesheets', label: 'Timesheets', permission: 'hr:timesheets' },
-      { href: '/dashboard/leaves', label: 'Leaves', permission: 'hr:leaves' },
-      { href: '/dashboard/tasks', label: 'Tasks', permission: 'hr:tasks' }
-    ]
+      { href: "/dashboard/hr", label: "Overview", permission: "hr:users" },
+      { href: "/dashboard/users", label: "Users", permission: "hr:users" },
+      {
+        href: "/dashboard/attendance",
+        label: "Attendance",
+        permission: "hr:attendance",
+      },
+      {
+        href: "/dashboard/timesheets",
+        label: "Timesheets",
+        permission: "hr:timesheets",
+      },
+      { href: "/dashboard/leaves", label: "Leaves", permission: "hr:leaves" },
+      { href: "/dashboard/tasks", label: "Tasks", permission: "hr:tasks" },
+    ],
   },
   {
-    id: 'ops',
-    label: 'Assets & Operations',
-    icon: 'box',
+    id: "ops",
+    label: "Assets & Operations",
+    icon: "box",
     items: [
-      { href: '/dashboard/ops', label: 'Overview', permission: 'ops:devices' },
-      { href: '/dashboard/devices', label: 'Devices', permission: 'ops:devices' },
-      { href: '/dashboard/documents', label: 'Documents', permission: 'ops:documents' },
-      { href: '/dashboard/reimbursements', label: 'Reimbursements', permission: 'ops:reimbursements' }
-    ]
+      { href: "/dashboard/ops", label: "Overview", permission: "ops:devices" },
+      {
+        href: "/dashboard/devices",
+        label: "Devices",
+        permission: "ops:devices",
+      },
+      {
+        href: "/dashboard/documents",
+        label: "Documents",
+        permission: "ops:documents",
+      },
+      {
+        href: "/dashboard/reimbursements",
+        label: "Reimbursements",
+        permission: "ops:reimbursements",
+      },
+    ],
   },
   {
-    id: 'sales',
-    label: 'Sales & CRM',
-    icon: 'chart',
+    id: "sales",
+    label: "Sales & CRM",
+    icon: "chart",
     items: [
-      { href: '/dashboard/sales', label: 'Overview', permission: 'sales:leads' },
-      { href: '/dashboard/leads', label: 'Leads', permission: 'sales:leads' },
-      { href: '/dashboard/payments', label: 'Payments', permission: 'sales:payments' },
-      { href: '/dashboard/sales-reports', label: 'Sales Reports', permission: 'sales:reports' }
-    ]
+      {
+        href: "/dashboard/sales",
+        label: "Overview",
+        permission: "sales:leads",
+      },
+      { href: "/dashboard/leads", label: "Leads", permission: "sales:leads" },
+      {
+        href: "/dashboard/payments",
+        label: "Payments",
+        permission: "sales:payments",
+      },
+      {
+        href: "/dashboard/sales-reports",
+        label: "Sales Reports",
+        permission: "sales:reports",
+      },
+    ],
   },
   {
-    id: 'sales-accounts',
-    label: 'Sales & Accounts',
-    icon: 'briefcase',
+    id: "sales-accounts",
+    label: "Sales & Accounts",
+    icon: "briefcase",
     items: [
-      { href: '/dashboard/sales-accounts', label: 'Overview', permission: 'sa:overview' },
-      { href: '/dashboard/sales-accounts/procurement', label: 'Procurement', permission: 'sa:procurement' },
-      { href: '/dashboard/sales-accounts/sales', label: 'Sales', permission: 'sa:sales' },
-      { href: '/dashboard/sales-accounts/inventory', label: 'Inventory', permission: 'sa:inventory' },
-      { href: '/dashboard/sales-accounts/payments', label: 'Payments', permission: 'sa:payments' },
-      { href: '/dashboard/sales-accounts/accounting', label: 'Accounting', permission: 'sa:accounting' },
-      { href: '/dashboard/sales-accounts/prints', label: 'Print Docs', permission: 'sa:prints' }
-    ]
+      {
+        href: "/dashboard/sales-accounts",
+        label: "Overview",
+        permission: "sa:overview",
+      },
+      {
+        href: "/dashboard/sales-accounts/procurement",
+        label: "Procurement",
+        permission: "sa:procurement",
+      },
+      {
+        href: "/dashboard/sales-accounts/sales",
+        label: "Sales",
+        permission: "sa:sales",
+      },
+      {
+        href: "/dashboard/sales-accounts/inventory",
+        label: "Inventory",
+        permission: "sa:inventory",
+      },
+      {
+        href: "/dashboard/sales-accounts/payments",
+        label: "Payments",
+        permission: "sa:payments",
+      },
+      {
+        href: "/dashboard/sales-accounts/accounting",
+        label: "Accounting",
+        permission: "sa:accounting",
+      },
+      {
+        href: "/dashboard/sales-accounts/prints",
+        label: "Print Docs",
+        permission: "sa:prints",
+      },
+    ],
   },
   {
-    id: 'finance',
-    label: 'Finance & Admin',
-    icon: 'card',
+    id: "finance",
+    label: "Finance & Admin",
+    icon: "card",
     items: [
-      { href: '/dashboard/finance', label: 'Overview', permission: 'fin:payroll' },
-      { href: '/dashboard/payroll', label: 'Payroll', permission: 'fin:payroll' },
-      { href: '/dashboard/recognition', label: 'Recognition', permission: 'fin:recognition' },
-      { href: '/dashboard/email', label: 'Email', permission: 'fin:email' },
-      { href: '/dashboard/exports', label: 'Exports', permission: 'fin:exports' },
-      { href: '/dashboard/reports', label: 'Reports', permission: 'fin:reports' }
-    ]
-  }
+      {
+        href: "/dashboard/finance",
+        label: "Overview",
+        permission: "fin:payroll",
+      },
+      {
+        href: "/dashboard/payroll",
+        label: "Payroll",
+        permission: "fin:payroll",
+      },
+      {
+        href: "/dashboard/recognition",
+        label: "Recognition",
+        permission: "fin:recognition",
+      },
+      { href: "/dashboard/email", label: "Email", permission: "fin:email" },
+      {
+        href: "/dashboard/exports",
+        label: "Exports",
+        permission: "fin:exports",
+      },
+      {
+        href: "/dashboard/reports",
+        label: "Reports",
+        permission: "fin:reports",
+      },
+    ],
+  },
 ];
 
 const rolePermissions = {
-  admin: ['*'],
+  admin: ["*"],
   manager: [
-    'hr:attendance',
-    'hr:timesheets',
-    'hr:leaves',
-    'hr:tasks',
-    'ops:documents',
-    'ops:reimbursements',
-    'fin:reports',
-    'fin:exports'
+    "hr:attendance",
+    "hr:timesheets",
+    "hr:leaves",
+    "hr:tasks",
+    "ops:documents",
+    "ops:reimbursements",
+    "fin:reports",
+    "fin:exports",
   ],
   employee: [
-    'hr:attendance',
-    'hr:timesheets',
-    'hr:leaves',
-    'hr:tasks',
-    'ops:documents',
-    'ops:reimbursements'
+    "hr:attendance",
+    "hr:timesheets",
+    "hr:leaves",
+    "hr:tasks",
+    "ops:documents",
+    "ops:reimbursements",
   ],
   sales_agent: [
-    'sales:leads',
-    'sales:payments',
-    'sales:reports',
-    'ops:documents',
-    'hr:attendance'
+    "sales:leads",
+    "sales:payments",
+    "sales:reports",
+    "ops:documents",
+    "hr:attendance",
   ],
   sales_manager: [
-    'sales:leads',
-    'sales:payments',
-    'sales:reports',
-    'sa:overview',
-    'sa:procurement',
-    'sa:sales',
-    'sa:inventory',
-    'sa:payments',
-    'sa:accounting',
-    'sa:prints'
+    "sales:leads",
+    "sales:payments",
+    "sales:reports",
+    "sa:overview",
+    "sa:procurement",
+    "sa:sales",
+    "sa:inventory",
+    "sa:payments",
+    "sa:accounting",
+    "sa:prints",
   ],
   finance: [
-    'ops:reimbursements',
-    'sa:payments',
-    'sa:accounting',
-    'fin:payroll',
-    'fin:reports',
-    'fin:exports',
-    'fin:email'
-  ]
+    "ops:reimbursements",
+    "sa:payments",
+    "sa:accounting",
+    "fin:payroll",
+    "fin:reports",
+    "fin:exports",
+    "fin:email",
+  ],
 };
 
 const getPermissionsForRoles = (roleList) => {
   if (!Array.isArray(roleList) || roleList.length === 0) {
-    return new Set(['*']);
+    return new Set(["*"]);
   }
   const permissions = new Set();
   roleList.forEach((role) => {
-    const key = String(role || '').toLowerCase();
+    const key = String(role || "").toLowerCase();
     const perms = rolePermissions[key];
     if (!perms) return;
     perms.forEach((perm) => permissions.add(perm));
@@ -145,14 +225,14 @@ const filterNavGroups = (permissions) =>
     .map((group) => ({
       ...group,
       items: group.items.filter((item) => {
-        if (permissions.has('*')) return true;
+        if (permissions.has("*")) return true;
         return permissions.has(item.permission);
-      })
+      }),
     }))
     .filter((group) => group.items.length > 0);
 
 const getRequiredPermissionForPath = (path) => {
-  if (path === '/dashboard' || path.startsWith('/dashboard/notifications')) {
+  if (path === "/dashboard" || path.startsWith("/dashboard/notifications")) {
     return null;
   }
   for (const group of navGroups) {
@@ -169,7 +249,7 @@ export default function DashboardLayout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  const [userName, setUserName] = useState('');
+  const [userName, setUserName] = useState("");
   const [roles, setRoles] = useState([]);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -181,12 +261,12 @@ export default function DashboardLayout({ children }) {
     const loadSession = async () => {
       try {
         const res = await fetch(`${API_BASE}/api/auth/me`, {
-          credentials: 'include',
-          cache: 'no-store'
+          credentials: "include",
+          cache: "no-store",
         });
 
         if (!res.ok) {
-          router.replace('/');
+          router.replace("/");
           return;
         }
 
@@ -195,15 +275,15 @@ export default function DashboardLayout({ children }) {
         const nextRoles = Array.isArray(user.roles) ? user.roles : [];
 
         if (!mounted) return;
-        setUserName(user.full_name || user.name || user.email || 'User');
+        setUserName(user.full_name || user.name || user.email || "User");
         setRoles(nextRoles);
 
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('offisphere_user', JSON.stringify(user));
-          localStorage.setItem('offisphere_roles', JSON.stringify(nextRoles));
+        if (typeof window !== "undefined") {
+          localStorage.setItem("offisphere_user", JSON.stringify(user));
+          localStorage.setItem("offisphere_roles", JSON.stringify(nextRoles));
         }
       } catch {
-        router.replace('/');
+        router.replace("/");
       }
     };
 
@@ -216,92 +296,142 @@ export default function DashboardLayout({ children }) {
   const permissions = useMemo(() => getPermissionsForRoles(roles), [roles]);
   const visibleGroups = useMemo(
     () => filterNavGroups(permissions),
-    [permissions]
+    [permissions],
   );
 
   useEffect(() => {
     const required = getRequiredPermissionForPath(pathname);
-    if (!required || permissions.has('*')) return;
+    if (!required || permissions.has("*")) return;
     if (!permissions.has(required)) {
-      router.replace('/dashboard');
+      router.replace("/dashboard");
     }
   }, [pathname, permissions, router]);
 
   const handleLogout = async () => {
     try {
       await fetch(`${API_BASE}/api/auth/logout`, {
-        method: 'POST',
-        credentials: 'include'
+        method: "POST",
+        credentials: "include",
       });
     } catch {
       // ignore logout errors
     }
 
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       Object.keys(window.localStorage)
-        .filter((k) => k.startsWith('offisphere_'))
+        .filter((k) => k.startsWith("offisphere_"))
         .forEach((k) => window.localStorage.removeItem(k));
     }
-    router.replace('/');
+    router.replace("/");
   };
 
   const goToNotifications = () => {
-    router.push('/dashboard/notifications');
+    router.push("/dashboard/notifications");
   };
 
   const isActive = (href, exact = false) =>
-    exact ? pathname === href : pathname === href || pathname.startsWith(href + '/');
+    exact
+      ? pathname === href
+      : pathname === href || pathname.startsWith(href + "/");
 
-  const primaryRoleLabel = roles[0] ? roles[0].toUpperCase() : 'SUPER ADMIN';
+  const primaryRoleLabel = roles[0] ? roles[0].toUpperCase() : "SUPER ADMIN";
   const showTopBar = true;
 
-  const renderIcon = (name, className = 'text-white') => {
+  const renderIcon = (name, className = "text-white") => {
     const common = `w-4 h-4 ${className}`;
     switch (name) {
-      case 'home':
+      case "home":
         return (
-          <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            className={common}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <path d="M3 9.5 12 3l9 6.5V21H3V9.5Z" />
             <path d="M9 21V12h6v9" />
           </svg>
         );
-      case 'users':
+      case "users":
         return (
-          <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            className={common}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
             <circle cx="9" cy="7" r="4" />
             <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
             <path d="M16 3.13a4 4 0 0 1 0 7.75" />
           </svg>
         );
-      case 'box':
+      case "box":
         return (
-          <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            className={common}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <path d="m21 16-9 5-9-5" />
             <path d="m3 8 9 5 9-5-9-5-9 5z" />
             <path d="M3 8v8" />
             <path d="M21 8v8" />
           </svg>
         );
-      case 'chart':
+      case "chart":
         return (
-          <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            className={common}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <path d="M3 3v18h18" />
             <path d="m19 9-5 5-4-4-3 3" />
             <path d="m15 9h4v4" />
           </svg>
         );
-      case 'briefcase':
+      case "briefcase":
         return (
-          <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            className={common}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <path d="M21 13V7a2 2 0 0 0-2-2h-3V3H8v2H5a2 2 0 0 0-2 2v6" />
             <path d="M3 13v6a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6" />
             <path d="M12 17v-6" />
           </svg>
         );
-      case 'card':
+      case "card":
         return (
-          <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            className={common}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <rect x="2" y="5" width="20" height="14" rx="2" ry="2" />
             <path d="M2 10h20" />
             <path d="M7 15h1" />
@@ -312,7 +442,6 @@ export default function DashboardLayout({ children }) {
         return <span className={common}>â€¢</span>;
     }
   };
-
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -329,8 +458,8 @@ export default function DashboardLayout({ children }) {
       {/* Fixed sidebar on the left */}
       <aside
         className={`fixed inset-y-0 left-0 z-40 flex flex-col overflow-hidden w-64 md:w-auto bg-gradient-to-b from-blue-700 via-blue-600 to-blue-800 text-white transition-[width,transform] duration-500 ease-in-out will-change-[width,transform] ${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } md:translate-x-0 ${sidebarCollapsed ? 'md:w-16' : 'md:w-64'}`}
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0 ${sidebarCollapsed ? "md:w-16" : "md:w-64"}`}
       >
         {/* Brand */}
         <div className="px-5 pt-6 pb-4">
@@ -339,7 +468,9 @@ export default function DashboardLayout({ children }) {
             data-interactive
             onClick={() => setSidebarCollapsed((v) => !v)}
             className="w-full flex items-center gap-3 text-left"
-            aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            aria-label={
+              sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"
+            }
           >
             <div className="h-12 w-12 rounded-2xl bg-white/15 ring-1 ring-white/25 flex items-center justify-center text-white text-sm font-semibold shadow-lg shadow-black/20">
               <Image
@@ -355,7 +486,6 @@ export default function DashboardLayout({ children }) {
                 <div className="text-base font-semibold text-white">
                   Offisphere
                 </div>
-            
               </div>
             )}
           </button>
@@ -367,13 +497,16 @@ export default function DashboardLayout({ children }) {
             href="/dashboard"
             onClick={() => setSidebarOpen(false)}
             className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-700 ${
-              isActive('/dashboard', true)
-                ? 'bg-white text-blue-700 shadow-[0_8px_20px_rgba(0,0,0,0.18)] ring-1 ring-white/30'
-                : 'text-white/90 hover:bg-white/15'
+              isActive("/dashboard", true)
+                ? "bg-white text-blue-700 shadow-[0_8px_20px_rgba(0,0,0,0.18)] ring-1 ring-white/30"
+                : "text-white/90 hover:bg-white/15"
             }`}
           >
             <span className="text-base drop-shadow-sm">
-              {renderIcon('home', isActive('/dashboard', true) ? 'text-blue-700' : 'text-white')}
+              {renderIcon(
+                "home",
+                isActive("/dashboard", true) ? "text-blue-700" : "text-white",
+              )}
             </span>
             {!sidebarCollapsed && <span>Dashboard</span>}
           </Link>
@@ -383,7 +516,8 @@ export default function DashboardLayout({ children }) {
         <nav className="flex-1 px-4 pb-3 space-y-3 text-sm">
           {visibleGroups.map((group) => {
             const overviewItem =
-              group.items.find((item) => item.label === 'Overview') || group.items[0];
+              group.items.find((item) => item.label === "Overview") ||
+              group.items[0];
             const groupActive = group.items.some((item) => isActive(item.href));
 
             return (
@@ -393,18 +527,18 @@ export default function DashboardLayout({ children }) {
                   href={overviewItem.href}
                   onClick={() => setSidebarOpen(false)}
                   className={`w-full flex items-center ${
-                    sidebarCollapsed ? 'justify-center' : 'justify-between'
+                    sidebarCollapsed ? "justify-center" : "justify-between"
                   } px-4 py-3 rounded-2xl text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-700 ${
                     groupActive
-                      ? 'bg-white text-blue-700 shadow-[0_10px_25px_rgba(0,0,0,0.18)] ring-1 ring-white/30'
-                      : 'text-white/90 hover:bg-white/12 hover:text-white'
+                      ? "bg-white text-blue-700 shadow-[0_10px_25px_rgba(0,0,0,0.18)] ring-1 ring-white/30"
+                      : "text-white/90 hover:bg-white/12 hover:text-white"
                   }`}
                 >
                   <span className="flex items-center gap-2">
                     <span className="text-base drop-shadow-sm">
                       {renderIcon(
                         group.icon,
-                        groupActive ? 'text-blue-700' : 'text-white/90'
+                        groupActive ? "text-blue-700" : "text-white/90",
                       )}
                     </span>
                     {!sidebarCollapsed && <span>{group.label}</span>}
@@ -417,15 +551,17 @@ export default function DashboardLayout({ children }) {
 
         {/* User / logout */}
         <div className="border-t border-white/10 px-4 py-4">
-          <div className={`flex items-center ${sidebarCollapsed ? 'justify-center' : 'justify-between'} gap-3`}>
+          <div
+            className={`flex items-center ${sidebarCollapsed ? "justify-center" : "justify-between"} gap-3`}
+          >
             <div className="flex items-center gap-2">
               <div className="h-10 w-10 rounded-2xl bg-white/10 flex items-center justify-center text-sm font-semibold text-white ring-1 ring-white/20">
-                {userName ? userName.charAt(0).toUpperCase() : 'U'}
+                {userName ? userName.charAt(0).toUpperCase() : "U"}
               </div>
               {!sidebarCollapsed && (
                 <div>
                   <div className="text-xs font-medium text-white line-clamp-1">
-                    {userName || 'Super Admin'}
+                    {userName || "Super Admin"}
                   </div>
                   <div className="inline-flex items-center px-2 py-0.5 rounded-full bg-white/10 text-[10px] text-white/80 border border-white/15 mt-0.5">
                     {primaryRoleLabel}
@@ -463,12 +599,12 @@ export default function DashboardLayout({ children }) {
       {/* Main content area, shifted right by sidebar width on desktop */}
       <div
         className={`md:transition-[margin-left] duration-500 ease-in-out ${
-          sidebarCollapsed ? 'md:ml-16' : 'md:ml-64'
+          sidebarCollapsed ? "md:ml-16" : "md:ml-64"
         }`}
       >
         <main
           className={`min-h-screen px-3 pb-6 pt-4 md:pr-4 md:pb-8 md:pt-6 ${
-            sidebarCollapsed ? 'md:pl-10' : 'md:pl-1'
+            sidebarCollapsed ? "md:pl-10" : "md:pl-1"
           }`}
         >
           {showTopBar && (
@@ -536,7 +672,7 @@ export default function DashboardLayout({ children }) {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 6 }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
               className="space-y-6"
             >
               {children}
@@ -544,10 +680,6 @@ export default function DashboardLayout({ children }) {
           </AnimatePresence>
         </main>
       </div>
-
     </div>
   );
 }
-
-
-

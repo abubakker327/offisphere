@@ -1,57 +1,58 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 export default function DevicesPage() {
   const [devices, setDevices] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const [creating, setCreating] = useState(false);
-  const [createError, setCreateError] = useState('');
+  const [createError, setCreateError] = useState("");
   const [form, setForm] = useState({
-    name: '',
-    device_type: '',
-    serial_number: '',
-    status: 'available',
-    assigned_to: '',
-    notes: ''
+    name: "",
+    device_type: "",
+    serial_number: "",
+    status: "available",
+    assigned_to: "",
+    notes: "",
   });
 
   const [editingDevice, setEditingDevice] = useState(null);
   const [editForm, setEditForm] = useState({
-    name: '',
-    device_type: '',
-    serial_number: '',
-    status: 'available',
-    assigned_to: '',
-    notes: ''
+    name: "",
+    device_type: "",
+    serial_number: "",
+    status: "available",
+    assigned_to: "",
+    notes: "",
   });
-  const [editError, setEditError] = useState('');
+  const [editError, setEditError] = useState("");
   const [editSaving, setEditSaving] = useState(false);
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+  const API_BASE =
+    process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         // devices
         const devRes = await fetch(`${API_BASE}/api/devices`, {
-        credentials: 'include',
+          credentials: "include",
         });
         const devData = await devRes.json();
 
         if (!devRes.ok) {
-          setError(devData.message || 'Error fetching devices');
+          setError(devData.message || "Error fetching devices");
         } else {
           setDevices(devData);
-          setError('');
+          setError("");
         }
 
         // users (for assign dropdown)
         const usersRes = await fetch(`${API_BASE}/api/users`, {
-        credentials: 'include',
+          credentials: "include",
         });
         const usersData = await usersRes.json();
 
@@ -59,8 +60,8 @@ export default function DevicesPage() {
           setUsers(usersData);
         }
       } catch (err) {
-        console.error('Devices fetch error:', err);
-        setError('Error connecting to server');
+        console.error("Devices fetch error:", err);
+        setError("Error connecting to server");
       } finally {
         setLoading(false);
       }
@@ -79,45 +80,45 @@ export default function DevicesPage() {
 
   const handleCreateDevice = async (e) => {
     e.preventDefault();
-    setCreateError('');
+    setCreateError("");
     setCreating(true);
 
     try {
       const payload = {
         ...form,
-        assigned_to: form.assigned_to || null
+        assigned_to: form.assigned_to || null,
       };
 
       const res = await fetch(`${API_BASE}/api/devices`, {
-        credentials: 'include',
-        method: 'POST',
+        credentials: "include",
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setCreateError(data.message || 'Error creating device');
+        setCreateError(data.message || "Error creating device");
         setCreating(false);
         return;
       }
 
       setDevices(data);
       setForm({
-        name: '',
-        device_type: '',
-        serial_number: '',
-        status: 'available',
-        assigned_to: '',
-        notes: ''
+        name: "",
+        device_type: "",
+        serial_number: "",
+        status: "available",
+        assigned_to: "",
+        notes: "",
       });
-      setCreateError('');
+      setCreateError("");
     } catch (err) {
-      console.error('Create device error:', err);
-      setCreateError('Error connecting to server');
+      console.error("Create device error:", err);
+      setCreateError("Error connecting to server");
     } finally {
       setCreating(false);
     }
@@ -125,20 +126,20 @@ export default function DevicesPage() {
 
   const openEdit = (device) => {
     setEditingDevice(device);
-    setEditError('');
+    setEditError("");
     setEditForm({
-      name: device.name || '',
-      device_type: device.device_type || '',
-      serial_number: device.serial_number || '',
-      status: device.status || 'available',
-      assigned_to: device.assigned_to || '',
-      notes: device.notes || ''
+      name: device.name || "",
+      device_type: device.device_type || "",
+      serial_number: device.serial_number || "",
+      status: device.status || "available",
+      assigned_to: device.assigned_to || "",
+      notes: device.notes || "",
     });
   };
 
   const closeEdit = () => {
     setEditingDevice(null);
-    setEditError('');
+    setEditError("");
     setEditSaving(false);
   };
 
@@ -147,30 +148,27 @@ export default function DevicesPage() {
     if (!editingDevice) return;
 
     setEditSaving(true);
-    setEditError('');
+    setEditError("");
 
     try {
       const payload = {
         ...editForm,
-        assigned_to: editForm.assigned_to || null
+        assigned_to: editForm.assigned_to || null,
       };
 
-      const res = await fetch(
-        `${API_BASE}/api/devices/${editingDevice.id}`,
-        {
-        credentials: 'include',
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload)
-        }
-      );
+      const res = await fetch(`${API_BASE}/api/devices/${editingDevice.id}`, {
+        credentials: "include",
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setEditError(data.message || 'Error updating device');
+        setEditError(data.message || "Error updating device");
         setEditSaving(false);
         return;
       }
@@ -178,23 +176,23 @@ export default function DevicesPage() {
       setDevices(data);
       closeEdit();
     } catch (err) {
-      console.error('Update device error:', err);
-      setEditError('Error connecting to server');
+      console.error("Update device error:", err);
+      setEditError("Error connecting to server");
       setEditSaving(false);
     }
   };
 
   const statusBadge = (status) => {
     const base =
-      'inline-flex items-center px-2 py-0.5 rounded-full text-[11px] border';
+      "inline-flex items-center px-2 py-0.5 rounded-full text-[11px] border";
     switch (status) {
-      case 'available':
+      case "available":
         return `${base} bg-emerald-50 text-emerald-700 border-emerald-200`;
-      case 'assigned':
+      case "assigned":
         return `${base} bg-sky-50 text-sky-700 border-sky-200`;
-      case 'repair':
+      case "repair":
         return `${base} bg-amber-50 text-amber-700 border-amber-200`;
-      case 'retired':
+      case "retired":
         return `${base} bg-slate-100 text-slate-600 border-slate-200`;
       default:
         return `${base} bg-slate-50 text-slate-600 border-slate-200`;
@@ -202,7 +200,7 @@ export default function DevicesPage() {
   };
 
   const formatDateTime = (value) => {
-    if (!value) return '--';
+    if (!value) return "--";
     return new Date(value).toLocaleString();
   };
 
@@ -260,9 +258,7 @@ export default function DevicesPage() {
             <input
               type="text"
               value={form.name}
-              onChange={(e) =>
-                handleFormChange('name', e.target.value)
-              }
+              onChange={(e) => handleFormChange("name", e.target.value)}
               className="of-input"
               placeholder="Dell XPS 13, iPhone 14..."
               required
@@ -274,9 +270,7 @@ export default function DevicesPage() {
             <input
               type="text"
               value={form.device_type}
-              onChange={(e) =>
-                handleFormChange('device_type', e.target.value)
-              }
+              onChange={(e) => handleFormChange("device_type", e.target.value)}
               className="of-input"
               placeholder="Laptop, Phone, Monitor"
             />
@@ -288,7 +282,7 @@ export default function DevicesPage() {
               type="text"
               value={form.serial_number}
               onChange={(e) =>
-                handleFormChange('serial_number', e.target.value)
+                handleFormChange("serial_number", e.target.value)
               }
               className="of-input"
             />
@@ -298,9 +292,7 @@ export default function DevicesPage() {
             <label className="of-label">Assign to</label>
             <select
               value={form.assigned_to}
-              onChange={(e) =>
-                handleFormChange('assigned_to', e.target.value)
-              }
+              onChange={(e) => handleFormChange("assigned_to", e.target.value)}
               className="of-input text-xs"
             >
               <option value="">Unassigned</option>
@@ -316,9 +308,7 @@ export default function DevicesPage() {
             <label className="of-label">Notes</label>
             <textarea
               value={form.notes}
-              onChange={(e) =>
-                handleFormChange('notes', e.target.value)
-              }
+              onChange={(e) => handleFormChange("notes", e.target.value)}
               rows={2}
               className="of-input text-xs resize-none"
               placeholder="Add purchase date, condition, accessories, etc."
@@ -331,7 +321,7 @@ export default function DevicesPage() {
               disabled={creating}
               className="of-button-primary"
             >
-              {creating ? 'Saving...' : 'Add device'}
+              {creating ? "Saving..." : "Add device"}
             </button>
           </div>
         </form>
@@ -359,8 +349,12 @@ export default function DevicesPage() {
                 <th className="text-left px-6 py-3 font-semibold">Name</th>
                 <th className="text-left px-6 py-3 font-semibold">Type</th>
                 <th className="text-left px-6 py-3 font-semibold">Serial</th>
-                <th className="text-left px-6 py-3 font-semibold">Assigned to</th>
-                <th className="text-left px-6 py-3 font-semibold">Assigned at</th>
+                <th className="text-left px-6 py-3 font-semibold">
+                  Assigned to
+                </th>
+                <th className="text-left px-6 py-3 font-semibold">
+                  Assigned at
+                </th>
                 <th className="text-left px-6 py-3 font-semibold">Status</th>
                 <th className="text-right px-6 py-3 font-semibold">Actions</th>
               </tr>
@@ -368,28 +362,19 @@ export default function DevicesPage() {
             <tbody className="divide-y divide-slate-100">
               {loading ? (
                 <tr>
-                  <td
-                    colSpan={7}
-                    className="px-6 py-8 of-loading"
-                  >
+                  <td colSpan={7} className="px-6 py-8 of-loading">
                     Loading devices...
                   </td>
                 </tr>
               ) : devices.length === 0 ? (
                 <tr>
-                  <td
-                    colSpan={7}
-                    className="px-6 py-8 of-empty"
-                  >
+                  <td colSpan={7} className="px-6 py-8 of-empty">
                     No devices found.
                   </td>
                 </tr>
               ) : (
                 devices.map((d) => (
-                  <tr
-                    key={d.id}
-                    className="hover:bg-slate-50"
-                  >
+                  <tr key={d.id} className="hover:bg-slate-50">
                     <td className="px-6 py-4 text-slate-900">
                       {d.name}
                       {d.notes && (
@@ -399,21 +384,19 @@ export default function DevicesPage() {
                       )}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-600">
-                      {d.device_type || '--'}
+                      {d.device_type || "--"}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-600">
-                      {d.serial_number || '--'}
+                      {d.serial_number || "--"}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-600">
-                      {d.assigned_to_name || 'Unassigned'}
+                      {d.assigned_to_name || "Unassigned"}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-500">
                       {formatDateTime(d.assigned_at)}
                     </td>
                     <td className="px-6 py-4 text-xs">
-                      <span className={statusBadge(d.status)}>
-                        {d.status}
-                      </span>
+                      <span className={statusBadge(d.status)}>{d.status}</span>
                     </td>
                     <td className="px-6 py-4 text-right text-xs">
                       <button
@@ -453,17 +436,14 @@ export default function DevicesPage() {
               <div className="mb-3 of-banner-error">{editError}</div>
             )}
 
-            <form
-              onSubmit={handleSaveEdit}
-              className="space-y-3 text-sm"
-            >
+            <form onSubmit={handleSaveEdit} className="space-y-3 text-sm">
               <div className="space-y-1">
                 <label className="of-label">Name</label>
                 <input
                   type="text"
                   value={editForm.name}
                   onChange={(e) =>
-                    handleFormChange('name', e.target.value, true)
+                    handleFormChange("name", e.target.value, true)
                   }
                   className="of-input"
                   required
@@ -476,11 +456,7 @@ export default function DevicesPage() {
                   type="text"
                   value={editForm.device_type}
                   onChange={(e) =>
-                    handleFormChange(
-                      'device_type',
-                      e.target.value,
-                      true
-                    )
+                    handleFormChange("device_type", e.target.value, true)
                   }
                   className="of-input"
                 />
@@ -492,11 +468,7 @@ export default function DevicesPage() {
                   type="text"
                   value={editForm.serial_number}
                   onChange={(e) =>
-                    handleFormChange(
-                      'serial_number',
-                      e.target.value,
-                      true
-                    )
+                    handleFormChange("serial_number", e.target.value, true)
                   }
                   className="of-input"
                 />
@@ -507,7 +479,7 @@ export default function DevicesPage() {
                 <select
                   value={editForm.status}
                   onChange={(e) =>
-                    handleFormChange('status', e.target.value, true)
+                    handleFormChange("status", e.target.value, true)
                   }
                   className="of-input text-xs"
                 >
@@ -521,13 +493,9 @@ export default function DevicesPage() {
               <div className="space-y-1">
                 <label className="of-label">Assign to</label>
                 <select
-                  value={editForm.assigned_to || ''}
+                  value={editForm.assigned_to || ""}
                   onChange={(e) =>
-                    handleFormChange(
-                      'assigned_to',
-                      e.target.value,
-                      true
-                    )
+                    handleFormChange("assigned_to", e.target.value, true)
                   }
                   className="of-input text-xs"
                 >
@@ -545,7 +513,7 @@ export default function DevicesPage() {
                 <textarea
                   value={editForm.notes}
                   onChange={(e) =>
-                    handleFormChange('notes', e.target.value, true)
+                    handleFormChange("notes", e.target.value, true)
                   }
                   rows={2}
                   className="of-input text-xs resize-none"
@@ -565,7 +533,7 @@ export default function DevicesPage() {
                   disabled={editSaving}
                   className="of-button-primary"
                 >
-                  {editSaving ? 'Saving...' : 'Save changes'}
+                  {editSaving ? "Saving..." : "Save changes"}
                 </button>
               </div>
             </form>
@@ -575,10 +543,3 @@ export default function DevicesPage() {
     </div>
   );
 }
-
-
-
-
-
-
-

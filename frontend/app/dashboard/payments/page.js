@@ -1,21 +1,21 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 const STATUS_OPTIONS = [
-  { value: 'received', label: 'Received' },
-  { value: 'pending', label: 'Pending' },
-  { value: 'failed', label: 'Failed' },
-  { value: 'refunded', label: 'Refunded' }
+  { value: "received", label: "Received" },
+  { value: "pending", label: "Pending" },
+  { value: "failed", label: "Failed" },
+  { value: "refunded", label: "Refunded" },
 ];
 
 const FILTERS = [
-  { value: 'all', label: 'All' },
-  { value: 'received', label: 'Received' },
-  { value: 'pending', label: 'Pending' },
-  { value: 'failed', label: 'Failed' },
-  { value: 'refunded', label: 'Refunded' }
+  { value: "all", label: "All" },
+  { value: "received", label: "Received" },
+  { value: "pending", label: "Pending" },
+  { value: "failed", label: "Failed" },
+  { value: "refunded", label: "Refunded" },
 ];
 
 export default function PaymentsPage() {
@@ -23,39 +23,39 @@ export default function PaymentsPage() {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
-  const [filterStatus, setFilterStatus] = useState('all');
+  const [error, setError] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all");
   const [isAdminManager, setIsAdminManager] = useState(false);
 
   const [form, setForm] = useState({
-    lead_id: '',
-    amount: '',
-    currency: 'INR',
-    status: 'received',
-    method: '',
-    reference: '',
-    notes: '',
-    paid_at: ''
+    lead_id: "",
+    amount: "",
+    currency: "INR",
+    status: "received",
+    method: "",
+    reference: "",
+    notes: "",
+    paid_at: "",
   });
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+  const API_BASE =
+    process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
   const triggerToast = (type, message) => {
     window.dispatchEvent(
-      new CustomEvent('offisphere-toast', {
-        detail: { type, message }
-      })
+      new CustomEvent("offisphere-toast", {
+        detail: { type, message },
+      }),
     );
   };
 
   const loadRoles = () => {
     try {
-      const rolesStr = window.localStorage.getItem('offisphere_roles');
+      const rolesStr = window.localStorage.getItem("offisphere_roles");
       if (!rolesStr) return;
       const roles = JSON.parse(rolesStr);
       if (!Array.isArray(roles)) return;
-      const flag =
-        roles.includes('admin') || roles.includes('manager');
+      const flag = roles.includes("admin") || roles.includes("manager");
       setIsAdminManager(flag);
     } catch {
       setIsAdminManager(false);
@@ -64,9 +64,8 @@ export default function PaymentsPage() {
 
   const fetchLeads = async () => {
     try {
-
       const res = await fetch(`${API_BASE}/api/leads?status=all`, {
-        credentials: 'include',
+        credentials: "include",
       });
 
       const data = await res.json();
@@ -74,28 +73,28 @@ export default function PaymentsPage() {
         setLeads(data);
       }
     } catch (err) {
-      console.error('Fetch leads for payments error:', err);
+      console.error("Fetch leads for payments error:", err);
     }
   };
 
-  const fetchPayments = async (status = 'all') => {
+  const fetchPayments = async (status = "all") => {
     try {
-      const qs = status ? `?status=${status}` : '';
+      const qs = status ? `?status=${status}` : "";
       const res = await fetch(`${API_BASE}/api/payments${qs}`, {
-        credentials: 'include',
+        credentials: "include",
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || 'Error fetching payments');
+        setError(data.message || "Error fetching payments");
       } else {
         setPayments(Array.isArray(data) ? data : []);
-        setError('');
+        setError("");
       }
     } catch (err) {
-      console.error('Fetch payments error:', err);
-      setError('Error connecting to server');
+      console.error("Fetch payments error:", err);
+      setError("Error connecting to server");
     } finally {
       setLoading(false);
     }
@@ -115,49 +114,47 @@ export default function PaymentsPage() {
   const handleCreate = async (e) => {
     e.preventDefault();
     setSaving(true);
-    setError('');
+    setError("");
 
     try {
       const body = {
         ...form,
-        amount:
-          form.amount !== '' ? parseFloat(form.amount) : null,
-        lead_id:
-          form.lead_id !== '' ? form.lead_id : null
+        amount: form.amount !== "" ? parseFloat(form.amount) : null,
+        lead_id: form.lead_id !== "" ? form.lead_id : null,
       };
 
       const res = await fetch(`${API_BASE}/api/payments`, {
-        credentials: 'include',
-        method: 'POST',
+        credentials: "include",
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || 'Error recording payment');
-        triggerToast('error', data.message || 'Error recording payment');
+        setError(data.message || "Error recording payment");
+        triggerToast("error", data.message || "Error recording payment");
       } else {
         setPayments(Array.isArray(data) ? data : []);
-        triggerToast('success', 'Payment recorded.');
+        triggerToast("success", "Payment recorded.");
         setForm({
-          lead_id: '',
-          amount: '',
-          currency: 'INR',
-          status: 'received',
-          method: '',
-          reference: '',
-          notes: '',
-          paid_at: ''
+          lead_id: "",
+          amount: "",
+          currency: "INR",
+          status: "received",
+          method: "",
+          reference: "",
+          notes: "",
+          paid_at: "",
         });
       }
     } catch (err) {
-      console.error('Create payment error:', err);
-      setError('Error connecting to server');
-      triggerToast('error', 'Error connecting to server');
+      console.error("Create payment error:", err);
+      setError("Error connecting to server");
+      triggerToast("error", "Error connecting to server");
     } finally {
       setSaving(false);
     }
@@ -170,7 +167,7 @@ export default function PaymentsPage() {
   };
 
   const leadNameById = (id) => {
-    const key = id != null ? String(id) : '';
+    const key = id != null ? String(id) : "";
     const match = leads.find((l) => String(l.id) === key);
     return match?.name || null;
   };
@@ -178,30 +175,30 @@ export default function PaymentsPage() {
   const handleStatusChange = async (id, newStatus) => {
     try {
       const res = await fetch(`${API_BASE}/api/payments/${id}`, {
-        credentials: 'include',
-        method: 'PUT',
+        credentials: "include",
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ status: newStatus })
+        body: JSON.stringify({ status: newStatus }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        triggerToast('error', data.message || 'Error updating payment');
+        triggerToast("error", data.message || "Error updating payment");
       } else {
         setPayments(Array.isArray(data) ? data : []);
-        triggerToast('success', 'Payment updated');
+        triggerToast("success", "Payment updated");
       }
     } catch (err) {
-      console.error('Update payment status error:', err);
-      triggerToast('error', 'Error connecting to server');
+      console.error("Update payment status error:", err);
+      triggerToast("error", "Error connecting to server");
     }
   };
 
   const formatDate = (value) =>
-    value ? new Date(value).toLocaleDateString() : '--';
+    value ? new Date(value).toLocaleDateString() : "--";
 
   return (
     <motion.div
@@ -217,7 +214,9 @@ export default function PaymentsPage() {
           </div>
           <div>
             <h1 className="page-title">Payments</h1>
-            <p className="page-subtitle">Track incoming payments against leads.</p>
+            <p className="page-subtitle">
+              Track incoming payments against leads.
+            </p>
           </div>
         </div>
       </div>
@@ -249,9 +248,7 @@ export default function PaymentsPage() {
           </div>
         </div>
 
-        {error && (
-          <div className="mb-3 of-banner-error">{error}</div>
-        )}
+        {error && <div className="mb-3 of-banner-error">{error}</div>}
 
         <form
           onSubmit={handleCreate}
@@ -261,14 +258,14 @@ export default function PaymentsPage() {
             <label className="of-label">Lead</label>
             <select
               value={form.lead_id}
-              onChange={(e) => handleChange('lead_id', e.target.value)}
+              onChange={(e) => handleChange("lead_id", e.target.value)}
               className="of-input text-xs"
             >
               <option value="">No lead</option>
               {leads.map((lead) => (
                 <option key={lead.id} value={lead.id}>
                   {lead.name}
-                  {lead.company ? ` - ${lead.company}` : ''}
+                  {lead.company ? ` - ${lead.company}` : ""}
                 </option>
               ))}
             </select>
@@ -280,7 +277,7 @@ export default function PaymentsPage() {
               type="number"
               step="0.01"
               value={form.amount}
-              onChange={(e) => handleChange('amount', e.target.value)}
+              onChange={(e) => handleChange("amount", e.target.value)}
               className="of-input"
               placeholder="25000"
               required
@@ -292,7 +289,7 @@ export default function PaymentsPage() {
             <input
               type="text"
               value={form.currency}
-              onChange={(e) => handleChange('currency', e.target.value)}
+              onChange={(e) => handleChange("currency", e.target.value)}
               className="of-input text-xs"
             />
           </div>
@@ -301,7 +298,7 @@ export default function PaymentsPage() {
             <label className="of-label">Status</label>
             <select
               value={form.status}
-              onChange={(e) => handleChange('status', e.target.value)}
+              onChange={(e) => handleChange("status", e.target.value)}
               className="of-input text-xs"
             >
               {STATUS_OPTIONS.map((s) => (
@@ -317,7 +314,7 @@ export default function PaymentsPage() {
             <input
               type="text"
               value={form.method}
-              onChange={(e) => handleChange('method', e.target.value)}
+              onChange={(e) => handleChange("method", e.target.value)}
               className="of-input"
               placeholder="UPI / Bank / Card"
             />
@@ -328,7 +325,7 @@ export default function PaymentsPage() {
             <input
               type="date"
               value={form.paid_at}
-              onChange={(e) => handleChange('paid_at', e.target.value)}
+              onChange={(e) => handleChange("paid_at", e.target.value)}
               className="of-input text-xs"
             />
           </div>
@@ -338,7 +335,7 @@ export default function PaymentsPage() {
             <input
               type="text"
               value={form.reference}
-              onChange={(e) => handleChange('reference', e.target.value)}
+              onChange={(e) => handleChange("reference", e.target.value)}
               className="of-input"
               placeholder="TXN ID / invoice no"
             />
@@ -349,7 +346,7 @@ export default function PaymentsPage() {
             <input
               type="text"
               value={form.notes}
-              onChange={(e) => handleChange('notes', e.target.value)}
+              onChange={(e) => handleChange("notes", e.target.value)}
               className="of-input"
               placeholder="Optional notes"
             />
@@ -363,7 +360,7 @@ export default function PaymentsPage() {
               disabled={saving}
               className="of-button-primary"
             >
-              {saving ? 'Saving...' : 'Record payment'}
+              {saving ? "Saving..." : "Record payment"}
             </motion.button>
           </div>
         </form>
@@ -379,8 +376,8 @@ export default function PaymentsPage() {
               onClick={() => handleStatusFilter(f.value)}
               className={`of-chip transition ${
                 active
-                  ? 'bg-blue-600 text-white border-transparent shadow'
-                  : 'hover:border-blue-200'
+                  ? "bg-blue-600 text-white border-transparent shadow"
+                  : "hover:border-blue-200"
               }`}
             >
               {f.label}
@@ -430,7 +427,9 @@ export default function PaymentsPage() {
                 <th className="text-left px-6 py-3 font-semibold">Method</th>
                 <th className="text-left px-6 py-3 font-semibold">Status</th>
                 <th className="text-left px-6 py-3 font-semibold">Reference</th>
-                <th className="text-left px-6 py-3 font-semibold">Recorded by</th>
+                <th className="text-left px-6 py-3 font-semibold">
+                  Recorded by
+                </th>
                 <th className="text-left px-6 py-3 font-semibold">Paid date</th>
                 <th className="text-left px-6 py-3 font-semibold">Created</th>
               </tr>
@@ -438,36 +437,27 @@ export default function PaymentsPage() {
             <tbody className="divide-y divide-slate-100">
               {loading ? (
                 <tr>
-                  <td
-                    colSpan={8}
-                    className="px-6 py-8 of-loading"
-                  >
+                  <td colSpan={8} className="px-6 py-8 of-loading">
                     Loading payments...
                   </td>
                 </tr>
               ) : payments.length === 0 ? (
                 <tr>
-                  <td
-                    colSpan={8}
-                    className="px-6 py-8 of-empty"
-                  >
+                  <td colSpan={8} className="px-6 py-8 of-empty">
                     No payments found.
                   </td>
                 </tr>
               ) : (
                 payments.map((p) => (
-                  <tr
-                    key={p.id}
-                    className="hover:bg-slate-50"
-                  >
+                  <tr key={p.id} className="hover:bg-slate-50">
                     <td className="px-6 py-4 text-slate-900">
-                      {p.lead_name || leadNameById(p.lead_id) || '--'}
+                      {p.lead_name || leadNameById(p.lead_id) || "--"}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-600">
                       {p.amount} {p.currency}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-600">
-                      {p.method || '--'}
+                      {p.method || "--"}
                     </td>
                     <td className="px-6 py-4 text-xs">
                       {isAdminManager ? (
@@ -487,13 +477,13 @@ export default function PaymentsPage() {
                       ) : (
                         <span
                           className={`px-3 py-1 rounded-full border text-xs font-medium ${
-                            p.status === 'received'
-                              ? 'bg-emerald-50 text-emerald-700 border-emerald-100'
-                              : p.status === 'pending'
-                              ? 'bg-amber-50 text-amber-700 border-amber-100'
-                              : p.status === 'failed'
-                              ? 'bg-rose-50 text-rose-700 border-rose-100'
-                              : 'bg-slate-50 text-slate-700 border-slate-200'
+                            p.status === "received"
+                              ? "bg-emerald-50 text-emerald-700 border-emerald-100"
+                              : p.status === "pending"
+                                ? "bg-amber-50 text-amber-700 border-amber-100"
+                                : p.status === "failed"
+                                  ? "bg-rose-50 text-rose-700 border-rose-100"
+                                  : "bg-slate-50 text-slate-700 border-slate-200"
                           }`}
                         >
                           {p.status}
@@ -501,10 +491,10 @@ export default function PaymentsPage() {
                       )}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-600">
-                      {p.reference || '--'}
+                      {p.reference || "--"}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-600">
-                      {p.recorded_by_name || '--'}
+                      {p.recorded_by_name || "--"}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-600">
                       {formatDate(p.paid_at)}
@@ -522,12 +512,3 @@ export default function PaymentsPage() {
     </motion.div>
   );
 }
-
-
-
-
-
-
-
-
-

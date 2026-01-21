@@ -1,56 +1,56 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const [creating, setCreating] = useState(false);
-  const [createError, setCreateError] = useState('');
+  const [createError, setCreateError] = useState("");
   const [form, setForm] = useState({
-    full_name: '',
-    email: '',
-    password: '',
-    roles: ['employee']
+    full_name: "",
+    email: "",
+    password: "",
+    roles: ["employee"],
   });
 
   // EDIT state
   const [editingUser, setEditingUser] = useState(null);
   const [editForm, setEditForm] = useState({
-    full_name: '',
-    email: '',
+    full_name: "",
+    email: "",
     is_active: true,
-    roles: ['employee']
+    roles: ["employee"],
   });
   const [editSaving, setEditSaving] = useState(false);
-  const [editError, setEditError] = useState('');
+  const [editError, setEditError] = useState("");
   const API_BASE =
-    process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+    process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
   // Fetch users
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const res = await fetch(`${API_BASE}/api/users`, {
-        credentials: 'include',
-          cache: 'no-store',
+          credentials: "include",
+          cache: "no-store",
         });
 
         const data = await res.json();
 
         if (!res.ok) {
-          setError(data.message || 'Error fetching users');
+          setError(data.message || "Error fetching users");
           setLoading(false);
           return;
         }
 
         setUsers(data);
-        setError('');
+        setError("");
       } catch (err) {
-        console.error('Users fetch error:', err);
-        setError('Error fetching users');
+        console.error("Users fetch error:", err);
+        setError("Error fetching users");
       } finally {
         setLoading(false);
       }
@@ -61,7 +61,7 @@ export default function UsersPage() {
 
   // --------- helpers ---------
   const formatDate = (value) => {
-    if (!value) return '-';
+    if (!value) return "-";
     return new Date(value).toLocaleDateString();
   };
 
@@ -72,26 +72,23 @@ export default function UsersPage() {
 
     return (
       <div className="flex flex-wrap gap-1">
-        {roles.includes('admin') && (
+        {roles.includes("admin") && (
           <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-medium border border-blue-100">
             Admin
           </span>
         )}
-        {roles.includes('manager') && (
+        {roles.includes("manager") && (
           <span className="px-3 py-1 rounded-full bg-sky-50 text-sky-700 text-xs font-medium border border-sky-100">
             Manager
           </span>
         )}
-        {roles.includes('employee') && (
+        {roles.includes("employee") && (
           <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-medium border border-emerald-100">
             Employee
           </span>
         )}
         {roles
-          .filter(
-            (r) =>
-              !['admin', 'manager', 'employee'].includes(r)
-          )
+          .filter((r) => !["admin", "manager", "employee"].includes(r))
           .map((r) => (
             <span
               key={r}
@@ -110,11 +107,11 @@ export default function UsersPage() {
       <div className="flex items-center gap-2 text-xs">
         <span
           className={`w-2 h-2 rounded-full ${
-            active ? 'bg-emerald-500' : 'bg-slate-300'
+            active ? "bg-emerald-500" : "bg-slate-300"
           }`}
         />
-        <span className={active ? 'text-emerald-600' : 'text-slate-500'}>
-          {active ? 'Active' : 'Inactive'}
+        <span className={active ? "text-emerald-600" : "text-slate-500"}>
+          {active ? "Active" : "Inactive"}
         </span>
       </div>
     );
@@ -130,7 +127,7 @@ export default function UsersPage() {
       const exists = prev.roles.includes(role);
       if (exists) {
         const next = prev.roles.filter((r) => r !== role);
-        return { ...prev, roles: next.length ? next : ['employee'] };
+        return { ...prev, roles: next.length ? next : ["employee"] };
       }
       return { ...prev, roles: [...prev.roles, role] };
     });
@@ -138,39 +135,39 @@ export default function UsersPage() {
 
   const handleCreateUser = async (e) => {
     e.preventDefault();
-    setCreateError('');
+    setCreateError("");
     setCreating(true);
 
     try {
       const res = await fetch(`${API_BASE}/api/users`, {
-        credentials: 'include',
-        method: 'POST',
-        cache: 'no-store',
+        credentials: "include",
+        method: "POST",
+        cache: "no-store",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(form)
+        body: JSON.stringify(form),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setCreateError(data.message || 'Error creating user');
+        setCreateError(data.message || "Error creating user");
         setCreating(false);
         return;
       }
 
       setUsers(data);
       setForm({
-        full_name: '',
-        email: '',
-        password: '',
-        roles: ['employee']
+        full_name: "",
+        email: "",
+        password: "",
+        roles: ["employee"],
       });
-      setCreateError('');
+      setCreateError("");
     } catch (err) {
-      console.error('Create user error:', err);
-      setCreateError('Error creating user');
+      console.error("Create user error:", err);
+      setCreateError("Error creating user");
     } finally {
       setCreating(false);
     }
@@ -179,21 +176,21 @@ export default function UsersPage() {
   // --------- edit user ---------
   const openEdit = (user) => {
     setEditingUser(user);
-    setEditError('');
+    setEditError("");
     setEditForm({
-      full_name: user.full_name || '',
-      email: user.email || '',
+      full_name: user.full_name || "",
+      email: user.email || "",
       is_active: user.is_active !== false,
       roles:
         Array.isArray(user.roles) && user.roles.length
           ? user.roles
-          : ['employee']
+          : ["employee"],
     });
   };
 
   const closeEdit = () => {
     setEditingUser(null);
-    setEditError('');
+    setEditError("");
     setEditSaving(false);
   };
 
@@ -206,7 +203,7 @@ export default function UsersPage() {
       const exists = prev.roles.includes(role);
       if (exists) {
         const next = prev.roles.filter((r) => r !== role);
-        return { ...prev, roles: next.length ? next : ['employee'] };
+        return { ...prev, roles: next.length ? next : ["employee"] };
       }
       return { ...prev, roles: [...prev.roles, role] };
     });
@@ -217,26 +214,23 @@ export default function UsersPage() {
     if (!editingUser) return;
 
     setEditSaving(true);
-    setEditError('');
+    setEditError("");
 
     try {
-      const res = await fetch(
-        `${API_BASE}/api/users/${editingUser.id}`,
-        {
-        credentials: 'include',
-          method: 'PUT',
-          cache: 'no-store',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(editForm)
-        }
-      );
+      const res = await fetch(`${API_BASE}/api/users/${editingUser.id}`, {
+        credentials: "include",
+        method: "PUT",
+        cache: "no-store",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editForm),
+      });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setEditError(data.message || 'Error updating user');
+        setEditError(data.message || "Error updating user");
         setEditSaving(false);
         return;
       }
@@ -244,8 +238,8 @@ export default function UsersPage() {
       setUsers(data);
       closeEdit();
     } catch (err) {
-      console.error('Update user error:', err);
-      setEditError('Error updating user');
+      console.error("Update user error:", err);
+      setEditError("Error updating user");
       setEditSaving(false);
     }
   };
@@ -286,7 +280,9 @@ export default function UsersPage() {
           </div>
           <div>
             <h2 className="section-title">Create new user</h2>
-            <p className="section-subtitle">Add admins, managers, or employees.</p>
+            <p className="section-subtitle">
+              Add admins, managers, or employees.
+            </p>
           </div>
         </div>
 
@@ -303,9 +299,7 @@ export default function UsersPage() {
             <input
               type="text"
               value={form.full_name}
-              onChange={(e) =>
-                handleChange('full_name', e.target.value)
-              }
+              onChange={(e) => handleChange("full_name", e.target.value)}
               className="of-input"
               placeholder="Enter full name"
               required
@@ -317,7 +311,7 @@ export default function UsersPage() {
             <input
               type="email"
               value={form.email}
-              onChange={(e) => handleChange('email', e.target.value)}
+              onChange={(e) => handleChange("email", e.target.value)}
               className="of-input"
               placeholder="Enter email"
               required
@@ -329,9 +323,7 @@ export default function UsersPage() {
             <input
               type="password"
               value={form.password}
-              onChange={(e) =>
-                handleChange('password', e.target.value)
-              }
+              onChange={(e) => handleChange("password", e.target.value)}
               className="of-input"
               placeholder="Enter password"
               required
@@ -346,7 +338,7 @@ export default function UsersPage() {
               </span>
             </label>
             <div className="flex flex-wrap gap-2">
-              {['admin', 'manager', 'employee'].map((role) => {
+              {["admin", "manager", "employee"].map((role) => {
                 const selected = form.roles.includes(role);
                 return (
                   <button
@@ -355,8 +347,8 @@ export default function UsersPage() {
                     onClick={() => toggleRoleCreate(role)}
                     className={`px-3 py-1 rounded-full text-xs border transition ${
                       selected
-                        ? 'bg-blue-600 text-white border-transparent shadow'
-                        : 'bg-white text-slate-600 border-slate-200 hover:border-blue-200'
+                        ? "bg-blue-600 text-white border-transparent shadow"
+                        : "bg-white text-slate-600 border-slate-200 hover:border-blue-200"
                     }`}
                   >
                     {role.charAt(0).toUpperCase() + role.slice(1)}
@@ -372,7 +364,7 @@ export default function UsersPage() {
               disabled={creating}
               className="of-button-primary"
             >
-              {creating ? 'Creating...' : 'Create user'}
+              {creating ? "Creating..." : "Create user"}
             </button>
           </div>
         </form>
@@ -427,46 +419,33 @@ export default function UsersPage() {
             <tbody className="divide-y divide-slate-100">
               {loading ? (
                 <tr>
-                  <td
-                    colSpan={6}
-                    className="px-6 py-8 of-loading"
-                  >
+                  <td colSpan={6} className="px-6 py-8 of-loading">
                     Loading users...
                   </td>
                 </tr>
               ) : users.length === 0 ? (
                 <tr>
-                  <td
-                    colSpan={6}
-                    className="px-6 py-8 of-empty"
-                  >
+                  <td colSpan={6} className="px-6 py-8 of-empty">
                     No users found.
                   </td>
                 </tr>
               ) : (
                 users.map((user) => (
-                  <tr
-                    key={user.id}
-                    className="hover:bg-slate-50"
-                  >
+                  <tr key={user.id} className="hover:bg-slate-50">
                     <td className="px-6 py-4 text-slate-900">
                       <div className="flex items-center gap-3">
                         <div className="h-10 w-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-sm font-semibold">
                           {user.full_name
                             ? user.full_name.charAt(0).toUpperCase()
-                            : 'U'}
+                            : "U"}
                         </div>
                         <div className="text-sm font-semibold">
                           {user.full_name}
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-slate-600">
-                      {user.email}
-                    </td>
-                    <td className="px-6 py-4">
-                      {renderRoles(user.roles)}
-                    </td>
+                    <td className="px-6 py-4 text-slate-600">{user.email}</td>
+                    <td className="px-6 py-4">{renderRoles(user.roles)}</td>
                     <td className="px-6 py-4">
                       {renderStatus(user.is_active)}
                     </td>
@@ -511,17 +490,14 @@ export default function UsersPage() {
               <div className="mb-3 of-banner-error">{editError}</div>
             )}
 
-            <form
-              onSubmit={handleSaveEdit}
-              className="space-y-3 text-sm"
-            >
+            <form onSubmit={handleSaveEdit} className="space-y-3 text-sm">
               <div className="space-y-1">
                 <label className="of-label">Full name</label>
                 <input
                   type="text"
                   value={editForm.full_name}
                   onChange={(e) =>
-                    handleEditChange('full_name', e.target.value)
+                    handleEditChange("full_name", e.target.value)
                   }
                   className="of-input"
                   required
@@ -533,9 +509,7 @@ export default function UsersPage() {
                 <input
                   type="email"
                   value={editForm.email}
-                  onChange={(e) =>
-                    handleEditChange('email', e.target.value)
-                  }
+                  onChange={(e) => handleEditChange("email", e.target.value)}
                   className="of-input"
                   required
                 />
@@ -546,26 +520,22 @@ export default function UsersPage() {
                 <div className="flex items-center gap-3 text-xs">
                   <button
                     type="button"
-                    onClick={() =>
-                      handleEditChange('is_active', true)
-                    }
+                    onClick={() => handleEditChange("is_active", true)}
                     className={`px-3 py-1 rounded-full border ${
                       editForm.is_active !== false
-                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                        : 'bg-white text-slate-500 border-slate-200'
+                        ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                        : "bg-white text-slate-500 border-slate-200"
                     }`}
                   >
                     Active
                   </button>
                   <button
                     type="button"
-                    onClick={() =>
-                      handleEditChange('is_active', false)
-                    }
+                    onClick={() => handleEditChange("is_active", false)}
                     className={`px-3 py-1 rounded-full border ${
                       editForm.is_active === false
-                        ? 'bg-rose-50 text-rose-700 border-rose-200'
-                        : 'bg-white text-slate-500 border-slate-200'
+                        ? "bg-rose-50 text-rose-700 border-rose-200"
+                        : "bg-white text-slate-500 border-slate-200"
                     }`}
                   >
                     Inactive
@@ -576,7 +546,7 @@ export default function UsersPage() {
               <div className="space-y-1">
                 <label className="of-label">Roles</label>
                 <div className="flex flex-wrap gap-2">
-                  {['admin', 'manager', 'employee'].map((role) => {
+                  {["admin", "manager", "employee"].map((role) => {
                     const selected = editForm.roles.includes(role);
                     return (
                       <button
@@ -585,8 +555,8 @@ export default function UsersPage() {
                         onClick={() => toggleRoleEdit(role)}
                         className={`px-3 py-1 rounded-full text-xs border transition ${
                           selected
-                            ? 'bg-blue-600 text-white border-blue-600'
-                            : 'bg-white text-slate-600 border-slate-200 hover:border-blue-200'
+                            ? "bg-blue-600 text-white border-blue-600"
+                            : "bg-white text-slate-600 border-slate-200 hover:border-blue-200"
                         }`}
                       >
                         {role.charAt(0).toUpperCase() + role.slice(1)}
@@ -609,7 +579,7 @@ export default function UsersPage() {
                   disabled={editSaving}
                   className="of-button-primary"
                 >
-                  {editSaving ? 'Saving...' : 'Save changes'}
+                  {editSaving ? "Saving..." : "Save changes"}
                 </button>
               </div>
             </form>
@@ -619,12 +589,3 @@ export default function UsersPage() {
     </div>
   );
 }
-
-
-
-
-
-
-
-
-

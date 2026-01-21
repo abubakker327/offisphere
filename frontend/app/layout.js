@@ -1,18 +1,18 @@
-﻿import './globals.css';
+﻿import "./globals.css";
 
 export const metadata = {
-  title: 'Offisphere',
-  description: 'Office management platform - Offisphere',
+  title: "Offisphere",
+  description: "Office management platform - Offisphere",
   icons: {
-    icon: '/offisphere-logo.png',
-    shortcut: '/offisphere-logo.png',
-    apple: '/offisphere-logo.png'
-  }
+    icon: "/offisphere-logo.png",
+    shortcut: "/offisphere-logo.png",
+    apple: "/offisphere-logo.png",
+  },
 };
 
 export const viewport = {
-  width: 'device-width',
-  initialScale: 1
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({ children }) {

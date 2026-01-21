@@ -1,39 +1,39 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+  process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
 export default function PayrollPage() {
   const [runs, setRuns] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [creating, setCreating] = useState(false);
   const [form, setForm] = useState({
-    period_start: '',
-    period_end: ''
+    period_start: "",
+    period_end: "",
   });
 
   const fetchRuns = async () => {
     try {
       setLoading(true);
       const res = await fetch(`${API_BASE}/api/payroll/runs`, {
-        credentials: 'include',
+        credentials: "include",
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || 'Error fetching payroll runs');
+        setError(data.message || "Error fetching payroll runs");
       } else {
         setRuns(data || []);
-        setError('');
+        setError("");
       }
     } catch (err) {
-      console.error('Fetch payroll runs error:', err);
-      setError('Error connecting to server');
+      console.error("Fetch payroll runs error:", err);
+      setError("Error connecting to server");
     } finally {
       setLoading(false);
     }
@@ -45,50 +45,46 @@ export default function PayrollPage() {
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (!form.period_start || !form.period_end) {
-      setError('Please select both start and end date');
+      setError("Please select both start and end date");
       return;
     }
 
     try {
       setCreating(true);
       const res = await fetch(`${API_BASE}/api/payroll/runs`, {
-        credentials: 'include',
-        method: 'POST',
+        credentials: "include",
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(form)
+        body: JSON.stringify(form),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || 'Error creating payroll run');
+        setError(data.message || "Error creating payroll run");
       } else {
-        setForm({ period_start: '', period_end: '' });
+        setForm({ period_start: "", period_end: "" });
         await fetchRuns();
       }
     } catch (err) {
-      console.error('Create payroll run error:', err);
-      setError('Error connecting to server');
+      console.error("Create payroll run error:", err);
+      setError("Error connecting to server");
     } finally {
       setCreating(false);
     }
   };
 
-  const formatDate = (d) =>
-    d ? new Date(d).toLocaleDateString() : '';
+  const formatDate = (d) => (d ? new Date(d).toLocaleDateString() : "");
 
   const statusStyles = {
-    draft:
-      'bg-slate-100 text-slate-700 border border-slate-200',
-    processing:
-      'bg-amber-50 text-amber-700 border border-amber-100',
-    completed:
-      'bg-emerald-50 text-emerald-700 border border-emerald-100'
+    draft: "bg-slate-100 text-slate-700 border border-slate-200",
+    processing: "bg-amber-50 text-amber-700 border border-amber-100",
+    completed: "bg-emerald-50 text-emerald-700 border border-emerald-100",
   };
 
   return (
@@ -105,9 +101,7 @@ export default function PayrollPage() {
             <span>Payroll cycle</span>
           </div>
           <div>
-            <h1 className="text-3xl font-semibold text-slate-900">
-              Payroll
-            </h1>
+            <h1 className="text-3xl font-semibold text-slate-900">Payroll</h1>
             <p className="text-sm text-slate-500">
               Create and track payroll runs for each pay period.
             </p>
@@ -170,7 +164,7 @@ export default function PayrollPage() {
               disabled={creating}
               className="px-5 py-2.5 rounded-2xl bg-blue-600 text-white text-sm font-medium shadow-lg shadow-blue-300/50 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {creating ? 'Creating' : 'Create run'}
+              {creating ? "Creating" : "Create run"}
             </motion.button>
           </div>
         </form>
@@ -193,7 +187,9 @@ export default function PayrollPage() {
               <tr>
                 <th className="text-left px-6 py-3 font-semibold">Period</th>
                 <th className="text-left px-6 py-3 font-semibold">Status</th>
-                <th className="text-left px-6 py-3 font-semibold">Total gross</th>
+                <th className="text-left px-6 py-3 font-semibold">
+                  Total gross
+                </th>
                 <th className="text-left px-6 py-3 font-semibold">Total net</th>
                 <th className="text-left px-6 py-3 font-semibold">Created</th>
               </tr>
@@ -219,29 +215,26 @@ export default function PayrollPage() {
                 </tr>
               ) : (
                 runs.map((run) => (
-                  <tr
-                    key={run.id}
-                    className="hover:bg-slate-50"
-                  >
+                  <tr key={run.id} className="hover:bg-slate-50">
                     <td className="px-6 py-4 text-slate-900 text-xs">
-                      {formatDate(run.period_start)} &ndash;{' '}
+                      {formatDate(run.period_start)} &ndash;{" "}
                       {formatDate(run.period_end)}
                     </td>
                     <td className="px-6 py-4 text-xs">
                       <span
                         className={`px-2 py-1 rounded-full text-[11px] ${
                           statusStyles[run.status] ||
-                          'bg-slate-100 text-slate-700 border border-slate-200'
+                          "bg-slate-100 text-slate-700 border border-slate-200"
                         }`}
                       >
                         {run.status}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-700">
-                      {Number(run.total_gross || 0).toLocaleString('en-IN')}
+                      {Number(run.total_gross || 0).toLocaleString("en-IN")}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-700">
-                      {Number(run.total_net || 0).toLocaleString('en-IN')}
+                      {Number(run.total_net || 0).toLocaleString("en-IN")}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-500">
                       {formatDate(run.created_at)}
@@ -256,9 +249,3 @@ export default function PayrollPage() {
     </motion.div>
   );
 }
-
-
-
-
-
-

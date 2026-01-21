@@ -1,37 +1,37 @@
-﻿'use client';
+﻿"use client";
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function DashboardHome() {
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const API_BASE =
-    process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+    process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         const res = await fetch(`${API_BASE}/api/dashboard/summary`, {
-          credentials: 'include'
+          credentials: "include",
         });
 
         const data = await res.json();
 
         if (!res.ok) {
-          setError(data.message || 'Server error fetching dashboard summary');
+          setError(data.message || "Server error fetching dashboard summary");
           setLoading(false);
           return;
         }
 
         setSummary(data);
-        setError('');
+        setError("");
       } catch (err) {
-        console.error('Dashboard summary error:', err);
-        setError('Error connecting to server');
+        console.error("Dashboard summary error:", err);
+        setError("Error connecting to server");
       } finally {
         setLoading(false);
       }
@@ -41,30 +41,37 @@ export default function DashboardHome() {
   }, []);
 
   const formatDate = (date) =>
-    date ? new Date(date).toLocaleDateString() : '-';
+    date ? new Date(date).toLocaleDateString() : "-";
   const formatTime = (value) =>
     value
       ? new Date(value).toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit'
+          hour: "2-digit",
+          minute: "2-digit",
         })
-      : '--';
+      : "--";
 
   const s = summary || {};
-  const toNumber = (value) => (Number.isFinite(Number(value)) ? Number(value) : 0);
+  const toNumber = (value) =>
+    Number.isFinite(Number(value)) ? Number(value) : 0;
 
   const leaveSummary = s.leave_summary || {
     cl_days: 0,
     sl_days: 0,
     el_days: 0,
-    lop_days: 0
+    lop_days: 0,
   };
 
-  const renderKpiIcon = (name, color = '#0f172a') => {
-    const base = 'w-4 h-4';
-    const props = { fill: 'none', stroke: color, strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' };
+  const renderKpiIcon = (name, color = "#0f172a") => {
+    const base = "w-4 h-4";
+    const props = {
+      fill: "none",
+      stroke: color,
+      strokeWidth: "2",
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+    };
     switch (name) {
-      case 'leaf':
+      case "leaf":
         return (
           <svg className={base} viewBox="0 0 24 24" {...props}>
             <path d="M20 4c-9 0-14 6-14 12 0 4 3 7 7 7 6 0 12-5 12-14 0 0-2 0-5-5Z" />
@@ -72,14 +79,14 @@ export default function DashboardHome() {
             <path d="M9 10c1.5 0 3 0.5 4 2" />
           </svg>
         );
-      case 'clock':
+      case "clock":
         return (
           <svg className={base} viewBox="0 0 24 24" {...props}>
             <circle cx="12" cy="12" r="10" />
             <path d="M12 6v6l3 3" />
           </svg>
         );
-      case 'users':
+      case "users":
         return (
           <svg className={base} viewBox="0 0 24 24" {...props}>
             <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
@@ -88,13 +95,13 @@ export default function DashboardHome() {
             <path d="M16 3.13a4 4 0 0 1 0 7.75" />
           </svg>
         );
-      case 'pulse':
+      case "pulse":
         return (
           <svg className={base} viewBox="0 0 24 24" {...props}>
             <path d="M2 12h4l2 7 4-14 2 7h6" />
           </svg>
         );
-      case 'calendar':
+      case "calendar":
         return (
           <svg className={base} viewBox="0 0 24 24" {...props}>
             <rect x="3" y="4" width="18" height="18" rx="2" />
@@ -103,7 +110,7 @@ export default function DashboardHome() {
             <path d="M3 10h18" />
           </svg>
         );
-      case 'list':
+      case "list":
         return (
           <svg className={base} viewBox="0 0 24 24" {...props}>
             <path d="M9 6h12" />
@@ -114,7 +121,7 @@ export default function DashboardHome() {
             <path d="M5 18h.01" />
           </svg>
         );
-      case 'monitor':
+      case "monitor":
         return (
           <svg className={base} viewBox="0 0 24 24" {...props}>
             <rect x="2" y="3" width="20" height="14" rx="2" />
@@ -122,7 +129,7 @@ export default function DashboardHome() {
             <path d="M8 21h8" />
           </svg>
         );
-      case 'device':
+      case "device":
         return (
           <svg className={base} viewBox="0 0 24 24" {...props}>
             <rect x="3" y="4" width="14" height="12" rx="2" />
@@ -131,14 +138,14 @@ export default function DashboardHome() {
             <path d="M7 20h6" />
           </svg>
         );
-      case 'file':
+      case "file":
         return (
           <svg className={base} viewBox="0 0 24 24" {...props}>
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
             <path d="M14 2v6h6" />
           </svg>
         );
-      case 'quote':
+      case "quote":
         return (
           <svg className={base} viewBox="0 0 24 24" {...props}>
             <path d="M7 7h10" />
@@ -147,7 +154,7 @@ export default function DashboardHome() {
             <path d="M17 17h0" />
           </svg>
         );
-      case 'truck':
+      case "truck":
         return (
           <svg className={base} viewBox="0 0 24 24" {...props}>
             <path d="M10 17h4" />
@@ -159,7 +166,7 @@ export default function DashboardHome() {
             <circle cx="17.5" cy="17.5" r="1.5" />
           </svg>
         );
-      case 'cash':
+      case "cash":
         return (
           <svg className={base} viewBox="0 0 24 24" {...props}>
             <rect x="2" y="5" width="20" height="14" rx="2" />
@@ -167,20 +174,20 @@ export default function DashboardHome() {
             <path d="M7 10h.01M17 14h.01" />
           </svg>
         );
-      case 'user':
+      case "user":
         return (
           <svg className={base} viewBox="0 0 24 24" {...props}>
             <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
             <circle cx="9" cy="7" r="4" />
           </svg>
         );
-      case 'check':
+      case "check":
         return (
           <svg className={base} viewBox="0 0 24 24" {...props}>
             <path d="M20 6 9 17l-5-5" />
           </svg>
         );
-      case 'tasks':
+      case "tasks":
         return (
           <svg className={base} viewBox="0 0 24 24" {...props}>
             <path d="M9 6h11" />
@@ -191,14 +198,14 @@ export default function DashboardHome() {
             <path d="m3 18 1.5 1.5L6 18" />
           </svg>
         );
-      case 'monitor':
+      case "monitor":
         return (
           <svg className={base} viewBox="0 0 24 24" {...props}>
             <rect x="3" y="4" width="18" height="14" rx="2" />
             <path d="M8 20h8" />
           </svg>
         );
-      case 'money':
+      case "money":
         return (
           <svg className={base} viewBox="0 0 24 24" {...props}>
             <path d="M12 2v20" />
@@ -211,36 +218,36 @@ export default function DashboardHome() {
   };
 
   const renderQAIcon = (name) => {
-    const common = 'w-5 h-5 text-white';
+    const common = "w-5 h-5 text-white";
     const props = {
-      fill: 'none',
-      stroke: 'currentColor',
-      strokeWidth: '2',
-      strokeLinecap: 'round',
-      strokeLinejoin: 'round'
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "2",
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
     };
     switch (name) {
-      case 'user':
+      case "user":
         return (
           <svg className={common} viewBox="0 0 24 24" {...props}>
             <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
             <circle cx="9" cy="7" r="4" />
           </svg>
         );
-      case 'clock':
+      case "clock":
         return (
           <svg className={common} viewBox="0 0 24 24" {...props}>
             <circle cx="12" cy="12" r="10" />
             <path d="M12 6v6l3 3" />
           </svg>
         );
-      case 'check':
+      case "check":
         return (
           <svg className={common} viewBox="0 0 24 24" {...props}>
             <path d="M20 6 9 17l-5-5" />
           </svg>
         );
-      case 'tasks':
+      case "tasks":
         return (
           <svg className={common} viewBox="0 0 24 24" {...props}>
             <path d="M9 6h11" />
@@ -251,14 +258,14 @@ export default function DashboardHome() {
             <path d="m3 18 1.5 1.5L6 18" />
           </svg>
         );
-      case 'device':
+      case "device":
         return (
           <svg className={common} viewBox="0 0 24 24" {...props}>
             <rect x="3" y="4" width="18" height="14" rx="2" />
             <path d="M8 20h8" />
           </svg>
         );
-      case 'money':
+      case "money":
         return (
           <svg className={common} viewBox="0 0 24 24" {...props}>
             <path d="M12 2v20" />
@@ -275,10 +282,9 @@ export default function DashboardHome() {
     visible: (i) => ({
       opacity: 1,
       y: 0,
-      transition: { delay: 0.05 * i, duration: 0.25 }
-    })
+      transition: { delay: 0.05 * i, duration: 0.25 },
+    }),
   };
-
 
   const GlowCard = ({ title, accent, index = 0, children }) => (
     <motion.div
@@ -294,9 +300,7 @@ export default function DashboardHome() {
         <p className="text-[11px] font-bold tracking-wider text-slate-400 uppercase mb-1 drop-shadow-sm">
           {title}
         </p>
-        <div className="relative">
-          {children}
-        </div>
+        <div className="relative">{children}</div>
       </div>
 
       <div
@@ -304,7 +308,7 @@ export default function DashboardHome() {
         style={{ color: accent.iconColor }}
       >
         <div className="opacity-90">
-          {renderKpiIcon(accent.icon || 'pulse', accent.iconColor || '#0f172a')}
+          {renderKpiIcon(accent.icon || "pulse", accent.iconColor || "#0f172a")}
         </div>
       </div>
     </motion.div>
@@ -341,249 +345,272 @@ export default function DashboardHome() {
       <div className="space-y-4">
         {/* Top row: Leaves + Attendance + Users + Leave Summary */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {loading ? (
-          <>
-            {skeletonCard}
-            {skeletonCard}
-            {skeletonCard}
-            {skeletonCard}
-          </>
-        ) : (
-          <>
-            {/* Leaves */}
-            <GlowCard
-              index={0}
-              title="Leaves"
-              accent={{
-                icon: 'leaf',
-                iconColor: '#6366f1'
-              }}
-            >
-              <div>
-                <div className="text-3xl font-bold text-slate-900 tracking-tight">
-                  {s.leaves?.pending ?? 0}
+          {loading ? (
+            <>
+              {skeletonCard}
+              {skeletonCard}
+              {skeletonCard}
+              {skeletonCard}
+            </>
+          ) : (
+            <>
+              {/* Leaves */}
+              <GlowCard
+                index={0}
+                title="Leaves"
+                accent={{
+                  icon: "leaf",
+                  iconColor: "#6366f1",
+                }}
+              >
+                <div>
+                  <div className="text-3xl font-bold text-slate-900 tracking-tight">
+                    {s.leaves?.pending ?? 0}
+                  </div>
+                  <div className="flex items-center gap-3 mt-1 text-[10px] font-medium uppercase tracking-wider">
+                    <span className="text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-md border border-emerald-100/50">
+                      Appr: {s.leaves?.approved ?? 0}
+                    </span>
+                    <span className="text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded-md border border-rose-100/50">
+                      Rej: {s.leaves?.rejected ?? 0}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-3 mt-1 text-[10px] font-medium uppercase tracking-wider">
-                  <span className="text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-md border border-emerald-100/50">
-                    Appr: {s.leaves?.approved ?? 0}
-                  </span>
-                  <span className="text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded-md border border-rose-100/50">
-                    Rej: {s.leaves?.rejected ?? 0}
-                  </span>
-                </div>
-              </div>
-            </GlowCard>
+              </GlowCard>
 
-            {/* Attendance */}
-            <GlowCard
-              index={1}
-              title="Attendance"
-              accent={{
-                icon: 'clock',
-                iconColor: '#0ea5e9'
-              }}
-            >
-              <div>
-                <div className="text-3xl font-bold text-slate-900 tracking-tight">
-                  {s.attendance?.checkins_today ?? 0}
+              {/* Attendance */}
+              <GlowCard
+                index={1}
+                title="Attendance"
+                accent={{
+                  icon: "clock",
+                  iconColor: "#0ea5e9",
+                }}
+              >
+                <div>
+                  <div className="text-3xl font-bold text-slate-900 tracking-tight">
+                    {s.attendance?.checkins_today ?? 0}
+                  </div>
+                  <p className="text-xs text-slate-400 font-medium mt-0.5">
+                    Check-ins today
+                  </p>
                 </div>
-                <p className="text-xs text-slate-400 font-medium mt-0.5">Check-ins today</p>
-              </div>
-            </GlowCard>
+              </GlowCard>
 
-            {/* Users */}
-            <GlowCard
-              index={2}
-              title="Users"
-              accent={{
-                icon: 'users',
-                iconColor: '#10b981'
-              }}
-            >
-              <div>
-                <div className="text-3xl font-bold text-slate-900 tracking-tight">
-                  {s.users?.total ?? 0}
+              {/* Users */}
+              <GlowCard
+                index={2}
+                title="Users"
+                accent={{
+                  icon: "users",
+                  iconColor: "#10b981",
+                }}
+              >
+                <div>
+                  <div className="text-3xl font-bold text-slate-900 tracking-tight">
+                    {s.users?.total ?? 0}
+                  </div>
+                  <div className="flex items-center gap-3 mt-1 text-[10px] font-medium uppercase tracking-wider text-slate-500">
+                    <span>
+                      Active:{" "}
+                      <span className="text-emerald-600">
+                        {s.users?.active ?? 0}
+                      </span>
+                    </span>
+                    <span>
+                      Admins:{" "}
+                      <span className="text-indigo-600">
+                        {s.users?.admins ?? 0}
+                      </span>
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-3 mt-1 text-[10px] font-medium uppercase tracking-wider text-slate-500">
-                  <span>Active: <span className="text-emerald-600">{s.users?.active ?? 0}</span></span>
-                  <span>Admins: <span className="text-indigo-600">{s.users?.admins ?? 0}</span></span>
-                </div>
-              </div>
-            </GlowCard>
+              </GlowCard>
 
-            {/* Pulse */}
-            <GlowCard
-              index={3}
-              title="Workforce Pulse"
-              accent={{
-                icon: 'pulse',
-                iconColor: '#06b6d4'
-              }}
-            >
-              <div className="space-y-1.5 mt-1">
-                <div className="flex items-center justify-between text-[11px] font-medium">
-                  <span className="text-slate-500">Hours Today</span>
-                  <span className="text-slate-900 font-bold">{s.timesheets?.hours_today ?? 0}h</span>
+              {/* Pulse */}
+              <GlowCard
+                index={3}
+                title="Workforce Pulse"
+                accent={{
+                  icon: "pulse",
+                  iconColor: "#06b6d4",
+                }}
+              >
+                <div className="space-y-1.5 mt-1">
+                  <div className="flex items-center justify-between text-[11px] font-medium">
+                    <span className="text-slate-500">Hours Today</span>
+                    <span className="text-slate-900 font-bold">
+                      {s.timesheets?.hours_today ?? 0}h
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-[11px] font-medium">
+                    <span className="text-slate-500">Open Tasks</span>
+                    <span className="text-amber-600 font-bold">
+                      {s.tasks?.open ?? 0}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between text-[11px] font-medium">
-                  <span className="text-slate-500">Open Tasks</span>
-                  <span className="text-amber-600 font-bold">{s.tasks?.open ?? 0}</span>
-                </div>
-              </div>
-            </GlowCard>
-          </>
-        )}
+              </GlowCard>
+            </>
+          )}
         </div>
 
         {/* KPI row */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {loading ? (
-          <>
-            {skeletonCard}
-            {skeletonCard}
-            {skeletonCard}
-            {skeletonCard}
-          </>
-        ) : (
-          <>
-            <GlowCard
-              index={4}
-              title="Timesheets"
-              accent={{
-                icon: 'calendar',
-                iconColor: '#64748b'
-              }}
-            >
-              <div>
-                <div className="text-3xl font-bold text-slate-900 tracking-tight">
-                  {s.timesheets?.pending ?? 0}
+          {loading ? (
+            <>
+              {skeletonCard}
+              {skeletonCard}
+              {skeletonCard}
+              {skeletonCard}
+            </>
+          ) : (
+            <>
+              <GlowCard
+                index={4}
+                title="Timesheets"
+                accent={{
+                  icon: "calendar",
+                  iconColor: "#64748b",
+                }}
+              >
+                <div>
+                  <div className="text-3xl font-bold text-slate-900 tracking-tight">
+                    {s.timesheets?.pending ?? 0}
+                  </div>
+                  <p className="text-xs text-slate-400 font-medium mt-0.5">
+                    Pending approvals
+                  </p>
                 </div>
-                <p className="text-xs text-slate-400 font-medium mt-0.5">
-                  Pending approvals
-                </p>
-              </div>
-            </GlowCard>
+              </GlowCard>
 
-            <GlowCard
-              index={5}
-              title="Tasks"
-              accent={{
-                icon: 'list',
-                iconColor: '#f59e0b'
-              }}
-            >
-              <div>
-                <div className="text-3xl font-bold text-slate-900 tracking-tight">
-                  {s.tasks?.open ?? 0}
+              <GlowCard
+                index={5}
+                title="Tasks"
+                accent={{
+                  icon: "list",
+                  iconColor: "#f59e0b",
+                }}
+              >
+                <div>
+                  <div className="text-3xl font-bold text-slate-900 tracking-tight">
+                    {s.tasks?.open ?? 0}
+                  </div>
+                  <div className="flex items-center gap-2 mt-1 px-2 py-0.5 bg-rose-50 border border-rose-100/60 rounded-full w-fit">
+                    <span className="text-[9px] font-bold text-rose-600 uppercase tracking-tighter">
+                      Overdue {s.tasks?.overdue ?? 0}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 mt-1 px-2 py-0.5 bg-rose-50 border border-rose-100/60 rounded-full w-fit">
-                  <span className="text-[9px] font-bold text-rose-600 uppercase tracking-tighter">
-                    Overdue {s.tasks?.overdue ?? 0}
-                  </span>
-                </div>
-              </div>
-            </GlowCard>
+              </GlowCard>
 
-            <GlowCard
-              index={6}
-              title="Devices"
-              accent={{
-                icon: 'device',
-                iconColor: '#ec4899'
-              }}
-            >
-              <div>
-                <div className="text-3xl font-bold text-slate-900 tracking-tight">
-                  {s.devices?.assigned ?? 0}
+              <GlowCard
+                index={6}
+                title="Devices"
+                accent={{
+                  icon: "device",
+                  iconColor: "#ec4899",
+                }}
+              >
+                <div>
+                  <div className="text-3xl font-bold text-slate-900 tracking-tight">
+                    {s.devices?.assigned ?? 0}
+                  </div>
+                  <p className="text-xs text-slate-400 font-medium mt-0.5">
+                    Active assignments
+                  </p>
                 </div>
-                <p className="text-xs text-slate-400 font-medium mt-0.5">
-                  Active assignments
-                </p>
-              </div>
-            </GlowCard>
+              </GlowCard>
 
-            <GlowCard
-              index={7}
-              title="Documents"
-              accent={{
-                icon: 'file',
-                iconColor: '#4f46e5'
-              }}
-            >
-              <div>
-                <div className="text-3xl font-bold text-slate-900 tracking-tight">
-                  {s.documents?.total ?? 0}
+              <GlowCard
+                index={7}
+                title="Documents"
+                accent={{
+                  icon: "file",
+                  iconColor: "#4f46e5",
+                }}
+              >
+                <div>
+                  <div className="text-3xl font-bold text-slate-900 tracking-tight">
+                    {s.documents?.total ?? 0}
+                  </div>
+                  <p className="text-xs text-slate-400 font-medium mt-0.5">
+                    Files stored
+                  </p>
                 </div>
-                <p className="text-xs text-slate-400 font-medium mt-0.5">
-                  Files stored
-                </p>
-              </div>
-            </GlowCard>
-          </>
-        )}
+              </GlowCard>
+            </>
+          )}
         </div>
 
         {/* Sales & Accounts snapshots */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {loading ? (
-          <>
-            {skeletonCard}
-            {skeletonCard}
-            {skeletonCard}
-          </>
-        ) : (
-          <>
-            <GlowCard
-              index={8}
-              title="Sales Quotes"
-              accent={{
-                icon: 'quote',
-                iconColor: '#c026d3'
-              }}
-            >
-              <div>
-                <div className="text-3xl font-bold text-slate-900 tracking-tight">
-                  {s.sales?.quotes ?? 0}
+          {loading ? (
+            <>
+              {skeletonCard}
+              {skeletonCard}
+              {skeletonCard}
+            </>
+          ) : (
+            <>
+              <GlowCard
+                index={8}
+                title="Sales Quotes"
+                accent={{
+                  icon: "quote",
+                  iconColor: "#c026d3",
+                }}
+              >
+                <div>
+                  <div className="text-3xl font-bold text-slate-900 tracking-tight">
+                    {s.sales?.quotes ?? 0}
+                  </div>
+                  <p className="text-xs text-slate-400 font-medium mt-0.5">
+                    Quotes sent
+                  </p>
                 </div>
-                <p className="text-xs text-slate-400 font-medium mt-0.5">Quotes sent</p>
-              </div>
-            </GlowCard>
+              </GlowCard>
 
-            <GlowCard
-              index={9}
-              title="Orders & Delivery"
-              accent={{
-                icon: 'truck',
-                iconColor: '#0ea5e9'
-              }}
-            >
-              <div>
-                <div className="text-3xl font-bold text-slate-900 tracking-tight">
-                  {s.sales?.orders ?? 0}
+              <GlowCard
+                index={9}
+                title="Orders & Delivery"
+                accent={{
+                  icon: "truck",
+                  iconColor: "#0ea5e9",
+                }}
+              >
+                <div>
+                  <div className="text-3xl font-bold text-slate-900 tracking-tight">
+                    {s.sales?.orders ?? 0}
+                  </div>
+                  <p className="text-xs text-slate-400 font-medium mt-0.5">
+                    Orders shipped
+                  </p>
                 </div>
-                <p className="text-xs text-slate-400 font-medium mt-0.5">Orders shipped</p>
-              </div>
-            </GlowCard>
+              </GlowCard>
 
-            <GlowCard
-              index={10}
-              title="Invoices & Cash"
-              accent={{
-                icon: 'cash',
-                iconColor: '#059669'
-              }}
-            >
-              <div>
-                <div className="text-3xl font-bold text-slate-900 tracking-tight">
-                  {s.sales?.invoices ?? 0}
+              <GlowCard
+                index={10}
+                title="Invoices & Cash"
+                accent={{
+                  icon: "cash",
+                  iconColor: "#059669",
+                }}
+              >
+                <div>
+                  <div className="text-3xl font-bold text-slate-900 tracking-tight">
+                    {s.sales?.invoices ?? 0}
+                  </div>
+                  <div className="text-xs text-slate-500 mt-1">
+                    Collections:{" "}
+                    <span className="text-emerald-600 font-semibold">
+                      {s.sales?.collections ?? 0}
+                    </span>
+                  </div>
                 </div>
-                <div className="text-xs text-slate-500 mt-1">
-                  Collections: <span className="text-emerald-600 font-semibold">{s.sales?.collections ?? 0}</span>
-                </div>
-              </div>
-            </GlowCard>
-          </>
-        )}
+              </GlowCard>
+            </>
+          )}
         </div>
 
         {/* Quick actions */}
@@ -594,8 +621,8 @@ export default function DashboardHome() {
           variants={{
             hidden: {},
             visible: {
-              transition: { staggerChildren: 0.05 }
-            }
+              transition: { staggerChildren: 0.05 },
+            },
           }}
         >
           <div className="flex items-center justify-between mb-3">
@@ -610,47 +637,47 @@ export default function DashboardHome() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
               {
-                href: '/dashboard/users',
-                title: 'Invite user',
-                desc: 'Add people to the workspace',
-                color: '#6366f1',
-                icon: 'user'
+                href: "/dashboard/users",
+                title: "Invite user",
+                desc: "Add people to the workspace",
+                color: "#6366f1",
+                icon: "user",
               },
               {
-                href: '/dashboard/attendance',
-                title: 'Record attendance',
-                desc: 'Check-in / Check-out',
-                color: '#06b6d4',
-                icon: 'clock'
+                href: "/dashboard/attendance",
+                title: "Record attendance",
+                desc: "Check-in / Check-out",
+                color: "#06b6d4",
+                icon: "clock",
               },
               {
-                href: '/dashboard/leaves',
-                title: 'Review leaves',
-                desc: 'Approve / reject requests',
-                color: '#10b981',
-                icon: 'check'
+                href: "/dashboard/leaves",
+                title: "Review leaves",
+                desc: "Approve / reject requests",
+                color: "#10b981",
+                icon: "check",
               },
               {
-                href: '/dashboard/tasks',
-                title: 'Create task',
-                desc: 'Assign work to team',
-                color: '#f97316',
-                icon: 'tasks'
+                href: "/dashboard/tasks",
+                title: "Create task",
+                desc: "Assign work to team",
+                color: "#f97316",
+                icon: "tasks",
               },
               {
-                href: '/dashboard/devices',
-                title: 'Assign device',
-                desc: 'Laptop / phone / assets',
-                color: '#f43f5e',
-                icon: 'device'
+                href: "/dashboard/devices",
+                title: "Assign device",
+                desc: "Laptop / phone / assets",
+                color: "#f43f5e",
+                icon: "device",
               },
               {
-                href: '/dashboard/sales-accounts',
-                title: 'Sales & Accounts',
-                desc: 'Quotes, orders, invoices, payments',
-                color: '#7c3aed',
-                icon: 'money'
-              }
+                href: "/dashboard/sales-accounts",
+                title: "Sales & Accounts",
+                desc: "Quotes, orders, invoices, payments",
+                color: "#7c3aed",
+                icon: "money",
+              },
             ].map((item) => (
               <motion.div
                 key={item.href}
@@ -666,8 +693,8 @@ export default function DashboardHome() {
                     hover: {
                       y: -4,
                       scale: 1.02,
-                      boxShadow: "0 20px 40px rgba(0,0,0,0.18)"
-                    }
+                      boxShadow: "0 20px 40px rgba(0,0,0,0.18)",
+                    },
                   }}
                 >
                   {/* Corner highlight shape */}
@@ -676,7 +703,7 @@ export default function DashboardHome() {
                   {/* Hover Arrow */}
                   <motion.div
                     variants={{
-                      hover: { opacity: 1, x: 0 }
+                      hover: { opacity: 1, x: 0 },
                     }}
                     initial={{ opacity: 0, x: -10 }}
                     className="absolute top-6 right-6 z-20"
@@ -718,7 +745,6 @@ export default function DashboardHome() {
             ))}
           </div>
         </motion.div>
-
       </div>
     </motion.div>
   );

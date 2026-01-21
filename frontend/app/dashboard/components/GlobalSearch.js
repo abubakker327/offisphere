@@ -1,58 +1,94 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+  process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
 const featureIndex = [
-  { label: 'Dashboard', href: '/dashboard', keywords: 'home overview' },
-  { label: 'HR Management', href: '/dashboard/hr', keywords: 'people overview' },
-  { label: 'Assets & Operations', href: '/dashboard/ops', keywords: 'devices overview' },
-  { label: 'Sales & CRM', href: '/dashboard/sales', keywords: 'pipeline overview' },
-  { label: 'Sales & Accounts', href: '/dashboard/sales-accounts', keywords: 'finance overview' },
-  { label: 'Finance & Admin', href: '/dashboard/finance', keywords: 'payroll overview' },
-  { label: 'Users', href: '/dashboard/users', keywords: 'people employees' },
-  { label: 'Attendance', href: '/dashboard/attendance', keywords: 'check-in' },
-  { label: 'Timesheets', href: '/dashboard/timesheets', keywords: 'hours time' },
-  { label: 'Leaves', href: '/dashboard/leaves', keywords: 'vacation time off' },
-  { label: 'Tasks', href: '/dashboard/tasks', keywords: 'work items' },
-  { label: 'Devices', href: '/dashboard/devices', keywords: 'assets hardware' },
-  { label: 'Documents', href: '/dashboard/documents', keywords: 'files library' },
-  { label: 'Reimbursements', href: '/dashboard/reimbursements', keywords: 'claims' },
-  { label: 'Leads', href: '/dashboard/leads', keywords: 'sales prospects' },
-  { label: 'Payments', href: '/dashboard/payments', keywords: 'transactions' },
-  { label: 'Sales Reports', href: '/dashboard/sales-reports', keywords: 'pipeline' },
-  { label: 'Payroll', href: '/dashboard/payroll', keywords: 'salary' },
-  { label: 'Recognition', href: '/dashboard/recognition', keywords: 'rewards' },
-  { label: 'Email', href: '/dashboard/email', keywords: 'templates' },
-  { label: 'Exports', href: '/dashboard/exports', keywords: 'reports' },
-  { label: 'Reports', href: '/dashboard/reports', keywords: 'analytics' }
+  { label: "Dashboard", href: "/dashboard", keywords: "home overview" },
+  {
+    label: "HR Management",
+    href: "/dashboard/hr",
+    keywords: "people overview",
+  },
+  {
+    label: "Assets & Operations",
+    href: "/dashboard/ops",
+    keywords: "devices overview",
+  },
+  {
+    label: "Sales & CRM",
+    href: "/dashboard/sales",
+    keywords: "pipeline overview",
+  },
+  {
+    label: "Sales & Accounts",
+    href: "/dashboard/sales-accounts",
+    keywords: "finance overview",
+  },
+  {
+    label: "Finance & Admin",
+    href: "/dashboard/finance",
+    keywords: "payroll overview",
+  },
+  { label: "Users", href: "/dashboard/users", keywords: "people employees" },
+  { label: "Attendance", href: "/dashboard/attendance", keywords: "check-in" },
+  {
+    label: "Timesheets",
+    href: "/dashboard/timesheets",
+    keywords: "hours time",
+  },
+  { label: "Leaves", href: "/dashboard/leaves", keywords: "vacation time off" },
+  { label: "Tasks", href: "/dashboard/tasks", keywords: "work items" },
+  { label: "Devices", href: "/dashboard/devices", keywords: "assets hardware" },
+  {
+    label: "Documents",
+    href: "/dashboard/documents",
+    keywords: "files library",
+  },
+  {
+    label: "Reimbursements",
+    href: "/dashboard/reimbursements",
+    keywords: "claims",
+  },
+  { label: "Leads", href: "/dashboard/leads", keywords: "sales prospects" },
+  { label: "Payments", href: "/dashboard/payments", keywords: "transactions" },
+  {
+    label: "Sales Reports",
+    href: "/dashboard/sales-reports",
+    keywords: "pipeline",
+  },
+  { label: "Payroll", href: "/dashboard/payroll", keywords: "salary" },
+  { label: "Recognition", href: "/dashboard/recognition", keywords: "rewards" },
+  { label: "Email", href: "/dashboard/email", keywords: "templates" },
+  { label: "Exports", href: "/dashboard/exports", keywords: "reports" },
+  { label: "Reports", href: "/dashboard/reports", keywords: "analytics" },
 ];
 
-export default function GlobalSearch({ className = '' }) {
+export default function GlobalSearch({ className = "" }) {
   const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchResults, setSearchResults] = useState({
     features: [],
     users: [],
-    devices: []
+    devices: [],
   });
   const [activeResultIndex, setActiveResultIndex] = useState(-1);
-  const [searchError, setSearchError] = useState('');
+  const [searchError, setSearchError] = useState("");
   const [usersCache, setUsersCache] = useState(null);
   const [devicesCache, setDevicesCache] = useState(null);
 
-  const normalize = (value) => String(value || '').toLowerCase();
+  const normalize = (value) => String(value || "").toLowerCase();
 
   const filterFeatures = (query) => {
     const q = normalize(query);
     return featureIndex
       .filter((item) => {
-        const haystack = `${item.label} ${item.keywords || ''}`.toLowerCase();
+        const haystack = `${item.label} ${item.keywords || ""}`.toLowerCase();
         return haystack.includes(q);
       })
       .slice(0, 6);
@@ -62,7 +98,8 @@ export default function GlobalSearch({ className = '' }) {
     const q = normalize(query);
     return (users || [])
       .filter((user) => {
-        const haystack = `${user.full_name || ''} ${user.email || ''}`.toLowerCase();
+        const haystack =
+          `${user.full_name || ""} ${user.email || ""}`.toLowerCase();
         return haystack.includes(q);
       })
       .slice(0, 5);
@@ -72,7 +109,8 @@ export default function GlobalSearch({ className = '' }) {
     const q = normalize(query);
     return (devices || [])
       .filter((device) => {
-        const haystack = `${device.name || ''} ${device.device_type || ''} ${device.serial_number || ''} ${device.assigned_to_name || ''}`.toLowerCase();
+        const haystack =
+          `${device.name || ""} ${device.device_type || ""} ${device.serial_number || ""} ${device.assigned_to_name || ""}`.toLowerCase();
         return haystack.includes(q);
       })
       .slice(0, 5);
@@ -84,12 +122,12 @@ export default function GlobalSearch({ className = '' }) {
       setSearchResults({ features: [], users: [], devices: [] });
       setSearchOpen(false);
       setActiveResultIndex(-1);
-      setSearchError('');
+      setSearchError("");
       return;
     }
 
     setSearchLoading(true);
-    setSearchError('');
+    setSearchError("");
 
     try {
       let users = usersCache;
@@ -99,15 +137,19 @@ export default function GlobalSearch({ className = '' }) {
       if (!users) {
         fetches.push(
           fetch(`${API_BASE}/api/users`, {
-        credentials: 'include',
-          }).then((res) => res.json().then((data) => ({ res, data, type: 'users' })))
+            credentials: "include",
+          }).then((res) =>
+            res.json().then((data) => ({ res, data, type: "users" })),
+          ),
         );
       }
       if (!devices) {
         fetches.push(
           fetch(`${API_BASE}/api/devices`, {
-        credentials: 'include',
-          }).then((res) => res.json().then((data) => ({ res, data, type: 'devices' })))
+            credentials: "include",
+          }).then((res) =>
+            res.json().then((data) => ({ res, data, type: "devices" })),
+          ),
         );
       }
 
@@ -115,8 +157,8 @@ export default function GlobalSearch({ className = '' }) {
         const responses = await Promise.all(fetches);
         responses.forEach(({ res, data, type }) => {
           if (!res.ok) return;
-          if (type === 'users') users = Array.isArray(data) ? data : [];
-          if (type === 'devices') devices = Array.isArray(data) ? data : [];
+          if (type === "users") users = Array.isArray(data) ? data : [];
+          if (type === "devices") devices = Array.isArray(data) ? data : [];
         });
       }
 
@@ -129,15 +171,15 @@ export default function GlobalSearch({ className = '' }) {
       const nextResults = {
         features: filterFeatures(trimmed),
         users: filterUsers(trimmed, users),
-        devices: filterDevices(trimmed, devices)
+        devices: filterDevices(trimmed, devices),
       };
 
       setSearchResults(nextResults);
       setActiveResultIndex(-1);
       setSearchOpen(true);
     } catch (err) {
-      console.error('Search error:', err);
-      setSearchError('Error searching');
+      console.error("Search error:", err);
+      setSearchError("Error searching");
       setSearchResults({ features: [], users: [], devices: [] });
       setActiveResultIndex(-1);
       setSearchOpen(true);
@@ -156,42 +198,42 @@ export default function GlobalSearch({ className = '' }) {
   const handleSearchSelect = (href) => {
     if (!href) return;
     setSearchOpen(false);
-    setSearchQuery('');
+    setSearchQuery("");
     setActiveResultIndex(-1);
     router.push(href);
   };
 
   const getTopResult = () => {
     if (searchResults.features[0]) return searchResults.features[0].href;
-    if (searchResults.users[0]) return '/dashboard/users';
-    if (searchResults.devices[0]) return '/dashboard/devices';
-    return '';
+    if (searchResults.users[0]) return "/dashboard/users";
+    if (searchResults.devices[0]) return "/dashboard/devices";
+    return "";
   };
 
   const getFlatResults = () => {
     const items = [];
     searchResults.features.forEach((item) =>
       items.push({
-        type: 'feature',
+        type: "feature",
         label: item.label,
-        href: item.href
-      })
+        href: item.href,
+      }),
     );
     searchResults.users.forEach((user) =>
       items.push({
-        type: 'user',
+        type: "user",
         label: user.full_name || user.email,
-        meta: user.full_name && user.email ? user.email : '',
-        href: '/dashboard/users'
-      })
+        meta: user.full_name && user.email ? user.email : "",
+        href: "/dashboard/users",
+      }),
     );
     searchResults.devices.forEach((device) =>
       items.push({
-        type: 'device',
-        label: device.name || 'Device',
-        meta: device.serial_number || '',
-        href: '/dashboard/devices'
-      })
+        type: "device",
+        label: device.name || "Device",
+        meta: device.serial_number || "",
+        href: "/dashboard/devices",
+      }),
     );
     return items;
   };
@@ -233,7 +275,7 @@ export default function GlobalSearch({ className = '' }) {
             setTimeout(() => setSearchOpen(false), 150);
           }}
           onKeyDown={(e) => {
-            if (e.key === 'Enter') {
+            if (e.key === "Enter") {
               const href =
                 activeResultIndex >= 0 && flatResults[activeResultIndex]
                   ? flatResults[activeResultIndex].href
@@ -242,19 +284,19 @@ export default function GlobalSearch({ className = '' }) {
                 e.preventDefault();
                 handleSearchSelect(href);
               }
-            } else if (e.key === 'ArrowDown') {
+            } else if (e.key === "ArrowDown") {
               if (!searchOpen) setSearchOpen(true);
               e.preventDefault();
               setActiveResultIndex((prev) =>
-                Math.min(prev + 1, flatResults.length - 1)
+                Math.min(prev + 1, flatResults.length - 1),
               );
-            } else if (e.key === 'ArrowUp') {
+            } else if (e.key === "ArrowUp") {
               e.preventDefault();
               setActiveResultIndex((prev) => Math.max(prev - 1, 0));
-            } else if (e.key === 'Escape') {
+            } else if (e.key === "Escape") {
               setSearchOpen(false);
               setActiveResultIndex(-1);
-              setSearchQuery('');
+              setSearchQuery("");
             }
           }}
           className="of-search-input w-full rounded-full border border-slate-200 bg-white pl-11 pr-10 py-2 text-sm text-slate-700 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -265,7 +307,7 @@ export default function GlobalSearch({ className = '' }) {
             type="button"
             onMouseDown={(event) => {
               event.preventDefault();
-              setSearchQuery('');
+              setSearchQuery("");
               setSearchResults({ features: [], users: [], devices: [] });
               setSearchOpen(false);
               setActiveResultIndex(-1);
@@ -296,10 +338,14 @@ export default function GlobalSearch({ className = '' }) {
               <span>{totalResults} found</span>
             </div>
             {searchLoading && (
-              <div className="px-3 py-2 text-xs text-slate-500">Searching...</div>
+              <div className="px-3 py-2 text-xs text-slate-500">
+                Searching...
+              </div>
             )}
             {searchError && !searchLoading && (
-              <div className="px-3 py-2 text-xs text-rose-600">{searchError}</div>
+              <div className="px-3 py-2 text-xs text-rose-600">
+                {searchError}
+              </div>
             )}
             {!searchLoading && !searchError && (
               <>
@@ -315,15 +361,17 @@ export default function GlobalSearch({ className = '' }) {
                         onMouseDown={() => handleSearchSelect(item.href)}
                         onMouseEnter={() => {
                           const idx = flatResults.findIndex(
-                            (result) => result.href === item.href && result.type === 'feature'
+                            (result) =>
+                              result.href === item.href &&
+                              result.type === "feature",
                           );
                           setActiveResultIndex(idx);
                         }}
                         className={`w-full text-left px-3 py-2 rounded-xl text-sm text-slate-700 hover:bg-slate-100 ${
                           flatResults[activeResultIndex]?.href === item.href &&
-                          flatResults[activeResultIndex]?.type === 'feature'
-                            ? 'bg-slate-100'
-                            : ''
+                          flatResults[activeResultIndex]?.type === "feature"
+                            ? "bg-slate-100"
+                            : ""
                         }`}
                       >
                         {item.label}
@@ -341,23 +389,33 @@ export default function GlobalSearch({ className = '' }) {
                       <button
                         key={user.id}
                         type="button"
-                        onMouseDown={() => handleSearchSelect('/dashboard/users')}
+                        onMouseDown={() =>
+                          handleSearchSelect("/dashboard/users")
+                        }
                         onMouseEnter={() => {
                           const idx = flatResults.findIndex(
-                            (result) => result.type === 'user' && result.label === (user.full_name || user.email)
+                            (result) =>
+                              result.type === "user" &&
+                              result.label === (user.full_name || user.email),
                           );
                           setActiveResultIndex(idx);
                         }}
                         className={`w-full text-left px-3 py-2 rounded-xl text-sm text-slate-700 hover:bg-slate-100 ${
-                          flatResults[activeResultIndex]?.type === 'user' &&
-                          flatResults[activeResultIndex]?.label === (user.full_name || user.email)
-                            ? 'bg-slate-100'
-                            : ''
+                          flatResults[activeResultIndex]?.type === "user" &&
+                          flatResults[activeResultIndex]?.label ===
+                            (user.full_name || user.email)
+                            ? "bg-slate-100"
+                            : ""
                         }`}
                       >
-                        <span className="font-medium">{user.full_name || user.email}</span>
+                        <span className="font-medium">
+                          {user.full_name || user.email}
+                        </span>
                         {user.full_name && user.email && (
-                          <span className="text-xs text-slate-400"> - {user.email}</span>
+                          <span className="text-xs text-slate-400">
+                            {" "}
+                            - {user.email}
+                          </span>
                         )}
                       </button>
                     ))}
@@ -373,23 +431,33 @@ export default function GlobalSearch({ className = '' }) {
                       <button
                         key={device.id}
                         type="button"
-                        onMouseDown={() => handleSearchSelect('/dashboard/devices')}
+                        onMouseDown={() =>
+                          handleSearchSelect("/dashboard/devices")
+                        }
                         onMouseEnter={() => {
                           const idx = flatResults.findIndex(
-                            (result) => result.type === 'device' && result.label === (device.name || 'Device')
+                            (result) =>
+                              result.type === "device" &&
+                              result.label === (device.name || "Device"),
                           );
                           setActiveResultIndex(idx);
                         }}
                         className={`w-full text-left px-3 py-2 rounded-xl text-sm text-slate-700 hover:bg-slate-100 ${
-                          flatResults[activeResultIndex]?.type === 'device' &&
-                          flatResults[activeResultIndex]?.label === (device.name || 'Device')
-                            ? 'bg-slate-100'
-                            : ''
+                          flatResults[activeResultIndex]?.type === "device" &&
+                          flatResults[activeResultIndex]?.label ===
+                            (device.name || "Device")
+                            ? "bg-slate-100"
+                            : ""
                         }`}
                       >
-                        <span className="font-medium">{device.name || 'Device'}</span>
+                        <span className="font-medium">
+                          {device.name || "Device"}
+                        </span>
                         {device.serial_number && (
-                          <span className="text-xs text-slate-400"> - {device.serial_number}</span>
+                          <span className="text-xs text-slate-400">
+                            {" "}
+                            - {device.serial_number}
+                          </span>
                         )}
                       </button>
                     ))}
@@ -411,7 +479,3 @@ export default function GlobalSearch({ className = '' }) {
     </div>
   );
 }
-
-
-
-

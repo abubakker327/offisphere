@@ -1,42 +1,43 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 export default function SalesReportsPage() {
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+  const API_BASE =
+    process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
   const formatCurrency = (value) => {
     const number = Number(value || 0);
-    if (Number.isNaN(number)) return 'INR 0';
-    return `INR ${number.toLocaleString('en-IN')}`;
+    if (Number.isNaN(number)) return "INR 0";
+    return `INR ${number.toLocaleString("en-IN")}`;
   };
 
   const formatDate = (value) =>
-    value ? new Date(value).toLocaleDateString() : '--';
+    value ? new Date(value).toLocaleDateString() : "--";
 
   useEffect(() => {
     const fetchSummary = async () => {
       try {
         const res = await fetch(`${API_BASE}/api/sales/summary`, {
-        credentials: 'include',
+          credentials: "include",
         });
 
         const data = await res.json();
 
         if (!res.ok) {
-          setError(data.message || 'Error loading sales summary');
+          setError(data.message || "Error loading sales summary");
         } else {
           setSummary(data);
-          setError('');
+          setError("");
         }
       } catch (err) {
-        console.error('Sales summary error:', err);
-        setError('Error connecting to server');
+        console.error("Sales summary error:", err);
+        setError("Error connecting to server");
       } finally {
         setLoading(false);
       }
@@ -86,15 +87,12 @@ export default function SalesReportsPage() {
           whileHover={{ y: -2 }}
           className="relative overflow-hidden bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-4"
         >
-          <div
-            className="hidden"
-            aria-hidden="true"
-          />
+          <div className="hidden" aria-hidden="true" />
           <p className="text-[11px] uppercase tracking-wide text-slate-500 mb-1">
             Total leads
           </p>
           <p className="text-2xl font-semibold text-slate-900 mb-1">
-            {loading ? '--' : totals.totalLeads ?? 0}
+            {loading ? "--" : (totals.totalLeads ?? 0)}
           </p>
           <p className="text-[11px] text-slate-400">
             Across all stages in your pipeline
@@ -113,9 +111,7 @@ export default function SalesReportsPage() {
             Pipeline value
           </p>
           <p className="text-2xl font-semibold mb-1">
-            {loading
-              ? '--'
-              : formatCurrency(totals.totalPipelineValue || 0)}
+            {loading ? "--" : formatCurrency(totals.totalPipelineValue || 0)}
           </p>
           <p className="text-[11px] text-slate-500">
             Expected value of non-lost deals
@@ -126,17 +122,12 @@ export default function SalesReportsPage() {
           whileHover={{ y: -2 }}
           className="relative overflow-hidden bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-4"
         >
-          <div
-            className="hidden"
-            aria-hidden="true"
-          />
+          <div className="hidden" aria-hidden="true" />
           <p className="text-[11px] uppercase tracking-wide text-slate-600 mb-1">
             Won value
           </p>
           <p className="text-2xl font-semibold text-slate-900 mb-1">
-            {loading
-              ? '--'
-              : formatCurrency(totals.totalWonValue || 0)}
+            {loading ? "--" : formatCurrency(totals.totalWonValue || 0)}
           </p>
           <p className="text-[11px] text-slate-400">
             Expected value of won deals
@@ -147,17 +138,12 @@ export default function SalesReportsPage() {
           whileHover={{ y: -2 }}
           className="relative overflow-hidden bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-4"
         >
-          <div
-            className="hidden"
-            aria-hidden="true"
-          />
+          <div className="hidden" aria-hidden="true" />
           <p className="text-[11px] uppercase tracking-wide text-slate-500 mb-1">
             Payments received
           </p>
           <p className="text-2xl font-semibold text-slate-900 mb-1">
-            {loading
-              ? '--'
-              : formatCurrency(totals.totalPaymentsReceived || 0)}
+            {loading ? "--" : formatCurrency(totals.totalPaymentsReceived || 0)}
           </p>
           <p className="text-[11px] text-slate-400">
             From payments with status &quot;received&quot;
@@ -172,17 +158,14 @@ export default function SalesReportsPage() {
           whileHover={{ y: -2 }}
           className="relative overflow-hidden bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-4 flex flex-col justify-between"
         >
-          <div
-            className="hidden"
-            aria-hidden="true"
-          />
+          <div className="hidden" aria-hidden="true" />
           <div className="flex items-center justify-between mb-3">
             <div>
               <p className="text-[11px] uppercase tracking-wide text-slate-500">
                 Win rate
               </p>
               <p className="text-3xl font-semibold text-slate-900">
-                {loading ? '--' : `${totals.winRate ?? 0}%`}
+                {loading ? "--" : `${totals.winRate ?? 0}%`}
               </p>
             </div>
           </div>
@@ -196,10 +179,7 @@ export default function SalesReportsPage() {
           whileHover={{ y: -2 }}
           className="relative overflow-hidden bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-4"
         >
-          <div
-            className="hidden"
-            aria-hidden="true"
-          />
+          <div className="hidden" aria-hidden="true" />
           <p className="text-sm font-semibold text-slate-900 mb-2">
             Leads by stage
           </p>
@@ -208,16 +188,9 @@ export default function SalesReportsPage() {
               <p className="text-slate-400 text-xs">No leads yet.</p>
             )}
             {Object.entries(leadsByStatus).map(([stage, count]) => (
-              <div
-                key={stage}
-                className="flex items-center justify-between"
-              >
-                <span className="capitalize text-slate-600">
-                  {stage}
-                </span>
-                <span className="font-medium text-slate-900">
-                  {count}
-                </span>
+              <div key={stage} className="flex items-center justify-between">
+                <span className="capitalize text-slate-600">{stage}</span>
+                <span className="font-medium text-slate-900">{count}</span>
               </div>
             ))}
           </div>
@@ -228,10 +201,7 @@ export default function SalesReportsPage() {
           whileHover={{ y: -2 }}
           className="relative overflow-hidden bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-4"
         >
-          <div
-            className="hidden"
-            aria-hidden="true"
-          />
+          <div className="hidden" aria-hidden="true" />
           <p className="text-sm font-semibold text-slate-900 mb-2">
             Payments by status
           </p>
@@ -240,16 +210,9 @@ export default function SalesReportsPage() {
               <p className="text-slate-400 text-xs">No payments yet.</p>
             )}
             {Object.entries(paymentsByStatus).map(([status, count]) => (
-              <div
-                key={status}
-                className="flex items-center justify-between"
-              >
-                <span className="capitalize text-slate-600">
-                  {status}
-                </span>
-                <span className="font-medium text-slate-900">
-                  {count}
-                </span>
+              <div key={status} className="flex items-center justify-between">
+                <span className="capitalize text-slate-600">{status}</span>
+                <span className="font-medium text-slate-900">{count}</span>
               </div>
             ))}
           </div>
@@ -263,14 +226,9 @@ export default function SalesReportsPage() {
           whileHover={{ y: -2 }}
           className="relative overflow-hidden bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-4"
         >
-          <div
-            className="hidden"
-            aria-hidden="true"
-          />
+          <div className="hidden" aria-hidden="true" />
           <div className="flex items-center justify-between mb-3">
-            <p className="text-sm font-semibold text-slate-900">
-              Recent leads
-            </p>
+            <p className="text-sm font-semibold text-slate-900">Recent leads</p>
           </div>
 
           <div className="overflow-x-auto text-xs">
@@ -304,13 +262,8 @@ export default function SalesReportsPage() {
                   </tr>
                 ) : (
                   recentLeads.map((lead) => (
-                    <tr
-                      key={lead.id}
-                      className="hover:bg-slate-50"
-                    >
-                      <td className="px-6 py-4 text-slate-900">
-                        {lead.name}
-                      </td>
+                    <tr key={lead.id} className="hover:bg-slate-50">
+                      <td className="px-6 py-4 text-slate-900">{lead.name}</td>
                       <td className="px-6 py-4 text-[11px]">
                         <span className="px-2 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100 capitalize">
                           {lead.status}
@@ -319,7 +272,7 @@ export default function SalesReportsPage() {
                       <td className="px-6 py-4 text-[11px] text-slate-600">
                         {lead.expected_value
                           ? formatCurrency(lead.expected_value)
-                          : '--'}
+                          : "--"}
                       </td>
                       <td className="px-6 py-4 text-[11px] text-slate-500">
                         {formatDate(lead.created_at)}
@@ -337,10 +290,7 @@ export default function SalesReportsPage() {
           whileHover={{ y: -2 }}
           className="relative overflow-hidden bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-4"
         >
-          <div
-            className="hidden"
-            aria-hidden="true"
-          />
+          <div className="hidden" aria-hidden="true" />
           <div className="flex items-center justify-between mb-3">
             <p className="text-sm font-semibold text-slate-900">
               Recent payments
@@ -354,7 +304,9 @@ export default function SalesReportsPage() {
                   <th className="text-left px-6 py-3 font-semibold">Lead</th>
                   <th className="text-left px-6 py-3 font-semibold">Amount</th>
                   <th className="text-left px-6 py-3 font-semibold">Status</th>
-                  <th className="text-left px-6 py-3 font-semibold">Paid date</th>
+                  <th className="text-left px-6 py-3 font-semibold">
+                    Paid date
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -378,12 +330,9 @@ export default function SalesReportsPage() {
                   </tr>
                 ) : (
                   recentPayments.map((p) => (
-                    <tr
-                      key={p.id}
-                      className="hover:bg-slate-50"
-                    >
+                    <tr key={p.id} className="hover:bg-slate-50">
                       <td className="px-6 py-4 text-slate-900">
-                        {p.lead_name || '--'}
+                        {p.lead_name || "--"}
                       </td>
                       <td className="px-6 py-4 text-[11px] text-slate-600">
                         {formatCurrency(p.amount)}
@@ -407,11 +356,3 @@ export default function SalesReportsPage() {
     </motion.div>
   );
 }
-
-
-
-
-
-
-
-

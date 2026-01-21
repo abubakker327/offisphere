@@ -1,43 +1,43 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 export default function ReimbursementsPage() {
   const [reimbursements, setReimbursements] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [isAdminOrManager, setIsAdminOrManager] = useState(false);
 
   const [form, setForm] = useState({
-    title: '',
-    category: '',
-    amount: '',
-    currency: 'INR',
-    expense_date: '',
-    notes: '',
-    receipt_url: ''
+    title: "",
+    category: "",
+    amount: "",
+    currency: "INR",
+    expense_date: "",
+    notes: "",
+    receipt_url: "",
   });
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+  const API_BASE =
+    process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
   const triggerToast = (type, message) => {
     window.dispatchEvent(
-      new CustomEvent('offisphere-toast', {
-        detail: { type, message }
-      })
+      new CustomEvent("offisphere-toast", {
+        detail: { type, message },
+      }),
     );
   };
 
   const loadRoles = () => {
     try {
-      const rolesStr = window.localStorage.getItem('offisphere_roles');
+      const rolesStr = window.localStorage.getItem("offisphere_roles");
       if (!rolesStr) return;
       const roles = JSON.parse(rolesStr);
       if (!Array.isArray(roles)) return;
-      const flag =
-        roles.includes('admin') || roles.includes('manager');
+      const flag = roles.includes("admin") || roles.includes("manager");
       setIsAdminOrManager(flag);
     } catch {
       setIsAdminOrManager(false);
@@ -47,20 +47,20 @@ export default function ReimbursementsPage() {
   const fetchReimbursements = async () => {
     try {
       const res = await fetch(`${API_BASE}/api/reimbursements`, {
-        credentials: 'include',
+        credentials: "include",
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || 'Error fetching reimbursements');
+        setError(data.message || "Error fetching reimbursements");
       } else {
         setReimbursements(Array.isArray(data) ? data : []);
-        setError('');
+        setError("");
       }
     } catch (err) {
-      console.error('Fetch reimbursements error:', err);
-      setError('Error connecting to server');
+      console.error("Fetch reimbursements error:", err);
+      setError("Error connecting to server");
     } finally {
       setLoading(false);
     }
@@ -78,40 +78,40 @@ export default function ReimbursementsPage() {
   const handleCreate = async (e) => {
     e.preventDefault();
     setSaving(true);
-    setError('');
+    setError("");
 
     try {
       const res = await fetch(`${API_BASE}/api/reimbursements`, {
-        credentials: 'include',
-        method: 'POST',
+        credentials: "include",
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(form)
+        body: JSON.stringify(form),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || 'Error creating reimbursement');
-        triggerToast('error', data.message || 'Error creating reimbursement');
+        setError(data.message || "Error creating reimbursement");
+        triggerToast("error", data.message || "Error creating reimbursement");
       } else {
         setReimbursements(Array.isArray(data) ? data : []);
-        triggerToast('success', 'Reimbursement submitted.');
+        triggerToast("success", "Reimbursement submitted.");
         setForm({
-          title: '',
-          category: '',
-          amount: '',
-          currency: 'INR',
-          expense_date: '',
-          notes: '',
-          receipt_url: ''
+          title: "",
+          category: "",
+          amount: "",
+          currency: "INR",
+          expense_date: "",
+          notes: "",
+          receipt_url: "",
         });
       }
     } catch (err) {
-      console.error('Create reimbursement error:', err);
-      setError('Error connecting to server');
-      triggerToast('error', 'Error connecting to server');
+      console.error("Create reimbursement error:", err);
+      setError("Error connecting to server");
+      triggerToast("error", "Error connecting to server");
     } finally {
       setSaving(false);
     }
@@ -120,30 +120,30 @@ export default function ReimbursementsPage() {
   const handleStatusChange = async (id, newStatus) => {
     try {
       const res = await fetch(`${API_BASE}/api/reimbursements/${id}`, {
-        credentials: 'include',
-        method: 'PUT',
+        credentials: "include",
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ status: newStatus })
+        body: JSON.stringify({ status: newStatus }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        triggerToast('error', data.message || 'Error updating status');
+        triggerToast("error", data.message || "Error updating status");
       } else {
         setReimbursements(Array.isArray(data) ? data : []);
-        triggerToast('success', 'Reimbursement updated');
+        triggerToast("success", "Reimbursement updated");
       }
     } catch (err) {
-      console.error('Update reimbursement error:', err);
-      triggerToast('error', 'Error connecting to server');
+      console.error("Update reimbursement error:", err);
+      triggerToast("error", "Error connecting to server");
     }
   };
 
   const formatDate = (value) =>
-    value ? new Date(value).toLocaleDateString() : '--';
+    value ? new Date(value).toLocaleDateString() : "--";
 
   return (
     <motion.div
@@ -210,7 +210,7 @@ export default function ReimbursementsPage() {
             <input
               type="text"
               value={form.title}
-              onChange={(e) => handleChange('title', e.target.value)}
+              onChange={(e) => handleChange("title", e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Taxi to client meeting"
               required
@@ -222,7 +222,7 @@ export default function ReimbursementsPage() {
             <input
               type="text"
               value={form.category}
-              onChange={(e) => handleChange('category', e.target.value)}
+              onChange={(e) => handleChange("category", e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Travel / Food / Software"
               required
@@ -235,7 +235,7 @@ export default function ReimbursementsPage() {
               type="number"
               step="0.01"
               value={form.amount}
-              onChange={(e) => handleChange('amount', e.target.value)}
+              onChange={(e) => handleChange("amount", e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="1500"
               required
@@ -247,9 +247,7 @@ export default function ReimbursementsPage() {
             <input
               type="date"
               value={form.expense_date}
-              onChange={(e) =>
-                handleChange('expense_date', e.target.value)
-              }
+              onChange={(e) => handleChange("expense_date", e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
               required
             />
@@ -260,7 +258,7 @@ export default function ReimbursementsPage() {
             <input
               type="text"
               value={form.notes}
-              onChange={(e) => handleChange('notes', e.target.value)}
+              onChange={(e) => handleChange("notes", e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Optional description"
             />
@@ -273,9 +271,7 @@ export default function ReimbursementsPage() {
             <input
               type="text"
               value={form.receipt_url}
-              onChange={(e) =>
-                handleChange('receipt_url', e.target.value)
-              }
+              onChange={(e) => handleChange("receipt_url", e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Link to uploaded receipt"
             />
@@ -289,7 +285,7 @@ export default function ReimbursementsPage() {
               disabled={saving}
               className="px-5 py-2.5 rounded-2xl text-sm font-semibold text-white bg-blue-600 shadow-lg shadow-blue-300/40 hover:bg-blue-700 disabled:opacity-60"
             >
-              {saving ? 'Submitting...' : 'Submit reimbursement'}
+              {saving ? "Submitting..." : "Submit reimbursement"}
             </motion.button>
           </div>
         </form>
@@ -346,12 +342,9 @@ export default function ReimbursementsPage() {
                 </tr>
               ) : (
                 reimbursements.map((r) => (
-                  <tr
-                    key={r.id}
-                    className="hover:bg-slate-50"
-                  >
+                  <tr key={r.id} className="hover:bg-slate-50">
                     <td className="px-6 py-4 text-slate-900">
-                      {r.employee_name || '--'}
+                      {r.employee_name || "--"}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-700">
                       {r.title}
@@ -395,9 +388,3 @@ export default function ReimbursementsPage() {
     </motion.div>
   );
 }
-
-
-
-
-
-

@@ -1,27 +1,27 @@
 // backend/src/routes/leadRoutes.js
 
-const express = require('express');
-const supabase = require('../supabaseClient');
-const { authenticate, authorize } = require('../middleware/authMiddleware');
+const express = require("express");
+const supabase = require("../supabaseClient");
+const { authenticate, authorize } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
 // Map UI stage values to DB-allowed values (per check constraint)
 const uiToDbStage = (stage) => {
-  const normalized = (stage || '').toLowerCase();
-  if (normalized === 'hot') return 'Hot';
-  if (normalized === 'warm') return 'Warm';
-  if (normalized === 'cold') return 'Cold';
+  const normalized = (stage || "").toLowerCase();
+  if (normalized === "hot") return "Hot";
+  if (normalized === "warm") return "Warm";
+  if (normalized === "cold") return "Cold";
   return null;
 };
 
 // Map DB stage values back to UI tokens
 const dbToUiStage = (stage) => {
-  const normalized = (stage || '').toLowerCase();
-  if (normalized === 'hot') return 'hot';
-  if (normalized === 'warm') return 'warm';
-  if (normalized === 'cold') return 'cold';
-  return 'cold';
+  const normalized = (stage || "").toLowerCase();
+  if (normalized === "hot") return "hot";
+  if (normalized === "warm") return "warm";
+  if (normalized === "cold") return "cold";
+  return "cold";
 };
 
 /**
@@ -29,7 +29,7 @@ const dbToUiStage = (stage) => {
  */
 function isAdminOrManager(user) {
   const roles = user?.roles || [];
-  return roles.includes('admin') || roles.includes('manager');
+  return roles.includes("admin") || roles.includes("manager");
 }
 
 /**
@@ -37,24 +37,24 @@ function isAdminOrManager(user) {
  */
 async function buildUserNameMap(userIds) {
   const uniqueIds = Array.from(
-    new Set((userIds || []).filter((id) => id !== null && id !== undefined))
+    new Set((userIds || []).filter((id) => id !== null && id !== undefined)),
   );
 
   if (!uniqueIds.length) return {};
 
   const { data, error } = await supabase
-    .from('users')
-    .select('id, full_name, email')
-    .in('id', uniqueIds);
+    .from("users")
+    .select("id, full_name, email")
+    .in("id", uniqueIds);
 
   if (error) {
-    console.error('User name lookup error:', error);
+    console.error("User name lookup error:", error);
     return {};
   }
 
   return (data || []).reduce((acc, user) => {
     const key = String(user.id);
-    acc[key] = user.full_name || user.email || '';
+    acc[key] = user.full_name || user.email || "";
     return acc;
   }, {});
 }
@@ -64,17 +64,15 @@ async function buildUserNameMap(userIds) {
  */
 async function mapLeadsWithTelecaller(leads) {
   const userMap = await buildUserNameMap(
-    (leads || []).flatMap((row) => [row.assigned_to, row.owner_id])
+    (leads || []).flatMap((row) => [row.assigned_to, row.owner_id]),
   );
 
   return (leads || []).map((row) => ({
     ...row,
     stage: dbToUiStage(row.stage),
     telecaller_name:
-      userMap[String(row.assigned_to)] ||
-      userMap[String(row.owner_id)] ||
-      null,
-    assigned_to_name: userMap[String(row.assigned_to)] || null
+      userMap[String(row.assigned_to)] || userMap[String(row.owner_id)] || null,
+    assigned_to_name: userMap[String(row.assigned_to)] || null,
   }));
 }
 
@@ -87,18 +85,16 @@ async function mapLeadsWithTelecaller(leads) {
  *   ?start_date=YYYY-MM-DD
  *   ?end_date=YYYY-MM-DD
  */
-router.get('/', authenticate, authorize([]), async (req, res) => {
+router.get("/", authenticate, authorize([]), async (req, res) => {
   try {
     const { status, start_date, end_date, startDate, endDate } = req.query;
     const user = req.user;
     const adminManager = isAdminOrManager(user);
 
-    let query = supabase.from('leads').select('*');
+    let query = supabase.from("leads").select("*");
 
     if (!adminManager) {
-      query = query.or(
-        `owner_id.eq.${user.id},assigned_to.eq.${user.id}`
-      );
+      query = query.or(`owner_id.eq.${user.id},assigned_to.eq.${user.id}`);
     }
 
     // Date range filter (created_at)
@@ -115,27 +111,27 @@ router.get('/', authenticate, authorize([]), async (req, res) => {
     const endAt = parseDate(endDateStr);
 
     if (startAt) {
-      query = query.gte('created_at', startAt.toISOString());
+      query = query.gte("created_at", startAt.toISOString());
     }
     if (endAt) {
       const endOfDay = new Date(endAt);
       endOfDay.setHours(23, 59, 59, 999);
-      query = query.lte('created_at', endOfDay.toISOString());
+      query = query.lte("created_at", endOfDay.toISOString());
     }
 
     const { data, error } = await query;
 
     if (error) {
-      console.error('List leads error:', error);
-      return res.status(500).json({ message: 'Error fetching leads' });
+      console.error("List leads error:", error);
+      return res.status(500).json({ message: "Error fetching leads" });
     }
 
     const rows = await mapLeadsWithTelecaller(data);
 
     res.json(rows);
   } catch (err) {
-    console.error('List leads catch error:', err);
-    res.status(500).json({ message: 'Error fetching leads' });
+    console.error("List leads catch error:", err);
+    res.status(500).json({ message: "Error fetching leads" });
   }
 });
 
@@ -144,7 +140,7 @@ router.get('/', authenticate, authorize([]), async (req, res) => {
  * Any logged-in user can create a lead
  * Owner is current user unless owner_id is provided (for admins)
  */
-router.post('/', authenticate, authorize([]), async (req, res) => {
+router.post("/", authenticate, authorize([]), async (req, res) => {
   try {
     const user = req.user;
     const {
@@ -156,11 +152,11 @@ router.post('/', authenticate, authorize([]), async (req, res) => {
       expected_value,
       stage,
       owner_id,
-      assigned_to
+      assigned_to,
     } = req.body;
 
     if (!name) {
-      return res.status(400).json({ message: 'Lead name is required' });
+      return res.status(400).json({ message: "Lead name is required" });
     }
 
     const adminManager = isAdminOrManager(user);
@@ -178,54 +174,54 @@ router.post('/', authenticate, authorize([]), async (req, res) => {
         expected_value !== undefined && expected_value !== null
           ? expected_value
           : null,
-      stage: uiToDbStage(stage) || 'Cold',
+      stage: uiToDbStage(stage) || "Cold",
       // default owner is current user unless admin explicitly sets another
       owner_id: defaultOwnerId,
-      assigned_to: assignedToId
+      assigned_to: assignedToId,
     };
 
     const { error: insertError } = await supabase
-      .from('leads')
-      .insert([insertPayload], { returning: 'minimal' });
+      .from("leads")
+      .insert([insertPayload], { returning: "minimal" });
 
     if (insertError) {
-      console.error('Create lead error:', insertError);
-      return res.status(500).json({ message: 'Error creating lead' });
+      console.error("Create lead error:", insertError);
+      return res.status(500).json({ message: "Error creating lead" });
     }
 
     // Notification to assigned user (fallback owner)
     const notifyUserId = insertPayload.assigned_to || insertPayload.owner_id;
     if (notifyUserId) {
-      const { error: notifError } = await supabase.from('notifications').insert(
+      const { error: notifError } = await supabase.from("notifications").insert(
         [
           {
             user_id: notifyUserId,
-            title: 'New lead assigned',
+            title: "New lead assigned",
             message: `Lead "${name}" has been added to your pipeline.`,
-            type: 'system'
-          }
+            type: "system",
+          },
         ],
-        { returning: 'minimal' }
+        { returning: "minimal" },
       );
       if (notifError) {
-        console.error('Lead notify error:', notifError);
+        console.error("Lead notify error:", notifError);
       }
     }
 
     // Return updated list for this user
     const adminReload = adminManager;
-    let reloadQuery = supabase.from('leads').select('*');
+    let reloadQuery = supabase.from("leads").select("*");
 
     if (!adminReload) {
       reloadQuery = reloadQuery.or(
-        `owner_id.eq.${user.id},assigned_to.eq.${user.id}`
+        `owner_id.eq.${user.id},assigned_to.eq.${user.id}`,
       );
     }
 
     const { data: list, error: listError } = await reloadQuery;
 
     if (listError) {
-      console.error('Reload leads error:', listError);
+      console.error("Reload leads error:", listError);
       return res.json([]);
     }
 
@@ -233,8 +229,8 @@ router.post('/', authenticate, authorize([]), async (req, res) => {
 
     res.status(201).json(rows);
   } catch (err) {
-    console.error('Create lead catch error:', err);
-    res.status(500).json({ message: 'Error creating lead' });
+    console.error("Create lead catch error:", err);
+    res.status(500).json({ message: "Error creating lead" });
   }
 });
 
@@ -243,9 +239,9 @@ router.post('/', authenticate, authorize([]), async (req, res) => {
  * Admin/Manager can update any lead
  */
 router.put(
-  '/:id',
+  "/:id",
   authenticate,
-  authorize(['admin', 'manager']),
+  authorize(["admin", "manager"]),
   async (req, res) => {
     try {
       const { id } = req.params;
@@ -259,11 +255,11 @@ router.put(
         stage,
         status,
         owner_id,
-        assigned_to
+        assigned_to,
       } = req.body;
 
       const updatePayload = {
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
 
       if (name !== undefined) updatePayload.name = name;
@@ -275,7 +271,7 @@ router.put(
         updatePayload.expected_value =
           expected_value !== null ? expected_value : null;
       if (stage !== undefined) {
-        const mappedStage = uiToDbStage(stage) || 'Cold';
+        const mappedStage = uiToDbStage(stage) || "Cold";
         updatePayload.stage = mappedStage;
       }
       if (owner_id !== undefined) updatePayload.owner_id = owner_id || null;
@@ -283,56 +279,51 @@ router.put(
         updatePayload.assigned_to = assigned_to || null;
 
       const { error: updateError } = await supabase
-        .from('leads')
+        .from("leads")
         .update(updatePayload)
-        .eq('id', id);
+        .eq("id", id);
 
       if (updateError) {
-        console.error('Update lead error:', updateError);
-        return res.status(500).json({ message: 'Error updating lead' });
+        console.error("Update lead error:", updateError);
+        return res.status(500).json({ message: "Error updating lead" });
       }
 
       // If status is updated to won/lost, notify owner/assignee
-      if (status && ['won', 'lost'].includes(status)) {
+      if (status && ["won", "lost"].includes(status)) {
         // Fetch lead with owner/assignee
         const { data: leadData, error: leadError } = await supabase
-          .from('leads')
-          .select('name, owner_id, assigned_to')
-          .eq('id', id)
+          .from("leads")
+          .select("name, owner_id, assigned_to")
+          .eq("id", id)
           .single();
 
         if (!leadError && (leadData?.owner_id || leadData?.assigned_to)) {
           const { error: notifError } = await supabase
-            .from('notifications')
+            .from("notifications")
             .insert(
               [
                 {
                   user_id: leadData.assigned_to || leadData.owner_id,
-                  title:
-                    status === 'won'
-                      ? 'Lead won ĐYZ%'
-                      : 'Lead lost',
+                  title: status === "won" ? "Lead won ĐYZ%" : "Lead lost",
                   message:
-                    status === 'won'
+                    status === "won"
                       ? `Lead "${leadData.name}" has been marked as WON.`
                       : `Lead "${leadData.name}" has been marked as LOST.`,
-                  type: 'system'
-                }
+                  type: "system",
+                },
               ],
-              { returning: 'minimal' }
+              { returning: "minimal" },
             );
           if (notifError) {
-            console.error('Lead status notify error:', notifError);
+            console.error("Lead status notify error:", notifError);
           }
         }
       }
 
-      const { data, error } = await supabase
-        .from('leads')
-        .select('*');
+      const { data, error } = await supabase.from("leads").select("*");
 
       if (error) {
-        console.error('Reload leads error:', error);
+        console.error("Reload leads error:", error);
         return res.json([]);
       }
 
@@ -340,10 +331,10 @@ router.put(
 
       res.json(rows);
     } catch (err) {
-      console.error('Update lead catch error:', err);
-      res.status(500).json({ message: 'Error updating lead' });
+      console.error("Update lead catch error:", err);
+      res.status(500).json({ message: "Error updating lead" });
     }
-  }
+  },
 );
 
 module.exports = router;

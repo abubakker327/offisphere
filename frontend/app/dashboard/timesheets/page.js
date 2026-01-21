@@ -1,34 +1,35 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
 const STATUS_COLORS = {
-  submitted: 'bg-amber-50 text-amber-700 border-amber-100',
-  approved: 'bg-emerald-50 text-emerald-700 border-emerald-100',
-  rejected: 'bg-red-50 text-red-600 border-red-100'
+  submitted: "bg-amber-50 text-amber-700 border-amber-100",
+  approved: "bg-emerald-50 text-emerald-700 border-emerald-100",
+  rejected: "bg-red-50 text-red-600 border-red-100",
 };
 
 export default function TimesheetsPage() {
   const [timesheets, setTimesheets] = useState([]);
   const [loadingList, setLoadingList] = useState(true);
-  const [listError, setListError] = useState('');
+  const [listError, setListError] = useState("");
 
   // create form
-  const [workDate, setWorkDate] = useState('');
-  const [projectName, setProjectName] = useState('');
-  const [taskDescription, setTaskDescription] = useState('');
-  const [hours, setHours] = useState('');
-  const [notes, setNotes] = useState('');
+  const [workDate, setWorkDate] = useState("");
+  const [projectName, setProjectName] = useState("");
+  const [taskDescription, setTaskDescription] = useState("");
+  const [hours, setHours] = useState("");
+  const [notes, setNotes] = useState("");
   const [creating, setCreating] = useState(false);
-  const [createError, setCreateError] = useState('');
-  const [createSuccess, setCreateSuccess] = useState('');
+  const [createError, setCreateError] = useState("");
+  const [createSuccess, setCreateSuccess] = useState("");
 
   // filters
-  const [filterStatus, setFilterStatus] = useState('all');
-  const [filterDateFrom, setFilterDateFrom] = useState('');
-  const [filterDateTo, setFilterDateTo] = useState('');
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [filterDateFrom, setFilterDateFrom] = useState("");
+  const [filterDateTo, setFilterDateTo] = useState("");
 
   // roles
   const [roles, setRoles] = useState([]);
@@ -36,11 +37,11 @@ export default function TimesheetsPage() {
   const [deleteLoadingId, setDeleteLoadingId] = useState(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const today = new Date().toISOString().slice(0, 10);
       setWorkDate(today);
 
-      const storedRoles = window.localStorage.getItem('offisphere_roles');
+      const storedRoles = window.localStorage.getItem("offisphere_roles");
       if (storedRoles) {
         try {
           const parsed = JSON.parse(storedRoles);
@@ -52,32 +53,32 @@ export default function TimesheetsPage() {
     }
   }, []);
 
-  const authHeaders = { 'Content-Type': 'application/json' };
+  const authHeaders = { "Content-Type": "application/json" };
 
-  const isAdmin = roles.includes('admin');
-  const isManager = roles.includes('manager');
+  const isAdmin = roles.includes("admin");
+  const isManager = roles.includes("manager");
   const isAdminOrManager = isAdmin || isManager;
 
   const fetchTimesheets = async () => {
     setLoadingList(true);
-    setListError('');
+    setListError("");
 
     try {
       const res = await fetch(`${API_BASE}/api/timesheets`, {
-        credentials: 'include',
-        headers: authHeaders
+        credentials: "include",
+        headers: authHeaders,
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setListError(data.message || 'Failed to load timesheets');
+        setListError(data.message || "Failed to load timesheets");
       } else {
         setTimesheets(data);
       }
     } catch (err) {
       console.error(err);
-      setListError('Error connecting to server');
+      setListError("Error connecting to server");
     } finally {
       setLoadingList(false);
     }
@@ -91,38 +92,38 @@ export default function TimesheetsPage() {
   const handleCreateTimesheet = async (e) => {
     e.preventDefault();
     setCreating(true);
-    setCreateError('');
-    setCreateSuccess('');
+    setCreateError("");
+    setCreateSuccess("");
 
     try {
       const res = await fetch(`${API_BASE}/api/timesheets`, {
-        credentials: 'include',
-        method: 'POST',
+        credentials: "include",
+        method: "POST",
         headers: authHeaders,
         body: JSON.stringify({
           work_date: workDate,
           project_name: projectName,
           task_description: taskDescription,
           hours,
-          notes
-        })
+          notes,
+        }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setCreateError(data.message || 'Failed to create timesheet entry');
+        setCreateError(data.message || "Failed to create timesheet entry");
       } else {
-        setCreateSuccess('Timesheet entry added');
-        setProjectName('');
-        setTaskDescription('');
-        setHours('');
-        setNotes('');
+        setCreateSuccess("Timesheet entry added");
+        setProjectName("");
+        setTaskDescription("");
+        setHours("");
+        setNotes("");
         fetchTimesheets();
       }
     } catch (err) {
       console.error(err);
-      setCreateError('Error connecting to server');
+      setCreateError("Error connecting to server");
     } finally {
       setCreating(false);
     }
@@ -130,29 +131,26 @@ export default function TimesheetsPage() {
 
   const handleUpdateStatus = async (id, newStatus) => {
     setStatusLoadingId(id);
-    setListError('');
+    setListError("");
 
     try {
-      const res = await fetch(
-        `${API_BASE}/api/timesheets/${id}/status`,
-        {
-        credentials: 'include',
-          method: 'PATCH',
-          headers: authHeaders,
-          body: JSON.stringify({ status: newStatus })
-        }
-      );
+      const res = await fetch(`${API_BASE}/api/timesheets/${id}/status`, {
+        credentials: "include",
+        method: "PATCH",
+        headers: authHeaders,
+        body: JSON.stringify({ status: newStatus }),
+      });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setListError(data.message || 'Failed to update status');
+        setListError(data.message || "Failed to update status");
       } else {
         fetchTimesheets();
       }
     } catch (err) {
       console.error(err);
-      setListError('Error connecting to server');
+      setListError("Error connecting to server");
     } finally {
       setStatusLoadingId(null);
     }
@@ -160,47 +158,44 @@ export default function TimesheetsPage() {
 
   const handleDelete = async (id) => {
     const confirmed = window.confirm(
-      'Are you sure you want to delete this timesheet entry?'
+      "Are you sure you want to delete this timesheet entry?",
     );
     if (!confirmed) return;
 
     setDeleteLoadingId(id);
-    setListError('');
+    setListError("");
 
     try {
-      const res = await fetch(
-        `${API_BASE}/api/timesheets/${id}`,
-        {
-        credentials: 'include',
-          method: 'DELETE',
-          headers: authHeaders
-        }
-      );
+      const res = await fetch(`${API_BASE}/api/timesheets/${id}`, {
+        credentials: "include",
+        method: "DELETE",
+        headers: authHeaders,
+      });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setListError(data.message || 'Failed to delete entry');
+        setListError(data.message || "Failed to delete entry");
       } else {
         fetchTimesheets();
       }
     } catch (err) {
       console.error(err);
-      setListError('Error connecting to server');
+      setListError("Error connecting to server");
     } finally {
       setDeleteLoadingId(null);
     }
   };
 
   const formatDate = (value) => {
-    if (!value) return '-';
+    if (!value) return "-";
     return new Date(value).toLocaleDateString();
   };
 
   // client-side filters
   const filteredTimesheets = timesheets.filter((item) => {
     const matchesStatus =
-      filterStatus === 'all' ? true : item.status === filterStatus;
+      filterStatus === "all" ? true : item.status === filterStatus;
 
     const dateObj = item.work_date ? new Date(item.work_date) : null;
     let matchesFrom = true;
@@ -225,7 +220,9 @@ export default function TimesheetsPage() {
             <span>Time tracking</span>
           </div>
           <div>
-            <h1 className="text-3xl font-semibold text-slate-900">Timesheets</h1>
+            <h1 className="text-3xl font-semibold text-slate-900">
+              Timesheets
+            </h1>
             <p className="text-sm text-slate-500">
               Log daily work hours and review timesheet entries. Managers can
               approve or reject submissions.
@@ -256,7 +253,9 @@ export default function TimesheetsPage() {
           </div>
           <div>
             <h2 className="text-lg font-semibold text-slate-900">Log work</h2>
-            <p className="text-xs text-slate-500">Capture today&apos;s hours and tasks.</p>
+            <p className="text-xs text-slate-500">
+              Capture today&apos;s hours and tasks.
+            </p>
           </div>
         </div>
 
@@ -341,7 +340,7 @@ export default function TimesheetsPage() {
               disabled={creating}
               className="self-start px-5 py-2.5 rounded-2xl text-xs font-semibold text-white bg-blue-600 shadow-lg shadow-blue-300/40 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {creating ? 'Saving...' : 'Add entry'}
+              {creating ? "Saving..." : "Add entry"}
             </button>
           </div>
         </form>
@@ -368,7 +367,9 @@ export default function TimesheetsPage() {
           </div>
           <div>
             <h2 className="text-lg font-semibold text-slate-900">Filters</h2>
-            <p className="text-xs text-slate-500">Refine entries by status or date.</p>
+            <p className="text-xs text-slate-500">
+              Refine entries by status or date.
+            </p>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
@@ -410,7 +411,9 @@ export default function TimesheetsPage() {
       <div className="rounded-3xl bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] border border-slate-100">
         <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-100">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">Timesheet entries</h2>
+            <h2 className="text-lg font-semibold text-slate-900">
+              Timesheet entries
+            </h2>
             <p className="text-xs text-slate-500">
               {filteredTimesheets.length} entries
             </p>
@@ -457,10 +460,7 @@ export default function TimesheetsPage() {
                 </tr>
               ) : (
                 filteredTimesheets.map((item) => (
-                  <tr
-                    key={item.id}
-                    className="transition hover:bg-slate-50"
-                  >
+                  <tr key={item.id} className="transition hover:bg-slate-50">
                     <td className="px-6 py-4 text-slate-800">
                       {item.full_name}
                     </td>
@@ -468,17 +468,17 @@ export default function TimesheetsPage() {
                       {formatDate(item.work_date)}
                     </td>
                     <td className="px-6 py-4 text-slate-600">
-                      {item.project_name || '--'}
+                      {item.project_name || "--"}
                     </td>
                     <td className="px-6 py-4 text-slate-600">
-                      {item.task_description || '--'}
+                      {item.task_description || "--"}
                     </td>
                     <td className="px-6 py-4 text-slate-800">{item.hours}</td>
                     <td className="px-6 py-4 text-xs">
                       <span
                         className={`px-2.5 py-1 rounded-full border font-medium ${
                           STATUS_COLORS[item.status] ||
-                          'bg-slate-50 text-slate-700 border-slate-200'
+                          "bg-slate-50 text-slate-700 border-slate-200"
                         }`}
                       >
                         {item.status}
@@ -486,11 +486,11 @@ export default function TimesheetsPage() {
                     </td>
                     <td className="px-6 py-4 text-xs">
                       <div className="flex flex-wrap gap-2">
-                        {isAdminOrManager && item.status === 'submitted' && (
+                        {isAdminOrManager && item.status === "submitted" && (
                           <>
                             <button
                               onClick={() =>
-                                handleUpdateStatus(item.id, 'approved')
+                                handleUpdateStatus(item.id, "approved")
                               }
                               disabled={statusLoadingId === item.id}
                               className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 hover:bg-emerald-100 disabled:opacity-60"
@@ -499,7 +499,7 @@ export default function TimesheetsPage() {
                             </button>
                             <button
                               onClick={() =>
-                                handleUpdateStatus(item.id, 'rejected')
+                                handleUpdateStatus(item.id, "rejected")
                               }
                               disabled={statusLoadingId === item.id}
                               className="px-3 py-1 rounded-full bg-red-50 text-red-600 border border-red-100 hover:bg-red-100 disabled:opacity-60"
@@ -514,7 +514,9 @@ export default function TimesheetsPage() {
                           disabled={deleteLoadingId === item.id}
                           className="px-3 py-1 rounded-full bg-slate-900 text-white hover:bg-slate-700 disabled:opacity-60"
                         >
-                          {deleteLoadingId === item.id ? 'Deleting...' : 'Delete'}
+                          {deleteLoadingId === item.id
+                            ? "Deleting..."
+                            : "Delete"}
                         </button>
                       </div>
                     </td>
@@ -528,9 +530,3 @@ export default function TimesheetsPage() {
     </div>
   );
 }
-
-
-
-
-
-

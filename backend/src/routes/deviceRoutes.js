@@ -1,7 +1,7 @@
 // backend/src/routes/deviceRoutes.js
-const express = require('express');
-const supabase = require('../supabaseClient');
-const { authenticate, authorize } = require('../middleware/authMiddleware');
+const express = require("express");
+const supabase = require("../supabaseClient");
+const { authenticate, authorize } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
@@ -21,12 +21,12 @@ async function enrichDevices(records) {
 
   if (ids.length > 0) {
     const { data: users, error: usersError } = await supabase
-      .from('users')
-      .select('id, full_name, email')
-      .in('id', ids);
+      .from("users")
+      .select("id, full_name, email")
+      .in("id", ids);
 
     if (usersError) {
-      console.error('enrichDevices usersError:', usersError);
+      console.error("enrichDevices usersError:", usersError);
     } else {
       (users || []).forEach((u) => {
         usersMap[u.id] = u.full_name || u.email;
@@ -36,7 +36,7 @@ async function enrichDevices(records) {
 
   return (records || []).map((d) => ({
     ...d,
-    assigned_to_name: d.assigned_to ? usersMap[d.assigned_to] || '' : ''
+    assigned_to_name: d.assigned_to ? usersMap[d.assigned_to] || "" : "",
   }));
 }
 
@@ -45,27 +45,25 @@ async function enrichDevices(records) {
  * - Admin/Manager: all
  * - Employee: all (for now read-only; could be filtered later)
  */
-router.get('/', authenticate, authorize([]), async (req, res) => {
+router.get("/", authenticate, authorize([]), async (req, res) => {
   try {
     const { data, error } = await supabase
-      .from('devices')
+      .from("devices")
       .select(
-        'id, name, device_type, serial_number, status, assigned_to, assigned_at, notes, created_at'
+        "id, name, device_type, serial_number, status, assigned_to, assigned_at, notes, created_at",
       )
-      .order('created_at', { ascending: false });
+      .order("created_at", { ascending: false });
 
     if (error) {
-      console.error('List devices error:', error);
-      return res
-        .status(500)
-        .json({ message: 'Error fetching devices' });
+      console.error("List devices error:", error);
+      return res.status(500).json({ message: "Error fetching devices" });
     }
 
     const enriched = await enrichDevices(data || []);
     res.json(enriched);
   } catch (err) {
-    console.error('List devices catch error:', err);
-    res.status(500).json({ message: 'Error fetching devices' });
+    console.error("List devices catch error:", err);
+    res.status(500).json({ message: "Error fetching devices" });
   }
 });
 
@@ -75,23 +73,21 @@ router.get('/', authenticate, authorize([]), async (req, res) => {
  * body: { name, device_type, serial_number, status, assigned_to, notes }
  */
 router.post(
-  '/',
+  "/",
   authenticate,
-  authorize(['admin', 'manager']),
+  authorize(["admin", "manager"]),
   async (req, res) => {
     const {
       name,
       device_type,
       serial_number,
-      status = 'available',
+      status = "available",
       assigned_to,
-      notes
+      notes,
     } = req.body;
 
     if (!name) {
-      return res
-        .status(400)
-        .json({ message: 'Name is required' });
+      return res.status(400).json({ message: "Name is required" });
     }
 
     try {
@@ -100,7 +96,7 @@ router.post(
         device_type: device_type || null,
         serial_number: serial_number || null,
         status,
-        notes: notes || null
+        notes: notes || null,
       };
 
       if (assigned_to) {
@@ -109,38 +105,35 @@ router.post(
       }
 
       const { error: insertError } = await supabase
-        .from('devices')
+        .from("devices")
         .insert(insertData);
 
       if (insertError) {
-        console.error('Create device error:', insertError);
+        console.error("Create device error:", insertError);
         return res.status(400).json({
-          message:
-            insertError.message || 'Error creating device'
+          message: insertError.message || "Error creating device",
         });
       }
 
       const { data, error: listError } = await supabase
-        .from('devices')
+        .from("devices")
         .select(
-          'id, name, device_type, serial_number, status, assigned_to, assigned_at, notes, created_at'
+          "id, name, device_type, serial_number, status, assigned_to, assigned_at, notes, created_at",
         )
-        .order('created_at', { ascending: false });
+        .order("created_at", { ascending: false });
 
       if (listError) {
-        console.error('List devices after create error:', listError);
-        return res
-          .status(500)
-          .json({ message: 'Error fetching devices' });
+        console.error("List devices after create error:", listError);
+        return res.status(500).json({ message: "Error fetching devices" });
       }
 
       const enriched = await enrichDevices(data || []);
       res.status(201).json(enriched);
     } catch (err) {
-      console.error('Create device catch error:', err);
-      res.status(500).json({ message: 'Error creating device' });
+      console.error("Create device catch error:", err);
+      res.status(500).json({ message: "Error creating device" });
     }
-  }
+  },
 );
 
 /**
@@ -148,19 +141,13 @@ router.post(
  * Admin / Manager only
  */
 router.put(
-  '/:id',
+  "/:id",
   authenticate,
-  authorize(['admin', 'manager']),
+  authorize(["admin", "manager"]),
   async (req, res) => {
     const deviceId = req.params.id;
-    const {
-      name,
-      device_type,
-      serial_number,
-      status,
-      assigned_to,
-      notes
-    } = req.body;
+    const { name, device_type, serial_number, status, assigned_to, notes } =
+      req.body;
 
     try {
       const updateData = {};
@@ -183,39 +170,36 @@ router.put(
       }
 
       const { error: updateError } = await supabase
-        .from('devices')
+        .from("devices")
         .update(updateData)
-        .eq('id', deviceId);
+        .eq("id", deviceId);
 
       if (updateError) {
-        console.error('Update device error:', updateError);
+        console.error("Update device error:", updateError);
         return res.status(400).json({
-          message:
-            updateError.message || 'Error updating device'
+          message: updateError.message || "Error updating device",
         });
       }
 
       const { data, error: listError } = await supabase
-        .from('devices')
+        .from("devices")
         .select(
-          'id, name, device_type, serial_number, status, assigned_to, assigned_at, notes, created_at'
+          "id, name, device_type, serial_number, status, assigned_to, assigned_at, notes, created_at",
         )
-        .order('created_at', { ascending: false });
+        .order("created_at", { ascending: false });
 
       if (listError) {
-        console.error('List devices after update error:', listError);
-        return res
-          .status(500)
-          .json({ message: 'Error fetching devices' });
+        console.error("List devices after update error:", listError);
+        return res.status(500).json({ message: "Error fetching devices" });
       }
 
       const enriched = await enrichDevices(data || []);
       res.json(enriched);
     } catch (err) {
-      console.error('Update device catch error:', err);
-      res.status(500).json({ message: 'Error updating device' });
+      console.error("Update device catch error:", err);
+      res.status(500).json({ message: "Error updating device" });
     }
-  }
+  },
 );
 
 /**
@@ -223,47 +207,44 @@ router.put(
  * Admin / Manager only
  */
 router.delete(
-  '/:id',
+  "/:id",
   authenticate,
-  authorize(['admin', 'manager']),
+  authorize(["admin", "manager"]),
   async (req, res) => {
     const deviceId = req.params.id;
 
     try {
       const { error } = await supabase
-        .from('devices')
+        .from("devices")
         .delete()
-        .eq('id', deviceId);
+        .eq("id", deviceId);
 
       if (error) {
-        console.error('Delete device error:', error);
+        console.error("Delete device error:", error);
         return res.status(400).json({
-          message:
-            error.message || 'Error deleting device'
+          message: error.message || "Error deleting device",
         });
       }
 
       const { data, error: listError } = await supabase
-        .from('devices')
+        .from("devices")
         .select(
-          'id, name, device_type, serial_number, status, assigned_to, assigned_at, notes, created_at'
+          "id, name, device_type, serial_number, status, assigned_to, assigned_at, notes, created_at",
         )
-        .order('created_at', { ascending: false });
+        .order("created_at", { ascending: false });
 
       if (listError) {
-        console.error('List devices after delete error:', listError);
-        return res
-          .status(500)
-          .json({ message: 'Error fetching devices' });
+        console.error("List devices after delete error:", listError);
+        return res.status(500).json({ message: "Error fetching devices" });
       }
 
       const enriched = await enrichDevices(data || []);
       res.json(enriched);
     } catch (err) {
-      console.error('Delete device catch error:', err);
-      res.status(500).json({ message: 'Error deleting device' });
+      console.error("Delete device catch error:", err);
+      res.status(500).json({ message: "Error deleting device" });
     }
-  }
+  },
 );
 
 module.exports = router;

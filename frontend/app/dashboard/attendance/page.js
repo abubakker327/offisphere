@@ -1,34 +1,35 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 export default function AttendancePage() {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [modalType, setModalType] = useState(null); // 'in' | 'out' | null
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+  const API_BASE =
+    process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
   const fetchAttendance = async () => {
     try {
       const res = await fetch(`${API_BASE}/api/attendance`, {
-        credentials: 'include',
+        credentials: "include",
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || 'Error fetching attendance');
+        setError(data.message || "Error fetching attendance");
       } else {
         setEntries(Array.isArray(data) ? data : []);
-        setError('');
+        setError("");
       }
     } catch (err) {
-      console.error('Attendance list error:', err);
-      setError('Error connecting to server');
+      console.error("Attendance list error:", err);
+      setError("Error connecting to server");
     } finally {
       setLoading(false);
     }
@@ -40,61 +41,61 @@ export default function AttendancePage() {
 
   const triggerToast = (type, message) => {
     window.dispatchEvent(
-      new CustomEvent('offisphere-toast', {
-        detail: { type, message }
-      })
+      new CustomEvent("offisphere-toast", {
+        detail: { type, message },
+      }),
     );
   };
 
   const handleCheck = async (type) => {
     if (!modalType) return;
     setActionLoading(true);
-    setError('');
+    setError("");
 
     try {
       const endpoint =
-        type === 'in'
+        type === "in"
           ? `${API_BASE}/api/attendance/check-in`
           : `${API_BASE}/api/attendance/check-out`;
 
       const res = await fetch(endpoint, {
-        credentials: 'include',
-        method: 'POST',
+        credentials: "include",
+        method: "POST",
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || 'Attendance action failed');
-        triggerToast('error', data.message || 'Attendance action failed');
+        setError(data.message || "Attendance action failed");
+        triggerToast("error", data.message || "Attendance action failed");
       } else {
         triggerToast(
-          'success',
-          type === 'in'
-            ? 'Checked in successfully.'
-            : 'Checked out successfully.'
+          "success",
+          type === "in"
+            ? "Checked in successfully."
+            : "Checked out successfully.",
         );
         setModalType(null);
         fetchAttendance();
       }
     } catch (err) {
-      console.error('Attendance action error:', err);
-      setError('Error connecting to server');
-      triggerToast('error', 'Error connecting to server');
+      console.error("Attendance action error:", err);
+      setError("Error connecting to server");
+      triggerToast("error", "Error connecting to server");
     } finally {
       setActionLoading(false);
     }
   };
 
   const formatDate = (value) =>
-    value ? new Date(value).toLocaleDateString() : '--';
+    value ? new Date(value).toLocaleDateString() : "--";
   const formatTime = (value) =>
     value
       ? new Date(value).toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit'
+          hour: "2-digit",
+          minute: "2-digit",
         })
-      : '--';
+      : "--";
 
   return (
     <motion.div
@@ -108,9 +109,7 @@ export default function AttendancePage() {
           <span>Attendance log</span>
         </div>
         <div>
-          <h1 className="text-3xl font-semibold text-slate-900">
-            Attendance
-          </h1>
+          <h1 className="text-3xl font-semibold text-slate-900">Attendance</h1>
           <p className="text-sm text-slate-500">
             Check in or out and review recent attendance entries.
           </p>
@@ -156,7 +155,7 @@ export default function AttendancePage() {
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             disabled={actionLoading}
-            onClick={() => setModalType('in')}
+            onClick={() => setModalType("in")}
             className="px-5 py-2.5 rounded-2xl text-xs font-semibold bg-blue-600 text-white shadow-lg shadow-blue-300/40 hover:bg-blue-700 disabled:opacity-60"
           >
             Check in
@@ -166,7 +165,7 @@ export default function AttendancePage() {
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             disabled={actionLoading}
-            onClick={() => setModalType('out')}
+            onClick={() => setModalType("out")}
             className="px-5 py-2.5 rounded-2xl text-xs font-semibold bg-white text-slate-700 border border-slate-200 shadow-sm hover:border-blue-200 disabled:opacity-60"
           >
             Check out
@@ -241,19 +240,16 @@ export default function AttendancePage() {
                 </tr>
               ) : (
                 entries.map((row) => (
-                  <tr
-                    key={row.id}
-                    className="hover:bg-slate-50"
-                  >
+                  <tr key={row.id} className="hover:bg-slate-50">
                     <td className="px-6 py-4 text-slate-900">
                       <div className="flex items-center gap-3">
                         <div className="h-9 w-9 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-sm font-semibold">
-                          {(row.employee_name || row.user_name || 'U')
+                          {(row.employee_name || row.user_name || "U")
                             .charAt(0)
                             .toUpperCase()}
                         </div>
                         <span className="text-sm font-semibold">
-                          {row.employee_name || row.user_name || '--'}
+                          {row.employee_name || row.user_name || "--"}
                         </span>
                       </div>
                     </td>
@@ -268,7 +264,7 @@ export default function AttendancePage() {
                     </td>
                     <td className="px-6 py-4 text-xs">
                       <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 font-medium">
-                        {row.status || 'present'}
+                        {row.status || "present"}
                       </span>
                     </td>
                   </tr>
@@ -293,7 +289,7 @@ export default function AttendancePage() {
                   Confirm
                 </p>
                 <h3 className="text-lg font-semibold text-slate-900">
-                  {modalType === 'in' ? 'Check in now?' : 'Check out now?'}
+                  {modalType === "in" ? "Check in now?" : "Check out now?"}
                 </h3>
               </div>
               <button
@@ -306,7 +302,9 @@ export default function AttendancePage() {
             </div>
 
             <p className="text-sm text-slate-600">
-              We will record your {modalType === 'in' ? 'check-in time' : 'check-out time'} as of now.
+              We will record your{" "}
+              {modalType === "in" ? "check-in time" : "check-out time"} as of
+              now.
             </p>
 
             <div className="flex justify-end gap-3 pt-2">
@@ -323,7 +321,7 @@ export default function AttendancePage() {
                 onClick={() => handleCheck(modalType)}
                 className="px-4 py-2 rounded-2xl text-xs font-semibold text-white bg-blue-600 shadow-md hover:bg-blue-700 disabled:opacity-60"
               >
-                {actionLoading ? 'Processing...' : 'Confirm'}
+                {actionLoading ? "Processing..." : "Confirm"}
               </motion.button>
             </div>
           </motion.div>
@@ -332,9 +330,3 @@ export default function AttendancePage() {
     </motion.div>
   );
 }
-
-
-
-
-
-

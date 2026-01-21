@@ -1,58 +1,59 @@
-'use client';
+﻿"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
 const LEAVE_TYPES = [
-  { value: 'CL', label: 'Casual Leave (CL)' },
-  { value: 'SL', label: 'Sick Leave (SL)' },
-  { value: 'EL', label: 'Earned Leave (EL)' },
-  { value: 'LOP', label: 'Loss of Pay (LOP)' }
+  { value: "CL", label: "Casual Leave (CL)" },
+  { value: "SL", label: "Sick Leave (SL)" },
+  { value: "EL", label: "Earned Leave (EL)" },
+  { value: "LOP", label: "Loss of Pay (LOP)" },
 ];
 
 const STATUS_FILTERS = [
-  { value: 'all', label: 'All statuses' },
-  { value: 'pending', label: 'Pending' },
-  { value: 'approved', label: 'Approved' },
-  { value: 'rejected', label: 'Rejected' }
+  { value: "all", label: "All statuses" },
+  { value: "pending", label: "Pending" },
+  { value: "approved", label: "Approved" },
+  { value: "rejected", label: "Rejected" },
 ];
 
 export default function LeavesPage() {
   const [leaves, setLeaves] = useState([]);
   const [loadingList, setLoadingList] = useState(true);
-  const [listError, setListError] = useState('');
+  const [listError, setListError] = useState("");
 
-  const [leaveType, setLeaveType] = useState('CL');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [reason, setReason] = useState('');
+  const [leaveType, setLeaveType] = useState("CL");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [reason, setReason] = useState("");
 
   const [applyLoading, setApplyLoading] = useState(false);
-  const [applyError, setApplyError] = useState('');
-  const [applySuccess, setApplySuccess] = useState('');
+  const [applyError, setApplyError] = useState("");
+  const [applySuccess, setApplySuccess] = useState("");
 
   const [statusActionLoadingId, setStatusActionLoadingId] = useState(null);
   const [roles, setRoles] = useState([]);
 
   // Filters
-  const [filterStatus, setFilterStatus] = useState('all');
-  const [filterType, setFilterType] = useState('all');
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [filterType, setFilterType] = useState("all");
 
   const normalizeRole = (role) => {
-    if (!role) return '';
-    if (typeof role === 'string') return role;
-    if (typeof role === 'object') {
-      return role.name || role.role || role.type || role.code || '';
+    if (!role) return "";
+    if (typeof role === "string") return role;
+    if (typeof role === "object") {
+      return role.name || role.role || role.type || role.code || "";
     }
-    return '';
+    return "";
   };
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const storedRoles =
-        window.localStorage.getItem('offisphere_roles') ||
-        window.sessionStorage.getItem('offisphere_roles');
+        window.localStorage.getItem("offisphere_roles") ||
+        window.sessionStorage.getItem("offisphere_roles");
       if (storedRoles) {
         try {
           const parsed = JSON.parse(storedRoles);
@@ -60,9 +61,9 @@ export default function LeavesPage() {
             ? parsed
                 .map((role) => normalizeRole(role))
                 .map((role) =>
-                  String(role || '')
+                  String(role || "")
                     .toLowerCase()
-                    .replace(/\s+/g, '_')
+                    .replace(/\s+/g, "_"),
                 )
             : [];
           setRoles(normalized.filter(Boolean));
@@ -72,35 +73,35 @@ export default function LeavesPage() {
       }
     }
   }, []);
-  const authHeaders = { 'Content-Type': 'application/json' };
+  const authHeaders = { "Content-Type": "application/json" };
 
   const isAdmin =
-    roles.includes('admin') ||
-    roles.includes('super_admin') ||
-    roles.includes('superadmin');
-  const isManager = roles.includes('manager');
+    roles.includes("admin") ||
+    roles.includes("super_admin") ||
+    roles.includes("superadmin");
+  const isManager = roles.includes("manager");
   const canReview = isAdmin || isManager;
 
   const fetchLeaves = async () => {
     setLoadingList(true);
-    setListError('');
+    setListError("");
 
     try {
       const res = await fetch(`${API_BASE}/api/leaves`, {
-        credentials: 'include',
-        headers: authHeaders
+        credentials: "include",
+        headers: authHeaders,
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setListError(data.message || 'Failed to load leaves');
+        setListError(data.message || "Failed to load leaves");
       } else {
         setLeaves(data);
       }
     } catch (err) {
       console.error(err);
-      setListError('Error connecting to server');
+      setListError("Error connecting to server");
     } finally {
       setLoadingList(false);
     }
@@ -114,36 +115,36 @@ export default function LeavesPage() {
   const handleApplyLeave = async (e) => {
     e.preventDefault();
     setApplyLoading(true);
-    setApplyError('');
-    setApplySuccess('');
+    setApplyError("");
+    setApplySuccess("");
 
     try {
       const res = await fetch(`${API_BASE}/api/leaves/apply`, {
-        credentials: 'include',
-        method: 'POST',
+        credentials: "include",
+        method: "POST",
         headers: authHeaders,
         body: JSON.stringify({
           leave_type: leaveType,
           start_date: startDate,
           end_date: endDate,
-          reason
-        })
+          reason,
+        }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setApplyError(data.message || 'Failed to submit leave');
+        setApplyError(data.message || "Failed to submit leave");
       } else {
-        setApplySuccess('Leave request submitted');
-        setReason('');
-        setStartDate('');
-        setEndDate('');
+        setApplySuccess("Leave request submitted");
+        setReason("");
+        setStartDate("");
+        setEndDate("");
         fetchLeaves();
       }
     } catch (err) {
       console.error(err);
-      setApplyError('Error connecting to server');
+      setApplyError("Error connecting to server");
     } finally {
       setApplyLoading(false);
     }
@@ -151,29 +152,26 @@ export default function LeavesPage() {
 
   const handleUpdateStatus = async (id, newStatus) => {
     setStatusActionLoadingId(id);
-    setListError('');
+    setListError("");
 
     try {
-      const res = await fetch(
-        `${API_BASE}/api/leaves/${id}/status`,
-        {
-        credentials: 'include',
-          method: 'PATCH',
-          headers: authHeaders,
-          body: JSON.stringify({ status: newStatus })
-        }
-      );
+      const res = await fetch(`${API_BASE}/api/leaves/${id}/status`, {
+        credentials: "include",
+        method: "PATCH",
+        headers: authHeaders,
+        body: JSON.stringify({ status: newStatus }),
+      });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setListError(data.message || 'Failed to update status');
+        setListError(data.message || "Failed to update status");
       } else {
         fetchLeaves();
       }
     } catch (err) {
       console.error(err);
-      setListError('Error connecting to server');
+      setListError("Error connecting to server");
     } finally {
       setStatusActionLoadingId(null);
     }
@@ -181,26 +179,26 @@ export default function LeavesPage() {
 
   const statusChipStyles = (status) => {
     switch (status) {
-      case 'approved':
-        return 'bg-emerald-50 text-emerald-700 border-emerald-100';
-      case 'rejected':
-        return 'bg-red-50 text-red-600 border-red-100';
+      case "approved":
+        return "bg-emerald-50 text-emerald-700 border-emerald-100";
+      case "rejected":
+        return "bg-red-50 text-red-600 border-red-100";
       default:
-        return 'bg-amber-50 text-amber-700 border-amber-100';
+        return "bg-amber-50 text-amber-700 border-amber-100";
     }
   };
 
   const formatDate = (value) => {
-    if (!value) return '-';
+    if (!value) return "-";
     return new Date(value).toLocaleDateString();
   };
 
   // Apply filters client-side
   const filteredLeaves = leaves.filter((leave) => {
     const matchesStatus =
-      filterStatus === 'all' ? true : leave.status === filterStatus;
+      filterStatus === "all" ? true : leave.status === filterStatus;
     const matchesType =
-      filterType === 'all' ? true : leave.leave_type === filterType;
+      filterType === "all" ? true : leave.leave_type === filterType;
     return matchesStatus && matchesType;
   });
 
@@ -213,9 +211,12 @@ export default function LeavesPage() {
             <span>Leave desk</span>
           </div>
           <div>
-            <h1 className="text-3xl font-semibold text-slate-900">Leave Management</h1>
+            <h1 className="text-3xl font-semibold text-slate-900">
+              Leave Management
+            </h1>
             <p className="text-sm text-slate-500">
-              Apply for leave and track approvals. Admins can review and approve requests.
+              Apply for leave and track approvals. Admins can review and approve
+              requests.
             </p>
           </div>
         </div>
@@ -242,8 +243,12 @@ export default function LeavesPage() {
             </svg>
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">Apply for leave</h2>
-            <p className="text-xs text-slate-500">Submit a request with dates and reason.</p>
+            <h2 className="text-lg font-semibold text-slate-900">
+              Apply for leave
+            </h2>
+            <p className="text-xs text-slate-500">
+              Submit a request with dates and reason.
+            </p>
           </div>
         </div>
 
@@ -289,7 +294,9 @@ export default function LeavesPage() {
           </div>
 
           <div className="space-y-1 md:col-span-1">
-            <label className="font-medium text-slate-700">Reason (optional)</label>
+            <label className="font-medium text-slate-700">
+              Reason (optional)
+            </label>
             <textarea
               rows={3}
               value={reason}
@@ -315,7 +322,7 @@ export default function LeavesPage() {
               disabled={applyLoading}
               className="self-start px-5 py-2.5 rounded-2xl text-xs font-semibold text-white bg-blue-600 shadow-lg shadow-blue-300/40 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {applyLoading ? 'Submitting...' : 'Submit leave request'}
+              {applyLoading ? "Submitting..." : "Submit leave request"}
             </button>
           </div>
         </form>
@@ -342,7 +349,9 @@ export default function LeavesPage() {
           </div>
           <div>
             <h2 className="text-lg font-semibold text-slate-900">Filters</h2>
-            <p className="text-xs text-slate-500">Filter by status or leave type.</p>
+            <p className="text-xs text-slate-500">
+              Filter by status or leave type.
+            </p>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
@@ -383,7 +392,9 @@ export default function LeavesPage() {
       <div className="rounded-3xl bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)] border border-slate-100">
         <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-100">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">Leave requests</h2>
+            <h2 className="text-lg font-semibold text-slate-900">
+              Leave requests
+            </h2>
             <p className="text-xs text-slate-500">
               {filteredLeaves.length} requests
             </p>
@@ -411,7 +422,11 @@ export default function LeavesPage() {
                 <th className="text-left px-6 py-3 font-semibold">To</th>
                 <th className="text-left px-6 py-3 font-semibold">Days</th>
                 <th className="text-left px-6 py-3 font-semibold">Status</th>
-                {canReview && <th className="text-right px-6 py-3 font-semibold">Actions</th>}
+                {canReview && (
+                  <th className="text-right px-6 py-3 font-semibold">
+                    Actions
+                  </th>
+                )}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -435,10 +450,7 @@ export default function LeavesPage() {
                 </tr>
               ) : (
                 filteredLeaves.map((leave) => (
-                  <tr
-                    key={leave.id}
-                    className="transition hover:bg-slate-50"
-                  >
+                  <tr key={leave.id} className="transition hover:bg-slate-50">
                     <td className="px-6 py-4 text-slate-800">
                       {leave.full_name}
                     </td>
@@ -457,7 +469,7 @@ export default function LeavesPage() {
                     <td className="px-6 py-4 text-xs">
                       <span
                         className={`px-2.5 py-1 rounded-full border font-medium ${statusChipStyles(
-                          leave.status
+                          leave.status,
                         )}`}
                       >
                         {leave.status}
@@ -465,26 +477,22 @@ export default function LeavesPage() {
                     </td>
                     {canReview && (
                       <td className="px-6 py-4 text-xs text-right">
-                        {leave.status === 'pending' ? (
+                        {leave.status === "pending" ? (
                           <div className="flex gap-2">
                             <button
                               onClick={() =>
-                                handleUpdateStatus(leave.id, 'approved')
+                                handleUpdateStatus(leave.id, "approved")
                               }
-                              disabled={
-                                statusActionLoadingId === leave.id
-                              }
+                              disabled={statusActionLoadingId === leave.id}
                               className="text-xs font-semibold text-emerald-700 hover:text-emerald-900 disabled:opacity-60"
                             >
                               Approve
                             </button>
                             <button
                               onClick={() =>
-                                handleUpdateStatus(leave.id, 'rejected')
+                                handleUpdateStatus(leave.id, "rejected")
                               }
-                              disabled={
-                                statusActionLoadingId === leave.id
-                              }
+                              disabled={statusActionLoadingId === leave.id}
                               className="text-xs font-semibold text-rose-600 hover:text-rose-800 disabled:opacity-60"
                             >
                               Reject
@@ -505,9 +513,3 @@ export default function LeavesPage() {
     </div>
   );
 }
-
-
-
-
-
-

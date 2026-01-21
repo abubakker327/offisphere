@@ -1,55 +1,55 @@
-'use client';
+"use client";
 
-import { useMemo, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { useMemo, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+  process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
 export default function ResetPasswordPage() {
   const params = useSearchParams();
   const router = useRouter();
-  const token = useMemo(() => params.get('token') || '', [params]);
+  const token = useMemo(() => params.get("token") || "", [params]);
 
-  const [password, setPassword] = useState('');
-  const [confirm, setConfirm] = useState('');
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setError('');
-    setMessage('');
+    setError("");
+    setMessage("");
 
     if (!token) {
-      setError('Reset token is missing.');
+      setError("Reset token is missing.");
       return;
     }
     if (password !== confirm) {
-      setError('Passwords do not match.');
+      setError("Passwords do not match.");
       return;
     }
 
     setLoading(true);
     try {
       const res = await fetch(`${API_BASE}/api/auth/reset`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, password })
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, password }),
       });
 
       const data = await res.json();
       if (!res.ok) {
-        setError(data.message || 'Unable to reset password');
+        setError(data.message || "Unable to reset password");
       } else {
-        setMessage('Password updated. You can log in now.');
-        setTimeout(() => router.push('/'), 1200);
+        setMessage("Password updated. You can log in now.");
+        setTimeout(() => router.push("/"), 1200);
       }
     } catch (err) {
-      setError('Unable to reset password');
+      setError("Unable to reset password");
     } finally {
       setLoading(false);
     }
@@ -62,7 +62,9 @@ export default function ResetPasswordPage() {
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md rounded-3xl border border-white/60 bg-white/90 p-8 shadow-[0_24px_60px_rgba(15,23,42,0.18)] backdrop-blur-xl"
       >
-        <h1 className="text-2xl font-semibold text-slate-900">Reset password</h1>
+        <h1 className="text-2xl font-semibold text-slate-900">
+          Reset password
+        </h1>
         <p className="mt-2 text-sm text-slate-500">
           Choose a new password for your account.
         </p>
@@ -107,7 +109,7 @@ export default function ResetPasswordPage() {
             disabled={loading}
             className="w-full rounded-full bg-blue-600 text-white py-3 text-sm font-semibold shadow-lg shadow-blue-500/25 hover:bg-blue-700 disabled:opacity-60"
           >
-            {loading ? 'Updating...' : 'Reset password'}
+            {loading ? "Updating..." : "Reset password"}
           </button>
         </form>
       </motion.div>

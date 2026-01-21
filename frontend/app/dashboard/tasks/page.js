@@ -1,48 +1,49 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 export default function TasksPage() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
-    title: '',
-    description: '',
-    status: 'pending',
-    priority: 'medium',
-    due_date: ''
+    title: "",
+    description: "",
+    status: "pending",
+    priority: "medium",
+    due_date: "",
   });
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+  const API_BASE =
+    process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
   const triggerToast = (type, message) => {
     window.dispatchEvent(
-      new CustomEvent('offisphere-toast', {
-        detail: { type, message }
-      })
+      new CustomEvent("offisphere-toast", {
+        detail: { type, message },
+      }),
     );
   };
 
   const fetchTasks = async () => {
     try {
       const res = await fetch(`${API_BASE}/api/tasks`, {
-        credentials: 'include',
+        credentials: "include",
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || 'Error fetching tasks');
+        setError(data.message || "Error fetching tasks");
       } else {
         setTasks(Array.isArray(data) ? data : []);
-        setError('');
+        setError("");
       }
     } catch (err) {
-      console.error('Fetch tasks error:', err);
-      setError('Error connecting to server');
+      console.error("Fetch tasks error:", err);
+      setError("Error connecting to server");
     } finally {
       setLoading(false);
     }
@@ -59,38 +60,38 @@ export default function TasksPage() {
   const handleCreate = async (e) => {
     e.preventDefault();
     setSaving(true);
-    setError('');
+    setError("");
 
     try {
       const res = await fetch(`${API_BASE}/api/tasks`, {
-        credentials: 'include',
-        method: 'POST',
+        credentials: "include",
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(form)
+        body: JSON.stringify(form),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || 'Error creating task');
-        triggerToast('error', data.message || 'Error creating task');
+        setError(data.message || "Error creating task");
+        triggerToast("error", data.message || "Error creating task");
       } else {
         setTasks(Array.isArray(data) ? data : []);
-        triggerToast('success', 'Task created successfully.');
+        triggerToast("success", "Task created successfully.");
         setForm({
-          title: '',
-          description: '',
-          status: 'pending',
-          priority: 'medium',
-          due_date: ''
+          title: "",
+          description: "",
+          status: "pending",
+          priority: "medium",
+          due_date: "",
         });
       }
     } catch (err) {
-      console.error('Create task error:', err);
-      setError('Error connecting to server');
-      triggerToast('error', 'Error connecting to server');
+      console.error("Create task error:", err);
+      setError("Error connecting to server");
+      triggerToast("error", "Error connecting to server");
     } finally {
       setSaving(false);
     }
@@ -99,30 +100,30 @@ export default function TasksPage() {
   const handleStatusChange = async (taskId, newStatus) => {
     try {
       const res = await fetch(`${API_BASE}/api/tasks/${taskId}`, {
-        credentials: 'include',
-        method: 'PUT',
+        credentials: "include",
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ status: newStatus })
+        body: JSON.stringify({ status: newStatus }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        triggerToast('error', data.message || 'Error updating task');
+        triggerToast("error", data.message || "Error updating task");
       } else {
         setTasks(Array.isArray(data) ? data : []);
-        triggerToast('success', 'Task updated');
+        triggerToast("success", "Task updated");
       }
     } catch (err) {
-      console.error('Update task error:', err);
-      triggerToast('error', 'Error connecting to server');
+      console.error("Update task error:", err);
+      triggerToast("error", "Error connecting to server");
     }
   };
 
   const formatDate = (value) =>
-    value ? new Date(value).toLocaleDateString() : '--';
+    value ? new Date(value).toLocaleDateString() : "--";
 
   return (
     <motion.div
@@ -163,7 +164,9 @@ export default function TasksPage() {
             </svg>
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">Create task</h2>
+            <h2 className="text-lg font-semibold text-slate-900">
+              Create task
+            </h2>
             <p className="text-xs text-slate-500">Add a task for your team.</p>
           </div>
         </div>
@@ -183,7 +186,7 @@ export default function TasksPage() {
             <input
               type="text"
               value={form.title}
-              onChange={(e) => handleChange('title', e.target.value)}
+              onChange={(e) => handleChange("title", e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Prepare monthly report"
               required
@@ -191,15 +194,11 @@ export default function TasksPage() {
           </div>
 
           <div className="md:col-span-2 space-y-1">
-            <label className="text-xs text-slate-600">
-              Description
-            </label>
+            <label className="text-xs text-slate-600">Description</label>
             <input
               type="text"
               value={form.description}
-              onChange={(e) =>
-                handleChange('description', e.target.value)
-              }
+              onChange={(e) => handleChange("description", e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="What needs to be done?"
             />
@@ -210,9 +209,7 @@ export default function TasksPage() {
             <input
               type="date"
               value={form.due_date}
-              onChange={(e) =>
-                handleChange('due_date', e.target.value)
-              }
+              onChange={(e) => handleChange("due_date", e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
             />
           </div>
@@ -221,9 +218,7 @@ export default function TasksPage() {
             <label className="text-xs text-slate-600">Status</label>
             <select
               value={form.status}
-              onChange={(e) =>
-                handleChange('status', e.target.value)
-              }
+              onChange={(e) => handleChange("status", e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
             >
               <option value="pending">Pending</option>
@@ -236,9 +231,7 @@ export default function TasksPage() {
             <label className="text-xs text-slate-600">Priority</label>
             <select
               value={form.priority}
-              onChange={(e) =>
-                handleChange('priority', e.target.value)
-              }
+              onChange={(e) => handleChange("priority", e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
             >
               <option value="low">Low</option>
@@ -255,7 +248,7 @@ export default function TasksPage() {
               disabled={saving}
               className="px-5 py-2.5 rounded-2xl text-sm font-semibold text-white bg-blue-600 shadow-lg shadow-blue-300/40 hover:bg-blue-700 disabled:opacity-60"
             >
-              {saving ? 'Saving...' : 'Create task'}
+              {saving ? "Saving..." : "Create task"}
             </motion.button>
           </div>
         </form>
@@ -275,7 +268,9 @@ export default function TasksPage() {
             <thead className="bg-slate-50 text-xs text-slate-500 uppercase tracking-wider">
               <tr>
                 <th className="text-left px-6 py-3 font-semibold">Title</th>
-                <th className="text-left px-6 py-3 font-semibold">Description</th>
+                <th className="text-left px-6 py-3 font-semibold">
+                  Description
+                </th>
                 <th className="text-left px-6 py-3 font-semibold">Status</th>
                 <th className="text-left px-6 py-3 font-semibold">Priority</th>
                 <th className="text-left px-6 py-3 font-semibold">Due date</th>
@@ -302,15 +297,10 @@ export default function TasksPage() {
                 </tr>
               ) : (
                 tasks.map((task) => (
-                  <tr
-                    key={task.id}
-                    className="hover:bg-slate-50"
-                  >
-                    <td className="px-6 py-4 text-slate-900">
-                      {task.title}
-                    </td>
+                  <tr key={task.id} className="hover:bg-slate-50">
+                    <td className="px-6 py-4 text-slate-900">{task.title}</td>
                     <td className="px-6 py-4 text-xs text-slate-600">
-                      {task.description || '--'}
+                      {task.description || "--"}
                     </td>
                     <td className="px-6 py-4 text-xs">
                       <select
@@ -326,7 +316,7 @@ export default function TasksPage() {
                       </select>
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-600">
-                      {task.priority || '--'}
+                      {task.priority || "--"}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-600">
                       {formatDate(task.due_date)}
@@ -341,9 +331,3 @@ export default function TasksPage() {
     </motion.div>
   );
 }
-
-
-
-
-
-

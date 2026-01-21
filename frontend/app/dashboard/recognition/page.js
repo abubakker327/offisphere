@@ -1,41 +1,41 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+  process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
 export default function RecognitionPage() {
   const [recognitions, setRecognitions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [creating, setCreating] = useState(false);
   const [form, setForm] = useState({
-    receiver_email: '',
-    title: '',
-    message: '',
-    badge: ''
+    receiver_email: "",
+    title: "",
+    message: "",
+    badge: "",
   });
 
   const fetchRecognitions = async () => {
     try {
       setLoading(true);
       const res = await fetch(`${API_BASE}/api/recognitions`, {
-        credentials: 'include',
+        credentials: "include",
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || 'Error fetching recognitions');
+        setError(data.message || "Error fetching recognitions");
       } else {
         setRecognitions(data || []);
-        setError('');
+        setError("");
       }
     } catch (err) {
-      console.error('Fetch recognitions error:', err);
-      setError('Error connecting to server');
+      console.error("Fetch recognitions error:", err);
+      setError("Error connecting to server");
     } finally {
       setLoading(false);
     }
@@ -51,10 +51,10 @@ export default function RecognitionPage() {
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (!form.receiver_email || !form.title) {
-      setError('Receiver email and title are required');
+      setError("Receiver email and title are required");
       return;
     }
 
@@ -62,31 +62,31 @@ export default function RecognitionPage() {
       setCreating(true);
 
       const res = await fetch(`${API_BASE}/api/recognitions`, {
-        credentials: 'include',
-        method: 'POST',
+        credentials: "include",
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(form)
+        body: JSON.stringify(form),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || 'Error creating recognition');
+        setError(data.message || "Error creating recognition");
       } else {
         setForm({
-          receiver_email: '',
-          title: '',
-          message: '',
-          badge: ''
+          receiver_email: "",
+          title: "",
+          message: "",
+          badge: "",
         });
         // prepend new recognition
         setRecognitions((prev) => [data, ...prev]);
       }
     } catch (err) {
-      console.error('Create recognition error:', err);
-      setError('Error connecting to server');
+      console.error("Create recognition error:", err);
+      setError("Error connecting to server");
     } finally {
       setCreating(false);
     }
@@ -95,10 +95,10 @@ export default function RecognitionPage() {
   const formatDateTime = (value) =>
     value
       ? new Date(value).toLocaleString(undefined, {
-          dateStyle: 'medium',
-          timeStyle: 'short'
+          dateStyle: "medium",
+          timeStyle: "short",
         })
-      : '-';
+      : "-";
 
   return (
     <motion.div
@@ -150,15 +150,11 @@ export default function RecognitionPage() {
           className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm"
         >
           <div className="space-y-1">
-            <label className="text-xs text-slate-600">
-              Receiver email
-            </label>
+            <label className="text-xs text-slate-600">Receiver email</label>
             <input
               type="email"
               value={form.receiver_email}
-              onChange={(e) =>
-                handleChange('receiver_email', e.target.value)
-              }
+              onChange={(e) => handleChange("receiver_email", e.target.value)}
               placeholder="employee@company.com"
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
@@ -169,7 +165,7 @@ export default function RecognitionPage() {
             <label className="text-xs text-slate-600">Badge (optional)</label>
             <select
               value={form.badge}
-              onChange={(e) => handleChange('badge', e.target.value)}
+              onChange={(e) => handleChange("badge", e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">None</option>
@@ -185,7 +181,7 @@ export default function RecognitionPage() {
             <input
               type="text"
               value={form.title}
-              onChange={(e) => handleChange('title', e.target.value)}
+              onChange={(e) => handleChange("title", e.target.value)}
               placeholder="For helping ship the Offisphere release"
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
@@ -193,13 +189,11 @@ export default function RecognitionPage() {
           </div>
 
           <div className="space-y-1 md:col-span-2">
-            <label className="text-xs text-slate-600">
-              Message (optional)
-            </label>
+            <label className="text-xs text-slate-600">Message (optional)</label>
             <textarea
               rows={3}
               value={form.message}
-              onChange={(e) => handleChange('message', e.target.value)}
+              onChange={(e) => handleChange("message", e.target.value)}
               placeholder="Write a few words about what they did well"
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
             />
@@ -213,7 +207,7 @@ export default function RecognitionPage() {
               disabled={creating}
               className="px-5 py-2.5 rounded-2xl bg-blue-600 text-white text-sm font-medium shadow-lg shadow-blue-300/50 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {creating ? 'Sending' : 'Send recognition'}
+              {creating ? "Sending" : "Send recognition"}
             </motion.button>
           </div>
         </form>
@@ -257,19 +251,17 @@ export default function RecognitionPage() {
                     </p>
                   </div>
                   <p className="text-[11px] text-slate-500 mt-0.5">
-                    From{' '}
+                    From{" "}
                     <span className="font-medium">
-                      {r.giver_name || r.giver_email || 'Someone'}
-                    </span>{' '}
-                    to{' '}
+                      {r.giver_name || r.giver_email || "Someone"}
+                    </span>{" "}
+                    to{" "}
                     <span className="font-medium">
-                      {r.receiver_name || r.receiver_email || 'a teammate'}
+                      {r.receiver_name || r.receiver_email || "a teammate"}
                     </span>
                   </p>
                   {r.message && (
-                    <p className="text-xs text-slate-600 mt-1">
-                      {r.message}
-                    </p>
+                    <p className="text-xs text-slate-600 mt-1">{r.message}</p>
                   )}
                 </div>
                 <div className="text-[11px] text-slate-400 md:text-right">
@@ -283,9 +275,3 @@ export default function RecognitionPage() {
     </motion.div>
   );
 }
-
-
-
-
-
-

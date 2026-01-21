@@ -1,28 +1,38 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import ProductsPage from './products/page';
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import ProductsPage from "./products/page";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
 const fetchWithAuth = async (path, options = {}) => {
   const res = await fetch(`${API_BASE}${path}`, {
-        credentials: 'include',
+    credentials: "include",
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...(options.headers || {})
-    }
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+    },
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    throw new Error(data?.message || 'Request failed');
+    throw new Error(data?.message || "Request failed");
   }
   return data;
 };
 
-const EntityCard = ({ title, description, list, fields, onSubmit, loading, saving, error }) => (
+const EntityCard = ({
+  title,
+  description,
+  list,
+  fields,
+  onSubmit,
+  loading,
+  saving,
+  error,
+}) => (
   <div className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6 space-y-4">
     <div className="flex items-center justify-between">
       <div>
@@ -56,7 +66,7 @@ const EntityCard = ({ title, description, list, fields, onSubmit, loading, savin
         onClick={onSubmit}
         className="px-5 py-2.5 rounded-2xl text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-60"
       >
-        {saving ? 'Saving...' : 'Save'}
+        {saving ? "Saving..." : "Save"}
       </motion.button>
     </div>
     <div className="overflow-x-auto pt-1">
@@ -70,13 +80,19 @@ const EntityCard = ({ title, description, list, fields, onSubmit, loading, savin
         <tbody className="divide-y divide-slate-100">
           {loading ? (
             <tr>
-              <td colSpan={2} className="px-6 py-6 text-slate-400 text-center text-xs">
+              <td
+                colSpan={2}
+                className="px-6 py-6 text-slate-400 text-center text-xs"
+              >
                 Loading...
               </td>
             </tr>
           ) : list.length === 0 ? (
             <tr>
-              <td colSpan={2} className="px-6 py-6 text-slate-400 text-center text-xs">
+              <td
+                colSpan={2}
+                className="px-6 py-6 text-slate-400 text-center text-xs"
+              >
                 No records.
               </td>
             </tr>
@@ -84,10 +100,10 @@ const EntityCard = ({ title, description, list, fields, onSubmit, loading, savin
             list.map((row) => (
               <tr key={row.id} className="hover:bg-slate-50">
                 <td className="px-6 py-4 text-slate-900 font-medium">
-                  {row.name || row.full_name || '-'}
+                  {row.name || row.full_name || "-"}
                 </td>
                 <td className="px-6 py-4 text-slate-600">
-                  {row.email || row.gstin || row.phone || '-'}
+                  {row.email || row.gstin || row.phone || "-"}
                 </td>
               </tr>
             ))
@@ -102,25 +118,33 @@ export default function MastersPage() {
   // Vendors
   const [vendors, setVendors] = useState([]);
   const [loadingVendors, setLoadingVendors] = useState(true);
-  const [vendorError, setVendorError] = useState('');
+  const [vendorError, setVendorError] = useState("");
   const [savingVendor, setSavingVendor] = useState(false);
-  const [vendorForm, setVendorForm] = useState({ name: '', email: '', gstin: '' });
+  const [vendorForm, setVendorForm] = useState({
+    name: "",
+    email: "",
+    gstin: "",
+  });
 
   // Customers
   const [customers, setCustomers] = useState([]);
   const [loadingCustomers, setLoadingCustomers] = useState(true);
-  const [customerError, setCustomerError] = useState('');
+  const [customerError, setCustomerError] = useState("");
   const [savingCustomer, setSavingCustomer] = useState(false);
-  const [customerForm, setCustomerForm] = useState({ name: '', email: '', gstin: '' });
+  const [customerForm, setCustomerForm] = useState({
+    name: "",
+    email: "",
+    gstin: "",
+  });
 
   const loadVendors = async () => {
     try {
       setLoadingVendors(true);
-      const data = await fetchWithAuth('/api/sa/masters/vendors');
+      const data = await fetchWithAuth("/api/sa/masters/vendors");
       setVendors(Array.isArray(data) ? data : []);
-      setVendorError('');
+      setVendorError("");
     } catch (err) {
-      setVendorError(err.message || 'Error loading vendors');
+      setVendorError(err.message || "Error loading vendors");
     } finally {
       setLoadingVendors(false);
     }
@@ -129,11 +153,11 @@ export default function MastersPage() {
   const loadCustomers = async () => {
     try {
       setLoadingCustomers(true);
-      const data = await fetchWithAuth('/api/sa/masters/customers');
+      const data = await fetchWithAuth("/api/sa/masters/customers");
       setCustomers(Array.isArray(data) ? data : []);
-      setCustomerError('');
+      setCustomerError("");
     } catch (err) {
-      setCustomerError(err.message || 'Error loading customers');
+      setCustomerError(err.message || "Error loading customers");
     } finally {
       setLoadingCustomers(false);
     }
@@ -147,14 +171,14 @@ export default function MastersPage() {
   const saveVendor = async () => {
     try {
       setSavingVendor(true);
-      await fetchWithAuth('/api/sa/masters/vendors', {
-        method: 'POST',
-        body: JSON.stringify(vendorForm)
+      await fetchWithAuth("/api/sa/masters/vendors", {
+        method: "POST",
+        body: JSON.stringify(vendorForm),
       });
-      setVendorForm({ name: '', email: '', gstin: '' });
+      setVendorForm({ name: "", email: "", gstin: "" });
       loadVendors();
     } catch (err) {
-      setVendorError(err.message || 'Error saving vendor');
+      setVendorError(err.message || "Error saving vendor");
     } finally {
       setSavingVendor(false);
     }
@@ -163,14 +187,14 @@ export default function MastersPage() {
   const saveCustomer = async () => {
     try {
       setSavingCustomer(true);
-      await fetchWithAuth('/api/sa/masters/customers', {
-        method: 'POST',
-        body: JSON.stringify(customerForm)
+      await fetchWithAuth("/api/sa/masters/customers", {
+        method: "POST",
+        body: JSON.stringify(customerForm),
       });
-      setCustomerForm({ name: '', email: '', gstin: '' });
+      setCustomerForm({ name: "", email: "", gstin: "" });
       loadCustomers();
     } catch (err) {
-      setCustomerError(err.message || 'Error saving customer');
+      setCustomerError(err.message || "Error saving customer");
     } finally {
       setSavingCustomer(false);
     }
@@ -207,26 +231,26 @@ export default function MastersPage() {
           error={vendorError}
           fields={[
             {
-              name: 'name',
-              label: 'Name',
+              name: "name",
+              label: "Name",
               value: vendorForm.name,
-              placeholder: 'Vendor name',
-              onChange: (v) => setVendorForm((p) => ({ ...p, name: v }))
+              placeholder: "Vendor name",
+              onChange: (v) => setVendorForm((p) => ({ ...p, name: v })),
             },
             {
-              name: 'email',
-              label: 'Email',
+              name: "email",
+              label: "Email",
               value: vendorForm.email,
-              placeholder: 'vendor@email',
-              onChange: (v) => setVendorForm((p) => ({ ...p, email: v }))
+              placeholder: "vendor@email",
+              onChange: (v) => setVendorForm((p) => ({ ...p, email: v })),
             },
             {
-              name: 'gstin',
-              label: 'GSTIN',
+              name: "gstin",
+              label: "GSTIN",
               value: vendorForm.gstin,
-              placeholder: 'GSTIN',
-              onChange: (v) => setVendorForm((p) => ({ ...p, gstin: v }))
-            }
+              placeholder: "GSTIN",
+              onChange: (v) => setVendorForm((p) => ({ ...p, gstin: v })),
+            },
           ]}
           onSubmit={saveVendor}
         />
@@ -240,26 +264,26 @@ export default function MastersPage() {
           error={customerError}
           fields={[
             {
-              name: 'name',
-              label: 'Name',
+              name: "name",
+              label: "Name",
               value: customerForm.name,
-              placeholder: 'Customer name',
-              onChange: (v) => setCustomerForm((p) => ({ ...p, name: v }))
+              placeholder: "Customer name",
+              onChange: (v) => setCustomerForm((p) => ({ ...p, name: v })),
             },
             {
-              name: 'email',
-              label: 'Email',
+              name: "email",
+              label: "Email",
               value: customerForm.email,
-              placeholder: 'customer@email',
-              onChange: (v) => setCustomerForm((p) => ({ ...p, email: v }))
+              placeholder: "customer@email",
+              onChange: (v) => setCustomerForm((p) => ({ ...p, email: v })),
             },
             {
-              name: 'gstin',
-              label: 'GSTIN',
+              name: "gstin",
+              label: "GSTIN",
               value: customerForm.gstin,
-              placeholder: 'GSTIN',
-              onChange: (v) => setCustomerForm((p) => ({ ...p, gstin: v }))
-            }
+              placeholder: "GSTIN",
+              onChange: (v) => setCustomerForm((p) => ({ ...p, gstin: v })),
+            },
           ]}
           onSubmit={saveCustomer}
         />
@@ -267,9 +291,3 @@ export default function MastersPage() {
     </motion.div>
   );
 }
-
-
-
-
-
-

@@ -1,44 +1,45 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
 const fetchWithAuth = async (path, options = {}) => {
   const res = await fetch(`${API_BASE}${path}`, {
-        credentials: 'include',
+    credentials: "include",
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...(options.headers || {})
-    }
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+    },
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    throw new Error(data?.message || 'Request failed');
+    throw new Error(data?.message || "Request failed");
   }
   return data;
 };
 
 export default function AccountingPage() {
   const [rows, setRows] = useState([]);
-  const [filters, setFilters] = useState({ ledger: '', ref_type: '' });
+  const [filters, setFilters] = useState({ ledger: "", ref_type: "" });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const loadLedger = async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams();
-      if (filters.ledger) params.set('ledger', filters.ledger);
-      if (filters.ref_type) params.set('ref_type', filters.ref_type);
-      const qs = params.toString() ? `?${params.toString()}` : '';
+      if (filters.ledger) params.set("ledger", filters.ledger);
+      if (filters.ref_type) params.set("ref_type", filters.ref_type);
+      const qs = params.toString() ? `?${params.toString()}` : "";
       const data = await fetchWithAuth(`/api/sa/accounting/ledger${qs}`);
       setRows(Array.isArray(data) ? data : []);
-      setError('');
+      setError("");
     } catch (err) {
-      setError(err.message || 'Error loading ledger');
+      setError(err.message || "Error loading ledger");
     } finally {
       setLoading(false);
     }
@@ -66,7 +67,8 @@ export default function AccountingPage() {
         <div>
           <h1 className="text-3xl font-semibold text-slate-900">Accounting</h1>
           <p className="text-sm text-slate-500">
-            Ledger entries with enforced debit/credit balance. Filter by ledger or reference type.
+            Ledger entries with enforced debit/credit balance. Filter by ledger
+            or reference type.
           </p>
         </div>
       </div>
@@ -77,13 +79,13 @@ export default function AccountingPage() {
             className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Ledger (e.g. AR_Customer)"
             value={filters.ledger}
-            onChange={(e) => onChange('ledger', e.target.value)}
+            onChange={(e) => onChange("ledger", e.target.value)}
           />
           <input
             className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Ref type (INVOICE/GRN/PAYMENT_IN/...)"
             value={filters.ref_type}
-            onChange={(e) => onChange('ref_type', e.target.value)}
+            onChange={(e) => onChange("ref_type", e.target.value)}
           />
           <div className="flex gap-2">
             <button
@@ -94,7 +96,7 @@ export default function AccountingPage() {
             </button>
             <button
               onClick={() => {
-                setFilters({ ledger: '', ref_type: '' });
+                setFilters({ ledger: "", ref_type: "" });
                 loadLedger();
               }}
               className="px-5 py-2.5 rounded-2xl text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200"
@@ -123,13 +125,19 @@ export default function AccountingPage() {
             <tbody className="divide-y divide-slate-100">
               {loading ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-6 text-center text-xs text-slate-400">
+                  <td
+                    colSpan={4}
+                    className="px-6 py-6 text-center text-xs text-slate-400"
+                  >
                     Loading
                   </td>
                 </tr>
               ) : rows.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-6 text-center text-xs text-slate-400">
+                  <td
+                    colSpan={4}
+                    className="px-6 py-6 text-center text-xs text-slate-400"
+                  >
                     No ledger rows found.
                   </td>
                 </tr>
@@ -152,9 +160,3 @@ export default function AccountingPage() {
     </motion.div>
   );
 }
-
-
-
-
-
-

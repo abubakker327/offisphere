@@ -1,33 +1,33 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+  process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
 const STAGE_OPTIONS = [
-  { label: 'Hot', value: 'hot' },
-  { label: 'Warm', value: 'warm' },
-  { label: 'Cold', value: 'cold' }
+  { label: "Hot", value: "hot" },
+  { label: "Warm", value: "warm" },
+  { label: "Cold", value: "cold" },
 ];
 
 const apiFetch = async (path, options = {}) => {
   const headers = {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
     ...(options.headers || {}),
   };
 
   const res = await fetch(`${API_BASE}${path}`, {
-        credentials: 'include',
+    credentials: "include",
     ...options,
-    headers
+    headers,
   });
 
   const data = await res.json().catch(() => ({}));
 
   if (!res.ok) {
-    const message = data?.message || 'Request failed';
+    const message = data?.message || "Request failed";
     throw new Error(message);
   }
 
@@ -35,17 +35,14 @@ const apiFetch = async (path, options = {}) => {
 };
 
 const mapApiLeadToUi = (lead) => {
-  const stage = (lead.stage || '').toLowerCase();
+  const stage = (lead.stage || "").toLowerCase();
   const telecallerName =
-    lead.telecaller_name ||
-    lead.owner_name ||
-    lead.owner_full_name ||
-    null;
+    lead.telecaller_name || lead.owner_name || lead.owner_full_name || null;
   return {
     ...lead,
-    stage: stage || 'cold',
+    stage: stage || "cold",
     expected_value: lead.expected_value ?? lead.value ?? null,
-    telecaller_name: telecallerName
+    telecaller_name: telecallerName,
   };
 };
 
@@ -54,19 +51,19 @@ const getStageLabel = (stage) =>
 
 export default function LeadsPage() {
   const [leads, setLeads] = useState([]);
-  const [stageFilter, setStageFilter] = useState('all');
-  const [dateRange, setDateRange] = useState({ start: '', end: '' });
+  const [stageFilter, setStageFilter] = useState("all");
+  const [dateRange, setDateRange] = useState({ start: "", end: "" });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const [form, setForm] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    company: '',
-    source: '',
-    expected_value: '',
-    stage: 'hot'
+    name: "",
+    email: "",
+    phone: "",
+    company: "",
+    source: "",
+    expected_value: "",
+    stage: "hot",
   });
 
   const fetchLeads = async (range) => {
@@ -76,25 +73,21 @@ export default function LeadsPage() {
       const params = new URLSearchParams();
 
       if (appliedRange?.start) {
-        params.set('start_date', appliedRange.start);
+        params.set("start_date", appliedRange.start);
       }
       if (appliedRange?.end) {
-        params.set('end_date', appliedRange.end);
+        params.set("end_date", appliedRange.end);
       }
 
-      const queryString = params.toString()
-        ? `?${params.toString()}`
-        : '';
+      const queryString = params.toString() ? `?${params.toString()}` : "";
 
       const data = await apiFetch(`/api/leads${queryString}`);
-      const mapped = Array.isArray(data)
-        ? data.map(mapApiLeadToUi)
-        : [];
+      const mapped = Array.isArray(data) ? data.map(mapApiLeadToUi) : [];
       setLeads(mapped);
-      setError('');
+      setError("");
     } catch (err) {
       console.error(err);
-      setError('Error fetching leads');
+      setError("Error fetching leads");
     } finally {
       setLoading(false);
     }
@@ -119,30 +112,28 @@ export default function LeadsPage() {
         source: form.source || null,
         stage: form.stage,
         expected_value:
-          form.expected_value !== ''
-            ? Number(form.expected_value)
-            : null
+          form.expected_value !== "" ? Number(form.expected_value) : null,
       };
 
-      await apiFetch('/api/leads', {
-        method: 'POST',
-        body: JSON.stringify(payload)
+      await apiFetch("/api/leads", {
+        method: "POST",
+        body: JSON.stringify(payload),
       });
 
       setForm({
-        name: '',
-        email: '',
-        phone: '',
-        company: '',
-        source: '',
-        expected_value: '',
-        stage: 'hot'
+        name: "",
+        email: "",
+        phone: "",
+        company: "",
+        source: "",
+        expected_value: "",
+        stage: "hot",
       });
 
       fetchLeads();
     } catch (err) {
       console.error(err);
-      setError('Error creating lead');
+      setError("Error creating lead");
     }
   };
 
@@ -155,13 +146,13 @@ export default function LeadsPage() {
   };
 
   const clearDateFilter = () => {
-    const cleared = { start: '', end: '' };
+    const cleared = { start: "", end: "" };
     setDateRange(cleared);
     fetchLeads(cleared);
   };
 
   const filteredLeads =
-    stageFilter === 'all'
+    stageFilter === "all"
       ? leads
       : leads.filter((l) => l.stage === stageFilter);
   const columnCount = 7;
@@ -231,7 +222,7 @@ export default function LeadsPage() {
             <input
               placeholder="Lead name"
               value={form.name}
-              onChange={(e) => handleChange('name', e.target.value)}
+              onChange={(e) => handleChange("name", e.target.value)}
               required
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
@@ -241,7 +232,7 @@ export default function LeadsPage() {
             <input
               placeholder="Email"
               value={form.email}
-              onChange={(e) => handleChange('email', e.target.value)}
+              onChange={(e) => handleChange("email", e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
@@ -250,7 +241,7 @@ export default function LeadsPage() {
             <input
               placeholder="Phone"
               value={form.phone}
-              onChange={(e) => handleChange('phone', e.target.value)}
+              onChange={(e) => handleChange("phone", e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
@@ -259,7 +250,7 @@ export default function LeadsPage() {
             <input
               placeholder="Company"
               value={form.company}
-              onChange={(e) => handleChange('company', e.target.value)}
+              onChange={(e) => handleChange("company", e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
@@ -268,7 +259,7 @@ export default function LeadsPage() {
             <input
               placeholder="Source"
               value={form.source}
-              onChange={(e) => handleChange('source', e.target.value)}
+              onChange={(e) => handleChange("source", e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
@@ -281,7 +272,7 @@ export default function LeadsPage() {
               type="number"
               placeholder="e.g. 50000"
               value={form.expected_value}
-              onChange={(e) => handleChange('expected_value', e.target.value)}
+              onChange={(e) => handleChange("expected_value", e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
@@ -290,7 +281,7 @@ export default function LeadsPage() {
             <label className="text-xs text-slate-500">Stage</label>
             <select
               value={form.stage}
-              onChange={(e) => handleChange('stage', e.target.value)}
+              onChange={(e) => handleChange("stage", e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
             >
               {STAGE_OPTIONS.map((opt) => (
@@ -319,7 +310,7 @@ export default function LeadsPage() {
           <span className="text-[11px] font-semibold text-slate-700">
             Stage:
           </span>
-          {['all', ...STAGE_OPTIONS.map((s) => s.value)].map((s) => {
+          {["all", ...STAGE_OPTIONS.map((s) => s.value)].map((s) => {
             const active = s === stageFilter;
             return (
               <button
@@ -328,11 +319,11 @@ export default function LeadsPage() {
                 onClick={() => setStageFilter(s)}
                 className={`px-3 py-1.5 rounded-full border transition ${
                   active
-                    ? 'bg-blue-600 text-white border-blue-600'
-                    : 'bg-white text-slate-700 border-slate-200 hover:border-blue-200'
+                    ? "bg-blue-600 text-white border-blue-600"
+                    : "bg-white text-slate-700 border-slate-200 hover:border-blue-200"
                 }`}
               >
-                {s === 'all' ? 'All' : getStageLabel(s)}
+                {s === "all" ? "All" : getStageLabel(s)}
               </button>
             );
           })}
@@ -345,18 +336,14 @@ export default function LeadsPage() {
           <input
             type="date"
             value={dateRange.start}
-            onChange={(e) =>
-              handleDateRangeChange('start', e.target.value)
-            }
+            onChange={(e) => handleDateRangeChange("start", e.target.value)}
             className="px-4 py-2 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
           />
           <span className="text-slate-400">to</span>
           <input
             type="date"
             value={dateRange.end}
-            onChange={(e) =>
-              handleDateRangeChange('end', e.target.value)
-            }
+            onChange={(e) => handleDateRangeChange("end", e.target.value)}
             className="px-4 py-2 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
           />
           <button
@@ -396,7 +383,9 @@ export default function LeadsPage() {
                 <th className="text-left px-6 py-3 font-semibold">Lead</th>
                 <th className="text-left px-6 py-3 font-semibold">Company</th>
                 <th className="text-left px-6 py-3 font-semibold">Source</th>
-                <th className="text-left px-6 py-3 font-semibold">Telecaller</th>
+                <th className="text-left px-6 py-3 font-semibold">
+                  Telecaller
+                </th>
                 <th className="text-left px-6 py-3 font-semibold">Value</th>
                 <th className="text-left px-6 py-3 font-semibold">Stage</th>
                 <th className="text-left px-6 py-3 font-semibold">Created</th>
@@ -423,35 +412,32 @@ export default function LeadsPage() {
                 </tr>
               ) : (
                 filteredLeads.map((lead) => (
-                  <tr
-                    key={lead.id}
-                    className="hover:bg-slate-50"
-                  >
+                  <tr key={lead.id} className="hover:bg-slate-50">
                     <td className="px-6 py-4 text-slate-900">
-                      {lead.name || '-'}
+                      {lead.name || "-"}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-500">
-                      {lead.company || '-'}
+                      {lead.company || "-"}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-500">
-                      {lead.source || '-'}
+                      {lead.source || "-"}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-500">
-                      {lead.telecaller_name || '-'}
+                      {lead.telecaller_name || "-"}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-500">
                       {lead.expected_value != null
                         ? Number(lead.expected_value).toLocaleString()
-                        : '-'}
+                        : "-"}
                     </td>
                     <td className="px-6 py-4 text-xs">
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          lead.stage === 'hot'
-                            ? 'bg-red-50 text-red-700 border border-red-100'
-                            : lead.stage === 'warm'
-                            ? 'bg-amber-50 text-amber-700 border border-amber-100'
-                            : 'bg-sky-50 text-sky-700 border border-sky-100'
+                          lead.stage === "hot"
+                            ? "bg-red-50 text-red-700 border border-red-100"
+                            : lead.stage === "warm"
+                              ? "bg-amber-50 text-amber-700 border border-amber-100"
+                              : "bg-sky-50 text-sky-700 border border-sky-100"
                         }`}
                       >
                         {getStageLabel(lead.stage)}
@@ -460,7 +446,7 @@ export default function LeadsPage() {
                     <td className="px-6 py-4 text-xs text-slate-500">
                       {lead.created_at
                         ? new Date(lead.created_at).toLocaleDateString()
-                        : '-'}
+                        : "-"}
                     </td>
                   </tr>
                 ))
@@ -472,10 +458,3 @@ export default function LeadsPage() {
     </motion.div>
   );
 }
-
-
-
-
-
-
-

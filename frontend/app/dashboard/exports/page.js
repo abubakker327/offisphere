@@ -1,34 +1,33 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useState } from "react";
+import { motion } from "framer-motion";
 
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+  process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
 export default function ExportsPage() {
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
-  const [error, setError] = useState('');
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [error, setError] = useState("");
   const [downloading, setDownloading] = useState(null); // 'attendance' | 'timesheets' | 'payroll' | 'leaves' | null
 
   const handleDownload = async (type) => {
-    setError('');
+    setError("");
     setDownloading(type);
 
     try {
       const params = new URLSearchParams();
-      if (fromDate) params.append('from', fromDate);
-      if (toDate) params.append('to', toDate);
+      if (fromDate) params.append("from", fromDate);
+      if (toDate) params.append("to", toDate);
 
       const url = `${API_BASE}/api/exports/${type}${
-        params.toString() ? `?${params.toString()}` : ''
+        params.toString() ? `?${params.toString()}` : ""
       }`;
 
       const res = await fetch(url, {
-        credentials: 'include',
-        headers: {
-        }
+        credentials: "include",
+        headers: {},
       });
 
       if (!res.ok) {
@@ -44,9 +43,9 @@ export default function ExportsPage() {
 
       const blob = await res.blob();
       const downloadUrl = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = downloadUrl;
-      a.download = `${type}_export_${fromDate || 'all'}_${toDate || 'all'}.csv`;
+      a.download = `${type}_export_${fromDate || "all"}_${toDate || "all"}.csv`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -73,9 +72,7 @@ export default function ExportsPage() {
             <span>Data exports</span>
           </div>
           <div>
-            <h1 className="text-3xl font-semibold text-slate-900">
-              Exports
-            </h1>
+            <h1 className="text-3xl font-semibold text-slate-900">Exports</h1>
             <p className="text-sm text-slate-500">
               Download attendance, timesheets, leaves and payroll data as CSV
               for reporting or backup.
@@ -128,8 +125,8 @@ export default function ExportsPage() {
             <button
               type="button"
               onClick={() => {
-                setFromDate('');
-                setToDate('');
+                setFromDate("");
+                setToDate("");
               }}
               className="px-5 py-2.5 rounded-2xl bg-slate-100 text-xs text-slate-600 hover:bg-slate-200"
             >
@@ -158,8 +155,8 @@ export default function ExportsPage() {
           <motion.button
             whileHover={{ y: -2, scale: 1.01 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => handleDownload('attendance')}
-            disabled={downloading === 'attendance'}
+            onClick={() => handleDownload("attendance")}
+            disabled={downloading === "attendance"}
             className="flex flex-col items-start px-4 py-4 rounded-2xl border border-slate-100 bg-white hover:bg-slate-50 text-left shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
           >
             <span className="text-xs font-semibold text-slate-900">
@@ -169,9 +166,7 @@ export default function ExportsPage() {
               Check-ins / check-outs
             </span>
             <span className="mt-2 text-[11px] text-blue-600">
-              {downloading === 'attendance'
-                ? 'Preparing'
-                : 'Download'}
+              {downloading === "attendance" ? "Preparing" : "Download"}
             </span>
           </motion.button>
 
@@ -179,8 +174,8 @@ export default function ExportsPage() {
           <motion.button
             whileHover={{ y: -2, scale: 1.01 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => handleDownload('timesheets')}
-            disabled={downloading === 'timesheets'}
+            onClick={() => handleDownload("timesheets")}
+            disabled={downloading === "timesheets"}
             className="flex flex-col items-start px-4 py-4 rounded-2xl border border-slate-100 bg-white hover:bg-slate-50 text-left shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
           >
             <span className="text-xs font-semibold text-slate-900">
@@ -190,9 +185,7 @@ export default function ExportsPage() {
               Time entries / hours
             </span>
             <span className="mt-2 text-[11px] text-blue-600">
-              {downloading === 'timesheets'
-                ? 'Preparing'
-                : 'Download'}
+              {downloading === "timesheets" ? "Preparing" : "Download"}
             </span>
           </motion.button>
 
@@ -200,8 +193,8 @@ export default function ExportsPage() {
           <motion.button
             whileHover={{ y: -2, scale: 1.01 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => handleDownload('leaves')}
-            disabled={downloading === 'leaves'}
+            onClick={() => handleDownload("leaves")}
+            disabled={downloading === "leaves"}
             className="flex flex-col items-start px-4 py-4 rounded-2xl border border-slate-100 bg-white hover:bg-slate-50 text-left shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
           >
             <span className="text-xs font-semibold text-slate-900">
@@ -211,9 +204,7 @@ export default function ExportsPage() {
               Leave requests & status
             </span>
             <span className="mt-2 text-[11px] text-blue-600">
-              {downloading === 'leaves'
-                ? 'Preparing'
-                : 'Download'}
+              {downloading === "leaves" ? "Preparing" : "Download"}
             </span>
           </motion.button>
 
@@ -221,8 +212,8 @@ export default function ExportsPage() {
           <motion.button
             whileHover={{ y: -2, scale: 1.01 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => handleDownload('payroll')}
-            disabled={downloading === 'payroll'}
+            onClick={() => handleDownload("payroll")}
+            disabled={downloading === "payroll"}
             className="flex flex-col items-start px-4 py-4 rounded-2xl border border-slate-100 bg-white hover:bg-slate-50 text-left shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
           >
             <span className="text-xs font-semibold text-slate-900">
@@ -232,9 +223,7 @@ export default function ExportsPage() {
               Periods, totals & status
             </span>
             <span className="mt-2 text-[11px] text-blue-600">
-              {downloading === 'payroll'
-                ? 'Preparing'
-                : 'Download'}
+              {downloading === "payroll" ? "Preparing" : "Download"}
             </span>
           </motion.button>
         </div>
@@ -242,8 +231,3 @@ export default function ExportsPage() {
     </motion.div>
   );
 }
-
-
-
-
-

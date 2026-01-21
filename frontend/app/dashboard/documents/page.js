@@ -1,52 +1,53 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 export default function DocumentsPage() {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const [creating, setCreating] = useState(false);
-  const [createError, setCreateError] = useState('');
+  const [createError, setCreateError] = useState("");
   const [form, setForm] = useState({
-    title: '',
-    category: '',
-    description: '',
-    file_url: '',
-    visibility: 'company'
+    title: "",
+    category: "",
+    description: "",
+    file_url: "",
+    visibility: "company",
   });
 
   const [editingDoc, setEditingDoc] = useState(null);
   const [editForm, setEditForm] = useState({
-    title: '',
-    category: '',
-    description: '',
-    file_url: '',
-    visibility: 'company'
+    title: "",
+    category: "",
+    description: "",
+    file_url: "",
+    visibility: "company",
   });
-  const [editError, setEditError] = useState('');
+  const [editError, setEditError] = useState("");
   const [editSaving, setEditSaving] = useState(false);
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+  const API_BASE =
+    process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
   useEffect(() => {
     const fetchDocs = async () => {
       try {
         const res = await fetch(`${API_BASE}/api/documents`, {
-        credentials: 'include',
+          credentials: "include",
         });
         const data = await res.json();
 
         if (!res.ok) {
-          setError(data.message || 'Error fetching documents');
+          setError(data.message || "Error fetching documents");
         } else {
           setDocuments(Array.isArray(data) ? data : []);
-          setError('');
+          setError("");
         }
       } catch (err) {
-        console.error('Documents fetch error:', err);
-        setError('Error connecting to server');
+        console.error("Documents fetch error:", err);
+        setError("Error connecting to server");
       } finally {
         setLoading(false);
       }
@@ -65,39 +66,39 @@ export default function DocumentsPage() {
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    setCreateError('');
+    setCreateError("");
     setCreating(true);
 
     try {
       const res = await fetch(`${API_BASE}/api/documents`, {
-        credentials: 'include',
-        method: 'POST',
+        credentials: "include",
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(form)
+        body: JSON.stringify(form),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setCreateError(data.message || 'Error creating document');
+        setCreateError(data.message || "Error creating document");
         setCreating(false);
         return;
       }
 
       setDocuments(Array.isArray(data) ? data : []);
       setForm({
-        title: '',
-        category: '',
-        description: '',
-        file_url: '',
-        visibility: 'company'
+        title: "",
+        category: "",
+        description: "",
+        file_url: "",
+        visibility: "company",
       });
-      setCreateError('');
+      setCreateError("");
     } catch (err) {
-      console.error('Create document error:', err);
-      setCreateError('Error connecting to server');
+      console.error("Create document error:", err);
+      setCreateError("Error connecting to server");
     } finally {
       setCreating(false);
     }
@@ -105,19 +106,19 @@ export default function DocumentsPage() {
 
   const openEdit = (doc) => {
     setEditingDoc(doc);
-    setEditError('');
+    setEditError("");
     setEditForm({
-      title: doc.title || '',
-      category: doc.category || '',
-      description: doc.description || '',
-      file_url: doc.file_url || '',
-      visibility: doc.visibility || 'company'
+      title: doc.title || "",
+      category: doc.category || "",
+      description: doc.description || "",
+      file_url: doc.file_url || "",
+      visibility: doc.visibility || "company",
     });
   };
 
   const closeEdit = () => {
     setEditingDoc(null);
-    setEditError('');
+    setEditError("");
     setEditSaving(false);
   };
 
@@ -126,25 +127,22 @@ export default function DocumentsPage() {
     if (!editingDoc) return;
 
     setEditSaving(true);
-    setEditError('');
+    setEditError("");
 
     try {
-      const res = await fetch(
-        `${API_BASE}/api/documents/${editingDoc.id}`,
-        {
-        credentials: 'include',
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(editForm)
-        }
-      );
+      const res = await fetch(`${API_BASE}/api/documents/${editingDoc.id}`, {
+        credentials: "include",
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editForm),
+      });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setEditError(data.message || 'Error updating document');
+        setEditError(data.message || "Error updating document");
         setEditSaving(false);
         return;
       }
@@ -152,42 +150,38 @@ export default function DocumentsPage() {
       setDocuments(Array.isArray(data) ? data : []);
       closeEdit();
     } catch (err) {
-      console.error('Update document error:', err);
-      setEditError('Error connecting to server');
+      console.error("Update document error:", err);
+      setEditError("Error connecting to server");
       setEditSaving(false);
     }
   };
 
   const handleDelete = async (docId) => {
-    if (!window.confirm('Delete this document?')) return;
+    if (!window.confirm("Delete this document?")) return;
 
     try {
-      const res = await fetch(
-        `${API_BASE}/api/documents/${docId}`,
-        {
-        credentials: 'include',
-          method: 'DELETE',
-          headers: {
-          }
-        }
-      );
+      const res = await fetch(`${API_BASE}/api/documents/${docId}`, {
+        credentials: "include",
+        method: "DELETE",
+        headers: {},
+      });
 
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.message || 'Error deleting document');
+        alert(data.message || "Error deleting document");
         return;
       }
 
       setDocuments(Array.isArray(data) ? data : []);
     } catch (err) {
-      console.error('Delete document error:', err);
-      alert('Error connecting to server');
+      console.error("Delete document error:", err);
+      alert("Error connecting to server");
     }
   };
 
   const formatDate = (value) => {
-    if (!value) return '--';
+    if (!value) return "--";
     return new Date(value).toLocaleDateString();
   };
 
@@ -198,11 +192,10 @@ export default function DocumentsPage() {
           <span>Document hub</span>
         </div>
         <div>
-          <h1 className="text-3xl font-semibold text-slate-900">
-            Documents
-          </h1>
+          <h1 className="text-3xl font-semibold text-slate-900">Documents</h1>
           <p className="text-sm text-slate-500">
-            Store links to policies, SOPs, contracts, and other important documents.
+            Store links to policies, SOPs, contracts, and other important
+            documents.
           </p>
         </div>
       </div>
@@ -250,9 +243,7 @@ export default function DocumentsPage() {
             <input
               type="text"
               value={form.title}
-              onChange={(e) =>
-                handleFormChange('title', e.target.value)
-              }
+              onChange={(e) => handleFormChange("title", e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Employee Handbook, Leave Policy..."
               required
@@ -260,44 +251,32 @@ export default function DocumentsPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs text-slate-600">
-              Category
-            </label>
+            <label className="text-xs text-slate-600">Category</label>
             <input
               type="text"
               value={form.category}
-              onChange={(e) =>
-                handleFormChange('category', e.target.value)
-              }
+              onChange={(e) => handleFormChange("category", e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="HR, Finance, IT..."
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs text-slate-600">
-              File / link URL
-            </label>
+            <label className="text-xs text-slate-600">File / link URL</label>
             <input
               type="url"
               value={form.file_url}
-              onChange={(e) =>
-                handleFormChange('file_url', e.target.value)
-              }
+              onChange={(e) => handleFormChange("file_url", e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="https://drive.google.com/..."
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs text-slate-600">
-              Visibility
-            </label>
+            <label className="text-xs text-slate-600">Visibility</label>
             <select
               value={form.visibility}
-              onChange={(e) =>
-                handleFormChange('visibility', e.target.value)
-              }
+              onChange={(e) => handleFormChange("visibility", e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
             >
               <option value="company">Entire company</option>
@@ -307,14 +286,10 @@ export default function DocumentsPage() {
           </div>
 
           <div className="md:col-span-4 space-y-1">
-            <label className="text-xs text-slate-600">
-              Description
-            </label>
+            <label className="text-xs text-slate-600">Description</label>
             <textarea
               value={form.description}
-              onChange={(e) =>
-                handleFormChange('description', e.target.value)
-              }
+              onChange={(e) => handleFormChange("description", e.target.value)}
               rows={2}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs resize-none"
               placeholder="Short summary of what this document covers."
@@ -327,7 +302,7 @@ export default function DocumentsPage() {
               disabled={creating}
               className="px-5 py-2.5 rounded-2xl text-sm font-semibold text-white bg-blue-600 shadow-lg shadow-blue-300/40 hover:bg-blue-700 disabled:opacity-60"
             >
-              {creating ? 'Saving...' : 'Add document'}
+              {creating ? "Saving..." : "Add document"}
             </button>
           </div>
         </form>
@@ -360,7 +335,9 @@ export default function DocumentsPage() {
               <tr>
                 <th className="text-left px-6 py-3 font-semibold">Title</th>
                 <th className="text-left px-6 py-3 font-semibold">Category</th>
-                <th className="text-left px-6 py-3 font-semibold">Visibility</th>
+                <th className="text-left px-6 py-3 font-semibold">
+                  Visibility
+                </th>
                 <th className="text-left px-6 py-3 font-semibold">Link</th>
                 <th className="text-left px-6 py-3 font-semibold">Created</th>
                 <th className="text-right px-6 py-3 font-semibold">Actions</th>
@@ -387,10 +364,7 @@ export default function DocumentsPage() {
                 </tr>
               ) : (
                 documents.map((doc) => (
-                  <tr
-                    key={doc.id}
-                    className="hover:bg-slate-50"
-                  >
+                  <tr key={doc.id} className="hover:bg-slate-50">
                     <td className="px-6 py-4 text-slate-900">
                       {doc.title}
                       {doc.description && (
@@ -400,10 +374,10 @@ export default function DocumentsPage() {
                       )}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-600">
-                      {doc.category || '--'}
+                      {doc.category || "--"}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-600">
-                      {doc.visibility || 'company'}
+                      {doc.visibility || "company"}
                     </td>
                     <td className="px-6 py-4 text-xs">
                       {doc.file_url ? (
@@ -469,17 +443,14 @@ export default function DocumentsPage() {
               </div>
             )}
 
-            <form
-              onSubmit={handleSaveEdit}
-              className="space-y-3 text-sm"
-            >
+            <form onSubmit={handleSaveEdit} className="space-y-3 text-sm">
               <div className="space-y-1">
                 <label className="text-xs text-slate-600">Title</label>
                 <input
                   type="text"
                   value={editForm.title}
                   onChange={(e) =>
-                    handleFormChange('title', e.target.value, true)
+                    handleFormChange("title", e.target.value, true)
                   }
                   className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
@@ -487,14 +458,12 @@ export default function DocumentsPage() {
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs text-slate-600">
-                  Category
-                </label>
+                <label className="text-xs text-slate-600">Category</label>
                 <input
                   type="text"
                   value={editForm.category}
                   onChange={(e) =>
-                    handleFormChange('category', e.target.value, true)
+                    handleFormChange("category", e.target.value, true)
                   }
                   className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
@@ -508,24 +477,18 @@ export default function DocumentsPage() {
                   type="url"
                   value={editForm.file_url}
                   onChange={(e) =>
-                    handleFormChange('file_url', e.target.value, true)
+                    handleFormChange("file_url", e.target.value, true)
                   }
                   className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs text-slate-600">
-                  Visibility
-                </label>
+                <label className="text-xs text-slate-600">Visibility</label>
                 <select
                   value={editForm.visibility}
                   onChange={(e) =>
-                    handleFormChange(
-                      'visibility',
-                      e.target.value,
-                      true
-                    )
+                    handleFormChange("visibility", e.target.value, true)
                   }
                   className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                 >
@@ -536,17 +499,11 @@ export default function DocumentsPage() {
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs text-slate-600">
-                  Description
-                </label>
+                <label className="text-xs text-slate-600">Description</label>
                 <textarea
                   value={editForm.description}
                   onChange={(e) =>
-                    handleFormChange(
-                      'description',
-                      e.target.value,
-                      true
-                    )
+                    handleFormChange("description", e.target.value, true)
                   }
                   rows={2}
                   className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs resize-none"
@@ -566,7 +523,7 @@ export default function DocumentsPage() {
                   disabled={editSaving}
                   className="px-5 py-2 rounded-2xl text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-60"
                 >
-                  {editSaving ? 'Saving...' : 'Save changes'}
+                  {editSaving ? "Saving..." : "Save changes"}
                 </button>
               </div>
             </form>
@@ -576,10 +533,3 @@ export default function DocumentsPage() {
     </div>
   );
 }
-
-
-
-
-
-
-

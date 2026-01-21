@@ -1,52 +1,52 @@
-﻿'use client';
+﻿"use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
+import Image from "next/image";
+import Link from "next/link";
+import { motion } from "framer-motion";
 
 const tiles = [
   {
-    title: 'Masters',
-    desc: 'Products, Vendors, Customers, GST',
-    href: '/dashboard/sales-accounts/masters',
-    color: '#0fb472',
-    iconSrc: '/icons/masters-material.svg'
+    title: "Masters",
+    desc: "Products, Vendors, Customers, GST",
+    href: "/dashboard/sales-accounts/masters",
+    color: "#0fb472",
+    iconSrc: "/icons/masters-material.svg",
   },
   {
-    title: 'Procurement',
-    desc: 'PO, GRN, Vendor Bills',
-    href: '/dashboard/sales-accounts/procurement',
-    color: '#f61b63',
-    iconSrc: '/icons/procurement-material.svg'
+    title: "Procurement",
+    desc: "PO, GRN, Vendor Bills",
+    href: "/dashboard/sales-accounts/procurement",
+    color: "#f61b63",
+    iconSrc: "/icons/procurement-material.svg",
   },
   {
-    title: 'Inventory',
-    desc: 'Stock Ledger, Serials, Warehouses',
-    href: '/dashboard/sales-accounts/inventory',
-    color: '#1a7dff',
-    iconSrc: '/icons/inventory-material.svg'
+    title: "Inventory",
+    desc: "Stock Ledger, Serials, Warehouses",
+    href: "/dashboard/sales-accounts/inventory",
+    color: "#1a7dff",
+    iconSrc: "/icons/inventory-material.svg",
   },
   {
-    title: 'Sales',
-    desc: 'Quotations, Orders, Delivery, Invoices',
-    href: '/dashboard/sales-accounts/sales',
-    color: '#f48c06',
-    iconSrc: '/icons/sales-material.svg'
+    title: "Sales",
+    desc: "Quotations, Orders, Delivery, Invoices",
+    href: "/dashboard/sales-accounts/sales",
+    color: "#f48c06",
+    iconSrc: "/icons/sales-material.svg",
   },
   {
-    title: 'Payments',
-    desc: 'Cash In (customers) & Out (vendors)',
-    href: '/dashboard/sales-accounts/payments',
-    color: '#00b3d8',
-    iconSrc: '/icons/payments-material.svg'
+    title: "Payments",
+    desc: "Cash In (customers) & Out (vendors)",
+    href: "/dashboard/sales-accounts/payments",
+    color: "#00b3d8",
+    iconSrc: "/icons/payments-material.svg",
   },
   {
-    title: 'Accounting',
-    desc: 'Ledger entries, Profit & Loss',
-    href: '/dashboard/sales-accounts/accounting',
-    color: '#7c4dff',
-    iconSrc: '/icons/accounting-material.svg'
-  }
+    title: "Accounting",
+    desc: "Ledger entries, Profit & Loss",
+    href: "/dashboard/sales-accounts/accounting",
+    color: "#7c4dff",
+    iconSrc: "/icons/accounting-material.svg",
+  },
 ];
 
 export default function SalesAccountsHome() {
@@ -64,7 +64,9 @@ export default function SalesAccountsHome() {
         </div>
         <div className="relative flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">Sales & Accounts</h1>
+            <h1 className="text-2xl font-bold text-slate-900">
+              Sales & Accounts
+            </h1>
             <p className="text-sm text-slate-500">
               Manage sales, purchases, inventory, and accounts.
             </p>
@@ -83,35 +85,35 @@ export default function SalesAccountsHome() {
               variants={{
                 hover: {
                   scale: 1.05,
-                  transition: { duration: 0.3, ease: 'easeOut' }
-                }
+                  transition: { duration: 0.3, ease: "easeOut" },
+                },
               }}
               whileTap={{ scale: 0.98 }}
               className="tilt-card relative overflow-hidden rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.18)] p-8 border border-white/20 backdrop-blur-md h-64 flex flex-col justify-between transition-shadow hover:shadow-[0_30px_60px_rgba(0,0,0,0.25)]"
-              style={{ 
+              style={{
                 background: `linear-gradient(135deg, ${tile.color} 0%, ${tile.color}dd 100%)`,
               }}
             >
               {/* Corner highlight shape */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-bl-full translate-x-12 -translate-y-12 transition-transform duration-500 group-hover:translate-x-8 group-hover:-translate-y-8" />
-              
+
               {/* Hover Arrow */}
               <motion.div
                 variants={{
-                  hover: { opacity: 1, x: 0 }
+                  hover: { opacity: 1, x: 0 },
                 }}
                 initial={{ opacity: 0, x: -10 }}
                 className="absolute top-7 right-7 z-30"
               >
-                <svg 
-                  width="28" 
-                  height="28" 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="2.5" 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
+                <svg
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   className="text-white drop-shadow-sm"
                 >
                   <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -134,17 +136,17 @@ export default function SalesAccountsHome() {
                     {tile.desc}
                   </p>
                 </div>
-                
+
                 <div className="flex justify-center pb-2">
-                  <motion.div 
+                  <motion.div
                     variants={{
-                      hover: { 
-                        rotate: 15, 
+                      hover: {
+                        rotate: 15,
                         scale: 1.2,
-                        y: -8
-                      }
+                        y: -8,
+                      },
                     }}
-                    transition={{ type: 'spring', stiffness: 200, damping: 10 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 10 }}
                     className="relative w-36 h-36 flex items-center justify-center"
                   >
                     <Image
@@ -164,5 +166,3 @@ export default function SalesAccountsHome() {
     </motion.div>
   );
 }
-
-

@@ -1,44 +1,46 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
 const fetchWithAuth = async (path, options = {}) => {
   const res = await fetch(`${API_BASE}${path}`, {
-        credentials: 'include',
+    credentials: "include",
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...(options.headers || {})
-    }
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+    },
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    throw new Error(data?.message || 'Request failed');
+    throw new Error(data?.message || "Request failed");
   }
   return data;
 };
 
 export default function InventoryPage() {
   const [rows, setRows] = useState([]);
-  const [error, setError] = useState('');
-  const [filters, setFilters] = useState({ product_id: '', warehouse_id: '' });
+  const [error, setError] = useState("");
+  const [filters, setFilters] = useState({ product_id: "", warehouse_id: "" });
   const [loading, setLoading] = useState(true);
 
   const loadLedger = async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams();
-      if (filters.product_id) params.set('product_id', filters.product_id);
-      if (filters.warehouse_id) params.set('warehouse_id', filters.warehouse_id);
-      const qs = params.toString() ? `?${params.toString()}` : '';
+      if (filters.product_id) params.set("product_id", filters.product_id);
+      if (filters.warehouse_id)
+        params.set("warehouse_id", filters.warehouse_id);
+      const qs = params.toString() ? `?${params.toString()}` : "";
       const data = await fetchWithAuth(`/api/sa/inventory/stock-ledger${qs}`);
       setRows(Array.isArray(data) ? data : []);
-      setError('');
+      setError("");
     } catch (err) {
-      setError(err.message || 'Error loading ledger');
+      setError(err.message || "Error loading ledger");
     } finally {
       setLoading(false);
     }
@@ -64,9 +66,12 @@ export default function InventoryPage() {
           <span>Stock ledger</span>
         </div>
         <div>
-          <h1 className="text-3xl font-semibold text-slate-900">Inventory & Stock Ledger</h1>
+          <h1 className="text-3xl font-semibold text-slate-900">
+            Inventory & Stock Ledger
+          </h1>
           <p className="text-sm text-slate-500">
-            Single source of truth for stock movements with warehouse and serial tracking.
+            Single source of truth for stock movements with warehouse and serial
+            tracking.
           </p>
         </div>
       </div>
@@ -77,13 +82,13 @@ export default function InventoryPage() {
             className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Product ID"
             value={filters.product_id}
-            onChange={(e) => onChange('product_id', e.target.value)}
+            onChange={(e) => onChange("product_id", e.target.value)}
           />
           <input
             className="px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Warehouse ID"
             value={filters.warehouse_id}
-            onChange={(e) => onChange('warehouse_id', e.target.value)}
+            onChange={(e) => onChange("warehouse_id", e.target.value)}
           />
           <div className="flex gap-2">
             <button
@@ -94,7 +99,7 @@ export default function InventoryPage() {
             </button>
             <button
               onClick={() => {
-                setFilters({ product_id: '', warehouse_id: '' });
+                setFilters({ product_id: "", warehouse_id: "" });
                 loadLedger();
               }}
               className="px-5 py-2.5 rounded-2xl text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200"
@@ -124,13 +129,19 @@ export default function InventoryPage() {
             <tbody className="divide-y divide-slate-100">
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-6 text-center text-xs text-slate-400">
+                  <td
+                    colSpan={5}
+                    className="px-6 py-6 text-center text-xs text-slate-400"
+                  >
                     Loading
                   </td>
                 </tr>
               ) : rows.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-6 text-center text-xs text-slate-400">
+                  <td
+                    colSpan={5}
+                    className="px-6 py-6 text-center text-xs text-slate-400"
+                  >
                     No ledger rows found.
                   </td>
                 </tr>
@@ -143,10 +154,14 @@ export default function InventoryPage() {
                     <td className="px-6 py-4 text-slate-600">
                       {row.products?.name || row.product_id}
                     </td>
-                    <td className="px-6 py-4 text-slate-600">{row.warehouse_id || '-'}</td>
-                    <td className="px-6 py-4 text-slate-600">{row.qty_delta}</td>
                     <td className="px-6 py-4 text-slate-600">
-                      {Array.isArray(row.serials) ? row.serials.join(', ') : ''}
+                      {row.warehouse_id || "-"}
+                    </td>
+                    <td className="px-6 py-4 text-slate-600">
+                      {row.qty_delta}
+                    </td>
+                    <td className="px-6 py-4 text-slate-600">
+                      {Array.isArray(row.serials) ? row.serials.join(", ") : ""}
                     </td>
                   </tr>
                 ))
@@ -158,9 +173,3 @@ export default function InventoryPage() {
     </motion.div>
   );
 }
-
-
-
-
-
-

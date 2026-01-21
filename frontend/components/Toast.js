@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function ToastContainer() {
   const [toasts, setToasts] = useState([]);
 
   useEffect(() => {
     function handleToastEvent(event) {
-      const { type = 'success', message = '' } = event.detail || {};
+      const { type = "success", message = "" } = event.detail || {};
       if (!message) return;
 
       const id = Date.now() + Math.random();
@@ -21,38 +21,38 @@ export default function ToastContainer() {
       }, 3000);
     }
 
-    window.addEventListener('offisphere-toast', handleToastEvent);
+    window.addEventListener("offisphere-toast", handleToastEvent);
     return () =>
-      window.removeEventListener('offisphere-toast', handleToastEvent);
+      window.removeEventListener("offisphere-toast", handleToastEvent);
   }, []);
 
   const getColors = (type) => {
-    if (type === 'error') {
+    if (type === "error") {
       return {
-        bg: 'bg-rose-50',
-        border: 'border-rose-200',
-        text: 'text-rose-800'
+        bg: "bg-rose-50",
+        border: "border-rose-200",
+        text: "text-rose-800",
       };
     }
-    if (type === 'info') {
+    if (type === "info") {
       return {
-        bg: 'bg-sky-50',
-        border: 'border-sky-200',
-        text: 'text-sky-800'
+        bg: "bg-sky-50",
+        border: "border-sky-200",
+        text: "text-sky-800",
       };
     }
     // success default
     return {
-      bg: 'bg-emerald-50',
-      border: 'border-emerald-200',
-      text: 'text-emerald-800'
+      bg: "bg-emerald-50",
+      border: "border-emerald-200",
+      text: "text-emerald-800",
     };
   };
 
   const getIcon = (type) => {
-    if (type === 'error') return '!';
-    if (type === 'info') return 'i';
-    return 'OK';
+    if (type === "error") return "!";
+    if (type === "info") return "i";
+    return "OK";
   };
 
   return (
@@ -69,7 +69,9 @@ export default function ToastContainer() {
               transition={{ duration: 0.2 }}
               className={`pointer-events-auto ${colors.bg} ${colors.border} ${colors.text} border rounded-xl shadow-md px-3 py-2 text-xs flex items-center gap-2`}
             >
-              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-white/70 text-[10px]">{getIcon(toast.type)}</span>
+              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-white/70 text-[10px]">
+                {getIcon(toast.type)}
+              </span>
               <span className="flex-1">{toast.message}</span>
             </motion.div>
           );
@@ -78,4 +80,3 @@ export default function ToastContainer() {
     </div>
   );
 }
-

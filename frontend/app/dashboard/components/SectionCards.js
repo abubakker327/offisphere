@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
+import Image from "next/image";
+import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function SectionCards({ title, description, pill, tiles }) {
   return (
@@ -29,9 +29,13 @@ export default function SectionCards({ title, description, pill, tiles }) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {tiles.map((tile, idx) => {
           const Icon = tile.icon;
-          const isSvg = tile.iconSrc && tile.iconSrc.endsWith('.svg');
+          const isSvg = tile.iconSrc && tile.iconSrc.endsWith(".svg");
           return (
-            <Link key={tile.href} href={tile.href} className="block h-full group">
+            <Link
+              key={tile.href}
+              href={tile.href}
+              className="block h-full group"
+            >
               <motion.div
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -40,20 +44,20 @@ export default function SectionCards({ title, description, pill, tiles }) {
                 variants={{
                   hover: {
                     scale: 1.05,
-                    transition: { duration: 0.3, ease: 'easeOut' }
-                  }
+                    transition: { duration: 0.3, ease: "easeOut" },
+                  },
                 }}
                 whileTap={{ scale: 0.98 }}
                 className="tilt-card relative overflow-hidden rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.18)] p-8 border border-white/20 backdrop-blur-md h-60 flex flex-col justify-between transition-shadow hover:shadow-[0_30px_60px_rgba(0,0,0,0.25)]"
                 style={{
-                  background: `linear-gradient(135deg, ${tile.color} 0%, ${tile.color}dd 100%)`
+                  background: `linear-gradient(135deg, ${tile.color} 0%, ${tile.color}dd 100%)`,
                 }}
               >
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-bl-full translate-x-12 -translate-y-12 transition-transform duration-500 group-hover:translate-x-8 group-hover:-translate-y-8" />
 
                 <motion.div
                   variants={{
-                    hover: { opacity: 1, x: 0 }
+                    hover: { opacity: 1, x: 0 },
                   }}
                   initial={{ opacity: 0, x: -10 }}
                   className="absolute top-7 right-7 z-30"
@@ -96,10 +100,14 @@ export default function SectionCards({ title, description, pill, tiles }) {
                         hover: {
                           rotate: 15,
                           scale: 1.15,
-                          y: -8
-                        }
+                          y: -8,
+                        },
                       }}
-                      transition={{ type: 'spring', stiffness: 200, damping: 10 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 200,
+                        damping: 10,
+                      }}
                       className="relative w-32 h-32 flex items-center justify-center"
                     >
                       {tile.iconSrc ? (

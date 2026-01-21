@@ -1,57 +1,56 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+  process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
 export default function ReportsPage() {
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const cardVariants = {
     hidden: { opacity: 0, y: 8 },
     visible: (i) => ({
       opacity: 1,
       y: 0,
-      transition: { delay: 0.05 * i, duration: 0.2 }
-    })
+      transition: { delay: 0.05 * i, duration: 0.2 },
+    }),
   };
 
   const fetchSummary = async () => {
     try {
       setLoading(true);
-      setError('');
+      setError("");
 
       const params = new URLSearchParams();
-      if (fromDate) params.append('from', fromDate);
-      if (toDate) params.append('to', toDate);
+      if (fromDate) params.append("from", fromDate);
+      if (toDate) params.append("to", toDate);
 
       const url = `${API_BASE}/api/reports/summary${
-        params.toString() ? `?${params.toString()}` : ''
+        params.toString() ? `?${params.toString()}` : ""
       }`;
 
       const res = await fetch(url, {
-        credentials: 'include',
-        headers: {
-        }
+        credentials: "include",
+        headers: {},
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || 'Error loading reports summary');
+        setError(data.message || "Error loading reports summary");
         setSummary(null);
       } else {
         setSummary(data);
       }
     } catch (err) {
-      console.error('Reports summary error:', err);
-      setError('Error connecting to server');
+      console.error("Reports summary error:", err);
+      setError("Error connecting to server");
       setSummary(null);
     } finally {
       setLoading(false);
@@ -65,7 +64,7 @@ export default function ReportsPage() {
   }, []);
 
   const formatCurrency = (value) =>
-    `${Number(value || 0).toLocaleString('en-IN')}`;
+    `${Number(value || 0).toLocaleString("en-IN")}`;
 
   return (
     <motion.div
@@ -81,12 +80,10 @@ export default function ReportsPage() {
             <span>Insights hub</span>
           </div>
           <div>
-            <h1 className="text-3xl font-semibold text-slate-900">
-              Reports
-            </h1>
+            <h1 className="text-3xl font-semibold text-slate-900">Reports</h1>
             <p className="text-sm text-slate-500">
-              Cross-module summary for attendance, leaves, timesheets, tasks
-              and payroll over a selected period.
+              Cross-module summary for attendance, leaves, timesheets, tasks and
+              payroll over a selected period.
             </p>
           </div>
         </div>
@@ -105,9 +102,7 @@ export default function ReportsPage() {
         className="rounded-3xl bg-white border border-slate-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] p-6"
       >
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-base font-semibold text-slate-900">
-            Date range
-          </h2>
+          <h2 className="text-base font-semibold text-slate-900">Date range</h2>
           <span className="text-xs text-slate-400">
             Filters all metrics on this page
           </span>
@@ -136,8 +131,8 @@ export default function ReportsPage() {
             <button
               type="button"
               onClick={() => {
-                setFromDate('');
-                setToDate('');
+                setFromDate("");
+                setToDate("");
               }}
               className="h-10 mt-auto px-4 py-2 rounded-2xl bg-slate-100 text-xs text-slate-600 hover:bg-slate-200"
             >
@@ -153,7 +148,7 @@ export default function ReportsPage() {
               disabled={loading}
               className="h-10 mt-auto px-5 py-2 rounded-2xl bg-blue-600 text-white text-xs font-medium shadow-lg shadow-blue-300/50 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {loading ? 'Updating' : 'Apply filters'}
+              {loading ? "Updating" : "Apply filters"}
             </motion.button>
           </div>
         </div>
@@ -178,19 +173,19 @@ export default function ReportsPage() {
           </div>
           <div className="mt-2 text-[11px] text-slate-600 space-y-1">
             <p>
-              Present:{' '}
+              Present:{" "}
               <span className="font-semibold text-emerald-600">
                 {summary?.attendance?.present ?? 0}
               </span>
             </p>
             <p>
-              Absent:{' '}
+              Absent:{" "}
               <span className="font-semibold text-rose-600">
                 {summary?.attendance?.absent ?? 0}
               </span>
             </p>
             <p>
-              On leave:{' '}
+              On leave:{" "}
               <span className="font-semibold text-indigo-600">
                 {summary?.attendance?.on_leave ?? 0}
               </span>
@@ -215,19 +210,19 @@ export default function ReportsPage() {
           </div>
           <div className="mt-2 text-[11px] text-slate-600 space-y-1">
             <p>
-              Approved:{' '}
+              Approved:{" "}
               <span className="font-semibold text-emerald-600">
                 {summary?.leaves?.approved ?? 0}
               </span>
             </p>
             <p>
-              Pending:{' '}
+              Pending:{" "}
               <span className="font-semibold text-amber-600">
                 {summary?.leaves?.pending ?? 0}
               </span>
             </p>
             <p>
-              Rejected:{' '}
+              Rejected:{" "}
               <span className="font-semibold text-rose-600">
                 {summary?.leaves?.rejected ?? 0}
               </span>
@@ -244,9 +239,7 @@ export default function ReportsPage() {
           whileHover={{ y: -4 }}
           className="bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-4"
         >
-          <p className="text-xs font-medium text-slate-500 mb-2">
-            Timesheets
-          </p>
+          <p className="text-xs font-medium text-slate-500 mb-2">Timesheets</p>
           <div className="text-2xl font-semibold text-slate-900">
             {summary?.timesheets?.entries ?? 0}
           </div>
@@ -264,33 +257,31 @@ export default function ReportsPage() {
           whileHover={{ y: -4 }}
           className="bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-4"
         >
-          <p className="text-xs font-medium text-slate-500 mb-2">
-            Tasks
-          </p>
+          <p className="text-xs font-medium text-slate-500 mb-2">Tasks</p>
           <div className="text-2xl font-semibold text-slate-900">
             {summary?.tasks?.total ?? 0}
           </div>
           <div className="mt-2 text-[11px] text-slate-600 space-y-1">
             <p>
-              Open:{' '}
+              Open:{" "}
               <span className="font-semibold text-sky-600">
                 {summary?.tasks?.open ?? 0}
               </span>
             </p>
             <p>
-              In progress:{' '}
+              In progress:{" "}
               <span className="font-semibold text-indigo-600">
                 {summary?.tasks?.in_progress ?? 0}
               </span>
             </p>
             <p>
-              Completed:{' '}
+              Completed:{" "}
               <span className="font-semibold text-emerald-600">
                 {summary?.tasks?.completed ?? 0}
               </span>
             </p>
             <p>
-              Overdue:{' '}
+              Overdue:{" "}
               <span className="font-semibold text-rose-600">
                 {summary?.tasks?.overdue ?? 0}
               </span>
@@ -318,13 +309,13 @@ export default function ReportsPage() {
           </div>
           <div className="mt-2 text-[11px] text-slate-600 space-y-1">
             <p>
-              Total gross:{' '}
+              Total gross:{" "}
               <span className="font-semibold text-slate-900">
                 {formatCurrency(summary?.payroll?.total_gross ?? 0)}
               </span>
             </p>
             <p>
-              Total net:{' '}
+              Total net:{" "}
               <span className="font-semibold text-slate-900">
                 {formatCurrency(summary?.payroll?.total_net ?? 0)}
               </span>
@@ -341,9 +332,7 @@ export default function ReportsPage() {
           whileHover={{ y: -4 }}
           className="bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-4"
         >
-          <p className="text-xs font-medium text-slate-500 mb-2">
-            HR snapshot
-          </p>
+          <p className="text-xs font-medium text-slate-500 mb-2">HR snapshot</p>
           <p className="text-[11px] text-slate-500">
             Combine this with the main Dashboard for a quick HR + Finance
             overview. Exports can be used for deeper reporting in Excel or BI
@@ -366,16 +355,12 @@ export default function ReportsPage() {
           whileHover={{ y: -4 }}
           className="bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-4"
         >
-          <p className="text-xs font-medium text-slate-500 mb-2">
-            Tips
-          </p>
+          <p className="text-xs font-medium text-slate-500 mb-2">Tips</p>
           <ul className="text-[11px] text-slate-600 space-y-1.5">
+            <li>Use a month range to match payroll cycles.</li>
             <li>
-              Use a month range to match payroll cycles.
-            </li>
-            <li>
-              Compare different ranges manually (e.g. this month vs last
-              month) to see trends.
+              Compare different ranges manually (e.g. this month vs last month)
+              to see trends.
             </li>
             <li>
               For team-level breakdowns, use the module pages + filters, or
@@ -387,8 +372,3 @@ export default function ReportsPage() {
     </motion.div>
   );
 }
-
-
-
-
-

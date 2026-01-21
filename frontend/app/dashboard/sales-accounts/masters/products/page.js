@@ -1,22 +1,23 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
 const fetchWithAuth = async (path, options = {}) => {
   const res = await fetch(`${API_BASE}${path}`, {
-        credentials: 'include',
+    credentials: "include",
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...(options.headers || {})
-    }
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+    },
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    throw new Error(data?.message || 'Request failed');
+    throw new Error(data?.message || "Request failed");
   }
   return data;
 };
@@ -24,28 +25,28 @@ const fetchWithAuth = async (path, options = {}) => {
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({
-    name: '',
-    sku: '',
-    category: '',
-    unit: '',
+    name: "",
+    sku: "",
+    category: "",
+    unit: "",
     gst_percent: 18,
-    unit_price: '',
-    has_serial: false
+    unit_price: "",
+    has_serial: false,
   });
 
   const loadProducts = async () => {
     try {
       setLoading(true);
-      const data = await fetchWithAuth('/api/sa/masters/products');
+      const data = await fetchWithAuth("/api/sa/masters/products");
       setProducts(Array.isArray(data) ? data : []);
-      setError('');
+      setError("");
     } catch (err) {
       console.error(err);
-      setError(err.message || 'Error loading products');
+      setError(err.message || "Error loading products");
     } finally {
       setLoading(false);
     }
@@ -61,32 +62,32 @@ export default function ProductsPage() {
       const payload = {
         ...form,
         gst_percent:
-          form.gst_percent === '' || Number.isNaN(Number(form.gst_percent))
+          form.gst_percent === "" || Number.isNaN(Number(form.gst_percent))
             ? null
             : Number(form.gst_percent),
         unit_price:
-          form.unit_price === '' || Number.isNaN(Number(form.unit_price))
+          form.unit_price === "" || Number.isNaN(Number(form.unit_price))
             ? null
-            : Number(form.unit_price)
+            : Number(form.unit_price),
       };
-      await fetchWithAuth('/api/sa/masters/products', {
-        method: 'POST',
-        body: JSON.stringify(payload)
+      await fetchWithAuth("/api/sa/masters/products", {
+        method: "POST",
+        body: JSON.stringify(payload),
       });
       setModalOpen(false);
       setForm({
-        name: '',
-        sku: '',
-        category: '',
-        unit: '',
+        name: "",
+        sku: "",
+        category: "",
+        unit: "",
         gst_percent: 18,
-        unit_price: '',
-        has_serial: false
+        unit_price: "",
+        has_serial: false,
       });
       loadProducts();
     } catch (err) {
       console.error(err);
-      setError(err.message || 'Error saving product');
+      setError(err.message || "Error saving product");
     } finally {
       setSaving(false);
     }
@@ -136,19 +137,27 @@ export default function ProductsPage() {
                 <th className="text-left px-6 py-3 font-semibold">Category</th>
                 <th className="text-left px-6 py-3 font-semibold">GST %</th>
                 <th className="text-left px-6 py-3 font-semibold">Unit</th>
-                <th className="text-left px-6 py-3 font-semibold">Serialized</th>
+                <th className="text-left px-6 py-3 font-semibold">
+                  Serialized
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {loading ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-6 text-center text-slate-400 text-xs">
+                  <td
+                    colSpan={6}
+                    className="px-6 py-6 text-center text-slate-400 text-xs"
+                  >
                     Loading products...
                   </td>
                 </tr>
               ) : products.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-6 text-center text-slate-400 text-xs">
+                  <td
+                    colSpan={6}
+                    className="px-6 py-6 text-center text-slate-400 text-xs"
+                  >
                     No products found.
                   </td>
                 </tr>
@@ -156,14 +165,18 @@ export default function ProductsPage() {
                 products.map((p) => (
                   <tr key={p.id} className="hover:bg-slate-50">
                     <td className="px-6 py-4 text-slate-900 font-medium">
-                      {p.name || '-'}
+                      {p.name || "-"}
                     </td>
-                    <td className="px-6 py-4 text-slate-600">{p.sku || '-'}</td>
-                    <td className="px-6 py-4 text-slate-600">{p.category || '-'}</td>
+                    <td className="px-6 py-4 text-slate-600">{p.sku || "-"}</td>
                     <td className="px-6 py-4 text-slate-600">
-                      {p.gst_percent ?? p.gst_rate ?? '-'}
+                      {p.category || "-"}
                     </td>
-                    <td className="px-6 py-4 text-slate-600">{p.unit || '-'}</td>
+                    <td className="px-6 py-4 text-slate-600">
+                      {p.gst_percent ?? p.gst_rate ?? "-"}
+                    </td>
+                    <td className="px-6 py-4 text-slate-600">
+                      {p.unit || "-"}
+                    </td>
                     <td className="px-6 py-4 text-slate-600 text-xs">
                       {p.has_serial || p.is_serialized ? (
                         <span className="text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
@@ -203,14 +216,27 @@ export default function ProductsPage() {
                   <h3 className="text-xl font-semibold text-slate-900">
                     New product
                   </h3>
-                  <p className="text-xs text-slate-500">Define product details and tax slab.</p>
+                  <p className="text-xs text-slate-500">
+                    Define product details and tax slab.
+                  </p>
                 </div>
                 <button
                   className="h-8 w-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition-colors"
                   onClick={() => setModalOpen(false)}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                 </button>
               </div>
@@ -221,7 +247,7 @@ export default function ProductsPage() {
                   <input
                     className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={form.name}
-                    onChange={(e) => onChange('name', e.target.value)}
+                    onChange={(e) => onChange("name", e.target.value)}
                     placeholder="e.g. BenQ Projector"
                   />
                 </div>
@@ -230,7 +256,7 @@ export default function ProductsPage() {
                   <input
                     className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={form.sku}
-                    onChange={(e) => onChange('sku', e.target.value)}
+                    onChange={(e) => onChange("sku", e.target.value)}
                     placeholder="Reference code"
                   />
                 </div>
@@ -239,35 +265,41 @@ export default function ProductsPage() {
                   <input
                     className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={form.category}
-                    onChange={(e) => onChange('category', e.target.value)}
+                    onChange={(e) => onChange("category", e.target.value)}
                     placeholder="Hardware, license..."
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs text-slate-600">Unit of measure</label>
+                  <label className="text-xs text-slate-600">
+                    Unit of measure
+                  </label>
                   <input
                     className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={form.unit}
-                    onChange={(e) => onChange('unit', e.target.value)}
+                    onChange={(e) => onChange("unit", e.target.value)}
                     placeholder="pcs, box, nos..."
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs text-slate-600">GST percentage</label>
+                  <label className="text-xs text-slate-600">
+                    GST percentage
+                  </label>
                   <input
                     type="number"
                     className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={form.gst_percent}
-                    onChange={(e) => onChange('gst_percent', e.target.value)}
+                    onChange={(e) => onChange("gst_percent", e.target.value)}
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs text-slate-600">Default unit price</label>
+                  <label className="text-xs text-slate-600">
+                    Default unit price
+                  </label>
                   <input
                     type="number"
                     className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={form.unit_price}
-                    onChange={(e) => onChange('unit_price', e.target.value)}
+                    onChange={(e) => onChange("unit_price", e.target.value)}
                     placeholder="0.00"
                   />
                 </div>
@@ -276,14 +308,20 @@ export default function ProductsPage() {
                     id="is_serialized"
                     type="checkbox"
                     checked={form.has_serial}
-                    onChange={(e) => onChange('has_serial', e.target.checked)}
+                    onChange={(e) => onChange("has_serial", e.target.checked)}
                     className="h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
                   />
                   <div className="flex flex-col">
-                    <label htmlFor="is_serialized" className="text-xs font-semibold text-slate-700 cursor-pointer">
+                    <label
+                      htmlFor="is_serialized"
+                      className="text-xs font-semibold text-slate-700 cursor-pointer"
+                    >
                       Serialized tracking
                     </label>
-                    <p className="text-[11px] text-slate-500">Enable serial number capture for each unit (required for panels/projectors).</p>
+                    <p className="text-[11px] text-slate-500">
+                      Enable serial number capture for each unit (required for
+                      panels/projectors).
+                    </p>
                   </div>
                 </div>
               </div>
@@ -302,7 +340,7 @@ export default function ProductsPage() {
                   onClick={handleSave}
                   className="px-6 py-2.5 rounded-2xl text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-300/50 disabled:opacity-60 transition-all"
                 >
-                  {saving ? 'Creating...' : 'Add product'}
+                  {saving ? "Creating..." : "Add product"}
                 </motion.button>
               </div>
             </motion.div>
@@ -312,8 +350,3 @@ export default function ProductsPage() {
     </motion.div>
   );
 }
-
-
-
-
-

@@ -1,68 +1,68 @@
-﻿'use client';
+﻿"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { motion } from "framer-motion";
 
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE || 'https://offisphere.onrender.com';
+  process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
 
 export default function LoginPage() {
   const router = useRouter();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   // Ripple state
   const [rippleStyle, setRippleStyle] = useState({});
   const [rippleVisible, setRippleVisible] = useState(false);
 
   const triggerToast = (type, message) => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
     window.dispatchEvent(
-      new CustomEvent('offisphere-toast', {
-        detail: { type, message }
-      })
+      new CustomEvent("offisphere-toast", {
+        detail: { type, message },
+      }),
     );
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
 
     try {
       const res = await fetch(`${API_BASE}/api/auth/login`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, remember })
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, remember }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || 'Login failed');
-        triggerToast('error', data.message || 'Login failed');
+        setError(data.message || "Login failed");
+        triggerToast("error", data.message || "Login failed");
       } else {
         const { user, roles } = data;
 
         if (remember) {
-          localStorage.setItem('offisphere_user', JSON.stringify(user || {}));
-          localStorage.setItem('offisphere_roles', JSON.stringify(roles || []));
+          localStorage.setItem("offisphere_user", JSON.stringify(user || {}));
+          localStorage.setItem("offisphere_roles", JSON.stringify(roles || []));
         }
 
-        triggerToast('success', 'Welcome back to Offisphere!');
-        router.replace('/dashboard');
+        triggerToast("success", "Welcome back to Offisphere!");
+        router.replace("/dashboard");
       }
     } catch (err) {
-      console.error('Login error:', err);
-      setError('Error connecting to server');
-      triggerToast('error', 'Error connecting to server');
+      console.error("Login error:", err);
+      setError("Error connecting to server");
+      triggerToast("error", "Error connecting to server");
     } finally {
       setLoading(false);
     }
@@ -78,7 +78,7 @@ export default function LoginPage() {
       top: y,
       left: x,
       width: size,
-      height: size
+      height: size,
     });
 
     setRippleVisible(false);
@@ -96,24 +96,24 @@ export default function LoginPage() {
         {/* Background gradient */}
         <div
           className="absolute inset-0"
-          style={{ background: 'var(--brand-gradient)' }}
+          style={{ background: "var(--brand-gradient)" }}
         />
 
         {/* Organic blobs */}
         <motion.div
           className="absolute -top-32 -left-24 w-72 h-72 rounded-[40%] bg-sky-400/70 blur-3xl"
           animate={{ y: [0, 30, 0] }}
-          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
           className="absolute bottom-[-120px] left-[-40px] w-80 h-80 rounded-[45%] bg-sky-500/80 blur-3xl"
           animate={{ y: [0, -40, 0] }}
-          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
           className="absolute -right-32 top-40 w-80 h-80 rounded-[45%] bg-sky-300/80 blur-3xl"
           animate={{ x: [0, -30, 0] }}
-          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
         />
 
         {/* Semi-transparent overlay to soften */}
@@ -129,7 +129,10 @@ export default function LoginPage() {
             className="flex items-center justify-center"
           >
             <div className="relative h-32 w-32">
-              <div className="absolute inset-0 rounded-full shadow-[0_22px_50px_rgba(37,99,235,0.45)]" style={{ background: 'var(--brand-gradient)' }} />
+              <div
+                className="absolute inset-0 rounded-full shadow-[0_22px_50px_rgba(37,99,235,0.45)]"
+                style={{ background: "var(--brand-gradient)" }}
+              />
               <div className="absolute inset-x-0 bottom-0 h-1/2 rounded-b-full bg-white/40 blur-lg" />
               <div className="absolute inset-3 rounded-full bg-white/20 backdrop-blur-md ring-1 ring-white/60" />
               <div className="relative h-full w-full flex items-center justify-center">
@@ -157,7 +160,8 @@ export default function LoginPage() {
               to Offisphere
             </p>
             <p className="text-sm text-indigo-50/90 max-w-xs">
-              Sign in to manage people, assets, payroll, and reporting in one place.
+              Sign in to manage people, assets, payroll, and reporting in one
+              place.
             </p>
           </motion.div>
 
@@ -175,7 +179,7 @@ export default function LoginPage() {
 
       {/* RIGHT SIDE - login form */}
       <div className="relative w-full lg:w-1/2 flex items-center justify-center px-6 py-12">
-          <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-24 right-10 h-56 w-56 rounded-full bg-sky-200/70 blur-3xl" />
           <div className="absolute bottom-0 left-6 h-64 w-64 rounded-full bg-blue-200/70 blur-3xl" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.9),_rgba(255,255,255,0.3),_transparent_70%)]" />
@@ -229,7 +233,7 @@ export default function LoginPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm text-slate-900 outline-none
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm text-slate-900 outline-none
                              transition shadow-sm group-hover:shadow-md
                              focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="name@company.com"
@@ -251,7 +255,7 @@ export default function LoginPage() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm text-slate-900 outline-none
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm text-slate-900 outline-none
                              transition shadow-sm group-hover:shadow-md
                              focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="********"
@@ -277,7 +281,9 @@ export default function LoginPage() {
                   />
                   {/* custom checkbox micro interaction */}
                   <span className="pointer-events-none absolute inset-0 rounded bg-blue-100 scale-0 opacity-0 peer-checked:scale-100 peer-checked:opacity-100 transition-transform duration-150" />
-                  <span className="pointer-events-none absolute inset-0 flex items-center justify-center text-[8px] text-blue-600 opacity-0 peer-checked:opacity-100 transition-opacity">v</span>
+                  <span className="pointer-events-none absolute inset-0 flex items-center justify-center text-[8px] text-blue-600 opacity-0 peer-checked:opacity-100 transition-opacity">
+                    v
+                  </span>
                 </span>
                 <span>Remember Me</span>
               </label>
@@ -285,7 +291,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 className="text-blue-600 hover:text-blue-700"
-                onClick={() => router.push('/forgot-password')}
+                onClick={() => router.push("/forgot-password")}
               >
                 Forgot Password?
               </button>
@@ -305,7 +311,7 @@ export default function LoginPage() {
                 onClick={handleButtonClick}
                 disabled={loading}
                 className="relative w-full overflow-hidden rounded-full text-white text-sm font-medium py-3 shadow-lg shadow-blue-500/25 disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none"
-                style={{ background: 'var(--brand-gradient)' }}
+                style={{ background: "var(--brand-gradient)" }}
               >
                 {rippleVisible && (
                   <span
@@ -313,7 +319,7 @@ export default function LoginPage() {
                     className="absolute rounded-full bg-white/40 animate-[ping_0.7s_ease-out] pointer-events-none"
                   />
                 )}
-                {loading ? 'Signing in...' : 'Login'}
+                {loading ? "Signing in..." : "Login"}
               </motion.button>
             </motion.div>
 
@@ -338,4 +344,3 @@ export default function LoginPage() {
     </motion.div>
   );
 }
-
