@@ -66,6 +66,7 @@ export default function LeadsPage() {
 
   const [form, setForm] = useState({
     name: "",
+    contact_person: "",
     email: "",
     phone: "",
     company: "",
@@ -114,6 +115,7 @@ export default function LeadsPage() {
     try {
       const payload = {
         name: form.name,
+        contact_person: form.contact_person || null,
         email: form.email || null,
         phone: form.phone || null,
         company: form.company || null,
@@ -130,6 +132,7 @@ export default function LeadsPage() {
 
       setForm({
         name: "",
+        contact_person: "",
         email: "",
         phone: "",
         company: "",
@@ -163,7 +166,7 @@ export default function LeadsPage() {
     stageFilter === "all"
       ? leads
       : leads.filter((l) => l.stage === stageFilter);
-  const columnCount = 7;
+  const columnCount = 8;
   const now = new Date();
   const leadsLast7 = leads.filter((lead) => {
     if (!lead.created_at) return false;
@@ -264,12 +267,23 @@ export default function LeadsPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-5 gap-3 text-sm">
           <div className="space-y-1">
-            <label className="text-xs text-slate-500">Lead name</label>
+            <label className="text-xs text-slate-500">
+              Designation (contact person)
+            </label>
             <input
-              placeholder="Lead name"
+              placeholder="Designation"
               value={form.name}
               onChange={(e) => handleChange("name", e.target.value)}
               required
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <div className="space-y-1">
+            <label className="text-xs text-slate-500">Contact person</label>
+            <input
+              placeholder="Contact person"
+              value={form.contact_person}
+              onChange={(e) => handleChange("contact_person", e.target.value)}
               className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
@@ -432,7 +446,12 @@ export default function LeadsPage() {
           <table className="min-w-full text-sm">
             <thead className="bg-slate-50 text-xs text-slate-500 uppercase tracking-wider">
               <tr>
-                <th className="text-left px-6 py-3 font-semibold">Lead</th>
+                <th className="text-left px-6 py-3 font-semibold">
+                  Designation
+                </th>
+                <th className="text-left px-6 py-3 font-semibold">
+                  Contact person
+                </th>
                 <th className="text-left px-6 py-3 font-semibold">Company</th>
                 <th className="text-left px-6 py-3 font-semibold">Source</th>
                 <th className="text-left px-6 py-3 font-semibold">
@@ -466,7 +485,10 @@ export default function LeadsPage() {
                 filteredLeads.map((lead) => (
                   <tr key={lead.id} className="hover:bg-slate-50">
                     <td className="px-6 py-4 text-slate-900">
-                      {lead.name || "-"}
+                      {lead.name || "--"}
+                    </td>
+                    <td className="px-6 py-4 text-xs text-slate-600">
+                      {lead.contact_person || "--"}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-500">
                       {lead.company || "-"}

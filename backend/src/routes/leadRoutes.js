@@ -149,6 +149,7 @@ router.post("/", authenticate, authorize([]), async (req, res) => {
       phone,
       company,
       source,
+      contact_person,
       expected_value,
       stage,
       owner_id,
@@ -170,6 +171,7 @@ router.post("/", authenticate, authorize([]), async (req, res) => {
       phone: phone || null,
       company: company || null,
       source: source || null,
+      contact_person: contact_person || null,
       expected_value:
         expected_value !== undefined && expected_value !== null
           ? expected_value
