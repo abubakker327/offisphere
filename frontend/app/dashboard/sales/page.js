@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import SectionCards from "../components/SectionCards";
-import { KpiCard } from "../components/KpiCard";
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
@@ -110,44 +109,11 @@ export default function SalesOverview() {
   }, [leads]);
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <KpiCard
-          label="Pipeline value"
-          value={`INR ${Number(pipelineValue || 0).toLocaleString("en-IN")}`}
-          loading={loading}
-          icon="trend"
-          accent="#0ea5e9"
-        />
-        <KpiCard
-          label="New leads (7/30d)"
-          value={`${leadsLast7}/${leadsLast30}`}
-          loading={loading}
-          icon="user-plus"
-          accent="#6366f1"
-        />
-        <KpiCard
-          label="Won this month"
-          value={wonThisMonth}
-          loading={loading}
-          icon="trophy"
-          accent="#10b981"
-        />
-        <KpiCard
-          label="Conversion rate"
-          value={`${conversionRate}%`}
-          loading={loading}
-          icon="percent"
-          accent="#f59e0b"
-        />
-      </div>
-
-      <SectionCards
-        title="Sales & CRM"
-        description="Manage leads, track revenue, and report performance."
-        pill="Revenue ops"
-        tiles={tiles}
-      />
-    </div>
+    <SectionCards
+      title="Sales & CRM"
+      description="Manage leads, track revenue, and report performance."
+      pill="Revenue ops"
+      tiles={tiles}
+    />
   );
 }

@@ -48,7 +48,7 @@ router.get(
       // 3) Recent leads
       const { data: recentLeads, error: recentLeadsError } = await supabase
         .from("leads")
-        .select("id, name, status, expected_value, currency, created_at")
+        .select("id, name, stage, expected_value, created_at")
         .order("created_at", { ascending: false })
         .limit(5);
 
