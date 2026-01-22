@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { KpiCard } from "../components/KpiCard";
 
 export default function AttendancePage() {
   const [entries, setEntries] = useState([]);
@@ -97,6 +98,25 @@ export default function AttendancePage() {
         })
       : "--";
 
+  const todayKey = new Date().toDateString();
+  const isToday = (value) =>
+    value ? new Date(value).toDateString() === todayKey : false;
+  const todaysEntries = entries.filter((row) =>
+    isToday(row.attendance_date || row.date),
+  );
+  const presentToday = todaysEntries.filter(
+    (row) => (row.status || "present").toLowerCase() === "present",
+  ).length;
+  const absentToday = todaysEntries.filter(
+    (row) => (row.status || "").toLowerCase() === "absent",
+  ).length;
+  const lateToday = todaysEntries.filter(
+    (row) => (row.status || "").toLowerCase() === "late",
+  ).length;
+  const onLeaveToday = todaysEntries.filter((row) =>
+    (row.status || "").toLowerCase().includes("leave"),
+  ).length;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -114,6 +134,38 @@ export default function AttendancePage() {
             Check in or out and review recent attendance entries.
           </p>
         </div>
+      </div>
+
+      {/* KPI cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <KpiCard
+          label="Present today"
+          value={presentToday}
+          loading={loading}
+          icon="check"
+          accent="#10b981"
+        />
+        <KpiCard
+          label="Absent today"
+          value={absentToday}
+          loading={loading}
+          icon="user-x"
+          accent="#ef4444"
+        />
+        <KpiCard
+          label="Late today"
+          value={lateToday}
+          loading={loading}
+          icon="clock"
+          accent="#f59e0b"
+        />
+        <KpiCard
+          label="On leave"
+          value={onLeaveToday}
+          loading={loading}
+          icon="leaf"
+          accent="#6366f1"
+        />
       </div>
 
       {/* Today controls */}

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { KpiCard } from "../components/KpiCard";
 
 const STATUS_OPTIONS = [
   { value: "received", label: "Received" },
@@ -200,6 +201,31 @@ export default function PaymentsPage() {
   const formatDate = (value) =>
     value ? new Date(value).toLocaleDateString() : "--";
 
+  const now = new Date();
+  const currentMonthKey = `${now.getFullYear()}-${now.getMonth()}`;
+  const isInCurrentMonth = (value) => {
+    if (!value) return false;
+    const date = new Date(value);
+    return `${date.getFullYear()}-${date.getMonth()}` === currentMonthKey;
+  };
+
+  const pendingPayments = payments.filter(
+    (p) => (p.status || "").toLowerCase() === "pending",
+  ).length;
+  const overduePayments = payments.filter((p) => {
+    if ((p.status || "").toLowerCase() !== "pending") return false;
+    if (!p.created_at) return false;
+    const created = new Date(p.created_at);
+    return created < new Date(Date.now() - 30 * 86400000);
+  }).length;
+  const collectedThisMonth = payments
+    .filter(
+      (p) =>
+        (p.status || "").toLowerCase() === "received" &&
+        isInCurrentMonth(p.paid_at || p.created_at),
+    )
+    .reduce((acc, p) => acc + Number(p.amount || 0), 0);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -219,6 +245,30 @@ export default function PaymentsPage() {
             </p>
           </div>
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <KpiCard
+          label="Pending payments"
+          value={pendingPayments}
+          loading={loading}
+          icon="clock"
+          accent="#f59e0b"
+        />
+        <KpiCard
+          label="Overdue"
+          value={overduePayments}
+          loading={loading}
+          icon="alert"
+          accent="#ef4444"
+        />
+        <KpiCard
+          label="Collected this month"
+          value={`INR ${Number(collectedThisMonth || 0).toLocaleString("en-IN")}`}
+          loading={loading}
+          icon="cash"
+          accent="#10b981"
+        />
       </div>
 
       {/* Record payment */}

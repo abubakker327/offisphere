@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { KpiCard } from "../components/KpiCard";
 
 export default function TasksPage() {
   const [tasks, setTasks] = useState([]);
@@ -125,6 +126,29 @@ export default function TasksPage() {
   const formatDate = (value) =>
     value ? new Date(value).toLocaleDateString() : "--";
 
+  const todayKey = new Date().toDateString();
+  const isToday = (value) =>
+    value ? new Date(value).toDateString() === todayKey : false;
+  const weekAgo = new Date(Date.now() - 7 * 86400000);
+
+  const openTasks = tasks.filter((t) =>
+    ["pending", "in_progress"].includes(t.status),
+  ).length;
+  const overdueTasks = tasks.filter((t) => {
+    if (!t.due_date) return false;
+    const due = new Date(t.due_date);
+    return due < new Date() && t.status !== "completed";
+  }).length;
+  const dueToday = tasks.filter(
+    (t) => t.due_date && isToday(t.due_date) && t.status !== "completed",
+  ).length;
+  const completedThisWeek = tasks.filter(
+    (t) =>
+      t.status === "completed" &&
+      t.created_at &&
+      new Date(t.created_at) >= weekAgo,
+  ).length;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -142,6 +166,37 @@ export default function TasksPage() {
             Create and track tasks assigned to your team.
           </p>
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <KpiCard
+          label="Open tasks"
+          value={openTasks}
+          loading={loading}
+          icon="list"
+          accent="#0ea5e9"
+        />
+        <KpiCard
+          label="Overdue"
+          value={overdueTasks}
+          loading={loading}
+          icon="alert"
+          accent="#ef4444"
+        />
+        <KpiCard
+          label="Due today"
+          value={dueToday}
+          loading={loading}
+          icon="calendar"
+          accent="#f59e0b"
+        />
+        <KpiCard
+          label="Completed this week"
+          value={completedThisWeek}
+          loading={loading}
+          icon="check"
+          accent="#10b981"
+        />
       </div>
 
       {/* Create task */}

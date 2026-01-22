@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { KpiCard } from "../components/KpiCard";
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
@@ -10,6 +11,13 @@ const STAGE_OPTIONS = [
   { label: "Hot", value: "hot" },
   { label: "Warm", value: "warm" },
   { label: "Cold", value: "cold" },
+];
+
+const SOURCE_OPTIONS = [
+  { label: "Social media", value: "social_media" },
+  { label: "Reference", value: "reference" },
+  { label: "Direct visit", value: "direct_visit" },
+  { label: "Telecalling", value: "telecalling" },
 ];
 
 const apiFetch = async (path, options = {}) => {
@@ -156,6 +164,20 @@ export default function LeadsPage() {
       ? leads
       : leads.filter((l) => l.stage === stageFilter);
   const columnCount = 7;
+  const now = new Date();
+  const leadsLast7 = leads.filter((lead) => {
+    if (!lead.created_at) return false;
+    return new Date(lead.created_at) >= new Date(now.getTime() - 7 * 86400000);
+  }).length;
+  const leadsLast30 = leads.filter((lead) => {
+    if (!lead.created_at) return false;
+    return (
+      new Date(lead.created_at) >= new Date(now.getTime() - 30 * 86400000)
+    );
+  }).length;
+  const hotLeads = leads.filter(
+    (lead) => (lead.stage || "").toLowerCase() === "hot",
+  ).length;
 
   return (
     <motion.div
@@ -183,6 +205,30 @@ export default function LeadsPage() {
           {error}
         </div>
       )}
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <KpiCard
+          label="New leads (7/30d)"
+          value={`${leadsLast7}/${leadsLast30}`}
+          loading={loading}
+          icon="user-plus"
+          accent="#6366f1"
+        />
+        <KpiCard
+          label="Hot leads"
+          value={hotLeads}
+          loading={loading}
+          icon="flame"
+          accent="#f97316"
+        />
+        <KpiCard
+          label="Avg response time"
+          value="--"
+          loading={loading}
+          icon="clock"
+          accent="#0ea5e9"
+        />
+      </div>
 
       <form
         onSubmit={handleSubmit}
@@ -256,12 +302,18 @@ export default function LeadsPage() {
           </div>
           <div className="space-y-1">
             <label className="text-xs text-slate-500">Source</label>
-            <input
-              placeholder="Source"
+            <select
               value={form.source}
               onChange={(e) => handleChange("source", e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+            >
+              <option value="">Select source</option>
+              {SOURCE_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
 

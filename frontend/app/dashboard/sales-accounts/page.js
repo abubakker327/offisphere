@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { KpiCard } from "../components/KpiCard";
 
 const tiles = [
   {
@@ -72,6 +73,30 @@ export default function SalesAccountsHome() {
             </p>
           </div>
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <KpiCard
+          label="Outstanding receivables"
+          value="--"
+          loading={false}
+          icon="inbox"
+          accent="#0ea5e9"
+        />
+        <KpiCard
+          label="Payables due"
+          value="--"
+          loading={false}
+          icon="outbox"
+          accent="#f59e0b"
+        />
+        <KpiCard
+          label="Cash in/out this week"
+          value="--"
+          loading={false}
+          icon="cash"
+          accent="#10b981"
+        />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

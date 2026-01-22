@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { KpiCard } from "../components/KpiCard";
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
@@ -116,6 +117,20 @@ export default function UsersPage() {
       </div>
     );
   };
+
+  const now = new Date();
+  const currentMonthKey = `${now.getFullYear()}-${now.getMonth()}`;
+  const isInCurrentMonth = (value) => {
+    if (!value) return false;
+    const date = new Date(value);
+    return `${date.getFullYear()}-${date.getMonth()}` === currentMonthKey;
+  };
+  const totalUsers = users.length;
+  const activeUsers = users.filter((u) => u.is_active !== false).length;
+  const inactiveUsers = totalUsers - activeUsers;
+  const newHiresThisMonth = users.filter((u) =>
+    isInCurrentMonth(u.created_at),
+  ).length;
 
   // --------- create user ---------
   const handleChange = (field, value) => {
@@ -256,6 +271,37 @@ export default function UsersPage() {
             Manage Offisphere admins, managers and employees.
           </p>
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <KpiCard
+          label="Total users"
+          value={totalUsers}
+          loading={loading}
+          icon="users"
+          accent="#0ea5e9"
+        />
+        <KpiCard
+          label="Active users"
+          value={activeUsers}
+          loading={loading}
+          icon="check"
+          accent="#10b981"
+        />
+        <KpiCard
+          label="New hires this month"
+          value={newHiresThisMonth}
+          loading={loading}
+          icon="user-plus"
+          accent="#6366f1"
+        />
+        <KpiCard
+          label="Inactive"
+          value={inactiveUsers}
+          loading={loading}
+          icon="user-x"
+          accent="#ef4444"
+        />
       </div>
 
       {/* Create user form */}

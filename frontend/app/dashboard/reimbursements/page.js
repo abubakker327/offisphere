@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { KpiCard } from "../components/KpiCard";
 
 export default function ReimbursementsPage() {
   const [reimbursements, setReimbursements] = useState([]);
@@ -145,6 +146,45 @@ export default function ReimbursementsPage() {
   const formatDate = (value) =>
     value ? new Date(value).toLocaleDateString() : "--";
 
+  const now = new Date();
+  const currentMonthKey = `${now.getFullYear()}-${now.getMonth()}`;
+  const isInCurrentMonth = (value) => {
+    if (!value) return false;
+    const date = new Date(value);
+    return `${date.getFullYear()}-${date.getMonth()}` === currentMonthKey;
+  };
+
+  const pendingClaims = reimbursements.filter(
+    (r) => (r.status || "").toLowerCase() === "pending",
+  ).length;
+  const approvedThisMonth = reimbursements
+    .filter(
+      (r) =>
+        (r.status || "").toLowerCase() === "approved" &&
+        isInCurrentMonth(r.expense_date || r.created_at),
+    )
+    .reduce((acc, r) => acc + Number(r.amount || 0), 0);
+  const approvalDurations = reimbursements
+    .filter(
+      (r) =>
+        (r.status || "").toLowerCase() === "approved" &&
+        r.created_at &&
+        r.updated_at,
+    )
+    .map(
+      (r) =>
+        (new Date(r.updated_at).getTime() -
+          new Date(r.created_at).getTime()) /
+        (1000 * 60 * 60),
+    )
+    .filter((v) => Number.isFinite(v));
+  const avgApprovalHours = approvalDurations.length
+    ? Math.round(
+        approvalDurations.reduce((acc, val) => acc + val, 0) /
+          approvalDurations.length,
+      )
+    : null;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -164,6 +204,30 @@ export default function ReimbursementsPage() {
             Submit and review expense reimbursements.
           </p>
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <KpiCard
+          label="Pending claims"
+          value={pendingClaims}
+          loading={loading}
+          icon="clock"
+          accent="#f59e0b"
+        />
+        <KpiCard
+          label="Total approved MTD"
+          value={`INR ${Number(approvedThisMonth || 0).toLocaleString("en-IN")}`}
+          loading={loading}
+          icon="receipt"
+          accent="#10b981"
+        />
+        <KpiCard
+          label="Avg time to approve"
+          value={avgApprovalHours != null ? `${avgApprovalHours}h` : "--"}
+          loading={loading}
+          icon="clock"
+          accent="#6366f1"
+        />
       </div>
 
       {/* Create reimbursement */}

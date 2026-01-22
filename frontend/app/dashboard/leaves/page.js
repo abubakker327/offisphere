@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useEffect, useState } from "react";
+import { KpiCard } from "../components/KpiCard";
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
@@ -281,6 +282,42 @@ export default function LeavesPage() {
     return matchesStatus && matchesType;
   });
 
+  const now = new Date();
+  const currentMonthKey = `${now.getFullYear()}-${now.getMonth()}`;
+  const isInCurrentMonth = (value) => {
+    if (!value) return false;
+    const date = new Date(value);
+    return `${date.getFullYear()}-${date.getMonth()}` === currentMonthKey;
+  };
+
+  const pendingCount = leaves.filter((l) => l.status === "pending").length;
+  const approvedThisMonth = leaves.filter(
+    (l) => l.status === "approved" && isInCurrentMonth(l.created_at),
+  ).length;
+  const rejectedThisMonth = leaves.filter(
+    (l) => l.status === "rejected" && isInCurrentMonth(l.created_at),
+  ).length;
+  const approvalDurations = leaves
+    .filter(
+      (l) =>
+        (l.status === "approved" || l.status === "rejected") &&
+        l.created_at &&
+        l.updated_at,
+    )
+    .map(
+      (l) =>
+        (new Date(l.updated_at).getTime() -
+          new Date(l.created_at).getTime()) /
+        (1000 * 60 * 60),
+    )
+    .filter((v) => Number.isFinite(v));
+  const avgApprovalHours = approvalDurations.length
+    ? Math.round(
+        approvalDurations.reduce((acc, val) => acc + val, 0) /
+          approvalDurations.length,
+      )
+    : null;
+
   return (
     <div className="space-y-6 rounded-3xl bg-slate-50/70 p-4 md:p-6">
       {/* Header */}
@@ -299,6 +336,38 @@ export default function LeavesPage() {
             </p>
           </div>
         </div>
+      </div>
+
+      {/* KPI cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <KpiCard
+          label="Pending requests"
+          value={pendingCount}
+          loading={loadingList}
+          icon="clock"
+          accent="#f59e0b"
+        />
+        <KpiCard
+          label="Approved this month"
+          value={approvedThisMonth}
+          loading={loadingList}
+          icon="check"
+          accent="#10b981"
+        />
+        <KpiCard
+          label="Rejected this month"
+          value={rejectedThisMonth}
+          loading={loadingList}
+          icon="alert"
+          accent="#ef4444"
+        />
+        <KpiCard
+          label="Avg approval time"
+          value={avgApprovalHours != null ? `${avgApprovalHours}h` : "--"}
+          loading={loadingList}
+          icon="clock"
+          accent="#6366f1"
+        />
       </div>
 
       {/* Apply leave card */}

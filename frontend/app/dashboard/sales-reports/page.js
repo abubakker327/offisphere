@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { KpiCard } from "../components/KpiCard";
 
 export default function SalesReportsPage() {
   const [summary, setSummary] = useState(null);
@@ -83,72 +84,34 @@ export default function SalesReportsPage() {
 
       {/* Top KPI cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <motion.div
-          whileHover={{ y: -2 }}
-          className="relative overflow-hidden bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-4"
-        >
-          <div className="hidden" aria-hidden="true" />
-          <p className="text-[11px] uppercase tracking-wide text-slate-500 mb-1">
-            Total leads
-          </p>
-          <p className="text-2xl font-semibold text-slate-900 mb-1">
-            {loading ? "--" : (totals.totalLeads ?? 0)}
-          </p>
-          <p className="text-[11px] text-slate-400">
-            Across all stages in your pipeline
-          </p>
-        </motion.div>
-
-        <motion.div
-          whileHover={{ y: -2 }}
-          className="relative overflow-hidden bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-4"
-        >
-          <div
-            className="absolute inset-y-0 left-0 w-1 bg-white/40"
-            aria-hidden="true"
-          />
-          <p className="text-[11px] uppercase tracking-wide text-slate-500 mb-1">
-            Pipeline value
-          </p>
-          <p className="text-2xl font-semibold mb-1">
-            {loading ? "--" : formatCurrency(totals.totalPipelineValue || 0)}
-          </p>
-          <p className="text-[11px] text-slate-500">
-            Expected value of non-lost deals
-          </p>
-        </motion.div>
-
-        <motion.div
-          whileHover={{ y: -2 }}
-          className="relative overflow-hidden bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-4"
-        >
-          <div className="hidden" aria-hidden="true" />
-          <p className="text-[11px] uppercase tracking-wide text-slate-600 mb-1">
-            Won value
-          </p>
-          <p className="text-2xl font-semibold text-slate-900 mb-1">
-            {loading ? "--" : formatCurrency(totals.totalWonValue || 0)}
-          </p>
-          <p className="text-[11px] text-slate-400">
-            Expected value of won deals
-          </p>
-        </motion.div>
-
-        <motion.div
-          whileHover={{ y: -2 }}
-          className="relative overflow-hidden bg-white rounded-3xl border border-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] p-4"
-        >
-          <div className="hidden" aria-hidden="true" />
-          <p className="text-[11px] uppercase tracking-wide text-slate-500 mb-1">
-            Payments received
-          </p>
-          <p className="text-2xl font-semibold text-slate-900 mb-1">
-            {loading ? "--" : formatCurrency(totals.totalPaymentsReceived || 0)}
-          </p>
-          <p className="text-[11px] text-slate-400">
-            From payments with status &quot;received&quot;
-          </p>
-        </motion.div>
+        <KpiCard
+          label="Revenue MTD"
+          value={formatCurrency(totals.totalPaymentsReceived || 0)}
+          loading={loading}
+          icon="money"
+          accent="#10b981"
+        />
+        <KpiCard
+          label="Target vs actual"
+          value="--"
+          loading={loading}
+          icon="target"
+          accent="#6366f1"
+        />
+        <KpiCard
+          label="Top product/rep"
+          value="--"
+          loading={loading}
+          icon="star"
+          accent="#f59e0b"
+        />
+        <KpiCard
+          label="YoY/MoM delta"
+          value="--"
+          loading={loading}
+          icon="trend"
+          accent="#0ea5e9"
+        />
       </div>
 
       {/* Win rate + breakdowns */}

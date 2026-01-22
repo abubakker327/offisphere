@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { KpiCard } from "../components/KpiCard";
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_BASE || "https://offisphere.onrender.com";
@@ -87,6 +88,20 @@ export default function PayrollPage() {
     completed: "bg-emerald-50 text-emerald-700 border border-emerald-100",
   };
 
+  const now = new Date();
+  const currentMonthKey = `${now.getFullYear()}-${now.getMonth()}`;
+  const isInCurrentMonth = (value) => {
+    if (!value) return false;
+    const date = new Date(value);
+    return `${date.getFullYear()}-${date.getMonth()}` === currentMonthKey;
+  };
+  const totalPayoutThisMonth = runs
+    .filter((run) => isInCurrentMonth(run.period_end || run.created_at))
+    .reduce((acc, run) => acc + Number(run.total_net || 0), 0);
+  const pendingApprovals = runs.filter(
+    (run) => (run.status || "").toLowerCase() !== "completed",
+  ).length;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -107,6 +122,38 @@ export default function PayrollPage() {
             </p>
           </div>
         </div>
+      </div>
+
+      {/* KPI cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <KpiCard
+          label="Total payout this month"
+          value={`INR ${Number(totalPayoutThisMonth || 0).toLocaleString("en-IN")}`}
+          loading={loading}
+          icon="money"
+          accent="#10b981"
+        />
+        <KpiCard
+          label="Employees paid"
+          value="--"
+          loading={loading}
+          icon="users"
+          accent="#6366f1"
+        />
+        <KpiCard
+          label="Pending approvals"
+          value={pendingApprovals}
+          loading={loading}
+          icon="clock"
+          accent="#f59e0b"
+        />
+        <KpiCard
+          label="Exceptions"
+          value="--"
+          loading={loading}
+          icon="alert"
+          accent="#ef4444"
+        />
       </div>
 
       {/* Error */}
