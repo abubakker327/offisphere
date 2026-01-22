@@ -116,6 +116,28 @@ const sendResetEmail = async ({ to, resetUrl }) => {
   });
 };
 
+const normalizeRoles = (roles) => {
+  if (Array.isArray(roles)) return roles;
+  if (!roles) return [];
+  if (typeof roles === "string") {
+    try {
+      const parsed = JSON.parse(roles);
+      if (Array.isArray(parsed)) return parsed;
+    } catch {
+      // fall back to CSV parsing
+    }
+    return roles
+      .split(",")
+      .map((role) => role.trim())
+      .filter(Boolean);
+  }
+  if (typeof roles === "object") {
+    const value = roles.name || roles.role || roles.type || roles.code;
+    return value ? [value] : [];
+  }
+  return [];
+};
+
 const buildResetToken = () => {
   const token = crypto.randomBytes(32).toString("hex");
   const hash = crypto.createHash("sha256").update(token).digest("hex");
@@ -169,7 +191,7 @@ router.post("/login", loginLimiter, async (req, res) => {
     }
 
     // Roles from users.roles column
-    let roles = Array.isArray(user.roles) ? user.roles : [];
+    let roles = normalizeRoles(user.roles);
 
     // Fallback: seeded admin
     if (roles.length === 0 && email === "admin@offisphere.local") {
@@ -356,12 +378,17 @@ router.get("/me", async (req, res) => {
       return res.status(401).json({ message: "Invalid user" });
     }
 
+    let roles = normalizeRoles(user.roles);
+    if (roles.length === 0 && user.email === "admin@offisphere.local") {
+      roles = ["admin"];
+    }
+
     return res.json({
       user: {
         id: user.id,
         full_name: user.full_name,
         email: user.email,
-        roles: Array.isArray(user.roles) ? user.roles : [],
+        roles,
       },
     });
   } catch (err) {

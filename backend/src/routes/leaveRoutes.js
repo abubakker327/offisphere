@@ -119,12 +119,12 @@ router.post("/apply", authenticate, authorize([]), async (req, res) => {
  * Admin only
  */
 router.patch(
-  "/:id/status",
+ "/:id/status",
   authenticate,
   authorize(["admin"]),
   async (req, res) => {
     const leaveId = req.params.id;
-    const { status } = req.body;
+    const { status, rejection_reason } = req.body;
 
     if (!["approved", "rejected"].includes(status)) {
       return res
@@ -133,9 +133,13 @@ router.patch(
     }
 
     try {
+      const updates = {
+        status,
+        rejection_reason: status === "rejected" ? rejection_reason || null : null,
+      };
       const { error } = await supabase
         .from("leaves")
-        .update({ status })
+        .update(updates)
         .eq("id", leaveId);
 
       if (error) {

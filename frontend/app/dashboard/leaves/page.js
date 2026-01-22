@@ -34,6 +34,12 @@ export default function LeavesPage() {
   const [applySuccess, setApplySuccess] = useState("");
 
   const [statusActionLoadingId, setStatusActionLoadingId] = useState(null);
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [reviewLeave, setReviewLeave] = useState(null);
+  const [reviewStatus, setReviewStatus] = useState("approved");
+  const [reviewReason, setReviewReason] = useState("");
+  const [reviewError, setReviewError] = useState("");
+  const [reviewLoading, setReviewLoading] = useState(false);
   const [roles, setRoles] = useState([]);
 
   // Filters
@@ -50,28 +56,62 @@ export default function LeavesPage() {
   };
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    let mounted = true;
+
+    const normalizeRoles = (values) =>
+      (Array.isArray(values) ? values : [])
+        .map((role) => normalizeRole(role))
+        .map((role) => String(role || "").toLowerCase().replace(/\s+/g, "_"))
+        .filter(Boolean);
+
+    const loadRoles = async () => {
+      if (typeof window === "undefined") return;
+
       const storedRoles =
         window.localStorage.getItem("offisphere_roles") ||
         window.sessionStorage.getItem("offisphere_roles");
+
       if (storedRoles) {
         try {
           const parsed = JSON.parse(storedRoles);
-          const normalized = Array.isArray(parsed)
-            ? parsed
-                .map((role) => normalizeRole(role))
-                .map((role) =>
-                  String(role || "")
-                    .toLowerCase()
-                    .replace(/\s+/g, "_"),
-                )
-            : [];
-          setRoles(normalized.filter(Boolean));
+          const normalized = normalizeRoles(parsed);
+          if (normalized.length && mounted) {
+            setRoles(normalized);
+            return;
+          }
         } catch {
+          // fall through to fetch
+        }
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/api/auth/me`, {
+          credentials: "include",
+          cache: "no-store",
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        const normalized = normalizeRoles(data?.user?.roles);
+        if (mounted) {
+          setRoles(normalized);
+          if (normalized.length) {
+            window.localStorage.setItem(
+              "offisphere_roles",
+              JSON.stringify(normalized),
+            );
+          }
+        }
+      } catch {
+        if (mounted) {
           setRoles([]);
         }
       }
-    }
+    };
+
+    loadRoles();
+    return () => {
+      mounted = false;
+    };
   }, []);
   const authHeaders = { "Content-Type": "application/json" };
 
@@ -150,7 +190,7 @@ export default function LeavesPage() {
     }
   };
 
-  const handleUpdateStatus = async (id, newStatus) => {
+  const handleUpdateStatus = async (id, newStatus, rejectionReason) => {
     setStatusActionLoadingId(id);
     setListError("");
 
@@ -159,19 +199,25 @@ export default function LeavesPage() {
         credentials: "include",
         method: "PATCH",
         headers: authHeaders,
-        body: JSON.stringify({ status: newStatus }),
+        body: JSON.stringify({
+          status: newStatus,
+          rejection_reason: rejectionReason || null,
+        }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
         setListError(data.message || "Failed to update status");
+        return false;
       } else {
         fetchLeaves();
+        return true;
       }
     } catch (err) {
       console.error(err);
       setListError("Error connecting to server");
+      return false;
     } finally {
       setStatusActionLoadingId(null);
     }
@@ -191,6 +237,39 @@ export default function LeavesPage() {
   const formatDate = (value) => {
     if (!value) return "-";
     return new Date(value).toLocaleDateString();
+  };
+
+  const openReviewModal = (leave) => {
+    setReviewLeave(leave);
+    setReviewStatus("approved");
+    setReviewReason("");
+    setReviewError("");
+    setReviewModalOpen(true);
+  };
+
+  const closeReviewModal = () => {
+    setReviewModalOpen(false);
+    setReviewLeave(null);
+    setReviewStatus("approved");
+    setReviewReason("");
+    setReviewError("");
+  };
+
+  const handleReviewSubmit = async (event) => {
+    event.preventDefault();
+    if (!reviewLeave) return;
+
+    setReviewLoading(true);
+    setReviewError("");
+    const ok = await handleUpdateStatus(
+      reviewLeave.id,
+      reviewStatus,
+      reviewReason.trim(),
+    );
+    setReviewLoading(false);
+    if (ok) {
+      closeReviewModal();
+    }
   };
 
   // Apply filters client-side
@@ -449,8 +528,20 @@ export default function LeavesPage() {
                   </td>
                 </tr>
               ) : (
-                filteredLeaves.map((leave) => (
-                  <tr key={leave.id} className="transition hover:bg-slate-50">
+                filteredLeaves.map((leave) => {
+                  const rowIsEditable = canReview;
+                  return (
+                    <tr
+                      key={leave.id}
+                      onClick={() => {
+                        if (rowIsEditable) openReviewModal(leave);
+                      }}
+                      className={`transition ${
+                        rowIsEditable
+                          ? "hover:bg-slate-50 cursor-pointer"
+                          : "hover:bg-slate-50"
+                      }`}
+                    >
                     <td className="px-6 py-4 text-slate-800">
                       {leave.full_name}
                     </td>
@@ -477,39 +568,124 @@ export default function LeavesPage() {
                     </td>
                     {canReview && (
                       <td className="px-6 py-4 text-xs text-right">
-                        {leave.status === "pending" ? (
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() =>
-                                handleUpdateStatus(leave.id, "approved")
-                              }
-                              disabled={statusActionLoadingId === leave.id}
-                              className="text-xs font-semibold text-emerald-700 hover:text-emerald-900 disabled:opacity-60"
-                            >
-                              Approve
-                            </button>
-                            <button
-                              onClick={() =>
-                                handleUpdateStatus(leave.id, "rejected")
-                              }
-                              disabled={statusActionLoadingId === leave.id}
-                              className="text-xs font-semibold text-rose-600 hover:text-rose-800 disabled:opacity-60"
-                            >
-                              Reject
-                            </button>
-                          </div>
-                        ) : (
-                          <span className="text-slate-400">--</span>
-                        )}
+                        <button
+                          type="button"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            openReviewModal(leave);
+                          }}
+                          disabled={statusActionLoadingId === leave.id}
+                          className="text-xs font-semibold text-blue-600 hover:text-blue-800 disabled:opacity-60"
+                        >
+                          Edit
+                        </button>
                       </td>
                     )}
                   </tr>
-                ))
+                )})
               )}
             </tbody>
           </table>
         </div>
       </div>
+
+      {reviewModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 px-4">
+          <div className="w-full max-w-lg rounded-3xl bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.25)] border border-slate-100">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h3 className="text-lg font-semibold text-slate-900">
+                  Review leave request
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Approve or reject and provide a reason when rejecting.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={closeReviewModal}
+                className="text-slate-400 hover:text-slate-600"
+                aria-label="Close"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="mt-4 rounded-2xl bg-slate-50 px-4 py-3 text-xs text-slate-600">
+              <div className="flex flex-wrap gap-2">
+                <span className="font-semibold text-slate-700">Employee:</span>
+                <span>{reviewLeave?.full_name || "-"}</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <span className="font-semibold text-slate-700">Dates:</span>
+                <span>
+                  {formatDate(reviewLeave?.start_date)} -{" "}
+                  {formatDate(reviewLeave?.end_date)}
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <span className="font-semibold text-slate-700">Type:</span>
+                <span>{reviewLeave?.leave_type || "-"}</span>
+              </div>
+            </div>
+
+            <form onSubmit={handleReviewSubmit} className="mt-4 space-y-4">
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-slate-700">
+                  Decision
+                </label>
+                <select
+                  value={reviewStatus}
+                  onChange={(e) => setReviewStatus(e.target.value)}
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="approved">Approve</option>
+                  <option value="rejected">Reject</option>
+                </select>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-slate-700">
+                  Rejection reason
+                </label>
+                <textarea
+                  rows={3}
+                  value={reviewReason}
+                  onChange={(e) => setReviewReason(e.target.value)}
+                  placeholder="Provide a short explanation"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                />
+                <p className="text-[11px] text-slate-500">
+                  Optional. Add context for the employee.
+                </p>
+              </div>
+
+              {reviewError && (
+                <p className="text-xs text-rose-600 bg-rose-50 border border-rose-100 rounded-xl px-3 py-2">
+                  {reviewError}
+                </p>
+              )}
+
+              <div className="flex flex-wrap justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={closeReviewModal}
+                  className="px-4 py-2 rounded-2xl text-xs font-semibold text-slate-600 border border-slate-200 hover:bg-slate-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={reviewLoading}
+                  className="px-5 py-2 rounded-2xl text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-60"
+                >
+                  {reviewLoading ? "Saving..." : "Save decision"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
