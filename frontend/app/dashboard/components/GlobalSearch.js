@@ -264,7 +264,8 @@ export default function GlobalSearch({ className = "" }) {
         </span>
         <input
           id="global-search"
-          type="search"
+          type="text"
+          inputMode="search"
           placeholder="Search features, people, or docs..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
