@@ -332,7 +332,7 @@ export default function DashboardHome() {
       {/* Header */}
       <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="page-title">Hello Admin</h1>
+          <h1 className="page-title">Hello Admin👋</h1>
           <p className="page-subtitle">
             Overview of users, attendance, leaves, tasks, devices and documents.
           </p>

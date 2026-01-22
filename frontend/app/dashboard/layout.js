@@ -554,11 +554,11 @@ export default function DashboardLayout({ children }) {
           <div
             className={`flex items-center ${sidebarCollapsed ? "justify-center" : "justify-between"} gap-3`}
           >
-            <div className="flex items-center gap-2">
-              <div className="h-10 w-10 rounded-2xl bg-white/10 flex items-center justify-center text-sm font-semibold text-white ring-1 ring-white/20">
-                {userName ? userName.charAt(0).toUpperCase() : "U"}
-              </div>
-              {!sidebarCollapsed && (
+            {!sidebarCollapsed ? (
+              <div className="flex items-center gap-2">
+                <div className="h-10 w-10 rounded-2xl bg-white/10 flex items-center justify-center text-sm font-semibold text-white ring-1 ring-white/20">
+                  {userName ? userName.charAt(0).toUpperCase() : "U"}
+                </div>
                 <div>
                   <div className="text-xs font-medium text-white line-clamp-1">
                     {userName || "Super Admin"}
@@ -567,8 +567,30 @@ export default function DashboardLayout({ children }) {
                     {primaryRoleLabel}
                   </div>
                 </div>
-              )}
-            </div>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="h-10 w-10 rounded-2xl bg-white/15 text-white border border-white/20 hover:bg-rose-500 hover:border-rose-400 transition shadow-sm shadow-black/20 flex items-center justify-center"
+                aria-label="Log out"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                  <polyline points="16 17 21 12 16 7" />
+                  <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+              </button>
+            )}
 
             {!sidebarCollapsed && (
               <button
