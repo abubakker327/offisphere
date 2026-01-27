@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import PwaInstallButton from "../../components/PwaInstallButton";
+import IosInstallNotice from "../../components/IosInstallNotice";
 
 export default function DashboardHome() {
   const [summary, setSummary] = useState(null);
@@ -336,6 +338,15 @@ export default function DashboardHome() {
           <p className="page-subtitle">
             Overview of users, attendance, leaves, tasks, devices and documents.
           </p>
+        </div>
+        <div className="flex flex-col items-end gap-2">
+          <div className="flex items-center gap-2">
+            {/* In-app PWA install button (shows when browser fires beforeinstallprompt) */}
+            <PwaInstallButton />
+          </div>
+          <div className="w-full md:w-auto">
+            <IosInstallNotice />
+          </div>
         </div>
       </div>
 
