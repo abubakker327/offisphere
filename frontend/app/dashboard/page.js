@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import PwaInstallButton from "../../components/PwaInstallButton";
-import IosInstallNotice from "../../components/IosInstallNotice";
+import PwaInstallButton from "../components/PwaInstallButton";
+import IosInstallNotice from "../components/IosInstallNotice";
 
 export default function DashboardHome() {
   const [summary, setSummary] = useState(null);
