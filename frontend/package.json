@@ -5,8 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "export": "next build && next export",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "make-ico": "node ./scripts/make-ico.js",
+    "electron:build": "npm run export && npm run make-ico && electron-builder -w"
   },
   "dependencies": {
     "framer-motion": "^12.23.25",
@@ -19,6 +22,9 @@
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
-    "tailwindcss": "^4"
+    "tailwindcss": "^4",
+    "electron": "^26.3.0",
+    "electron-builder": "^24.6.0",
+    "png-to-ico": "^1.0.0"
   }
 }

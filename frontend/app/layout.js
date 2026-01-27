@@ -25,6 +25,10 @@ export default function RootLayout({ children }) {
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <link rel="apple-touch-icon" href="/offisphere-logo.png" />
+        <link rel="icon" href="/offisphere.ico" />
+        <link rel="shortcut icon" href="/offisphere.ico" />
+        <meta name="msapplication-TileColor" content="#0f172a" />
+        <meta name="msapplication-TileImage" content="/offisphere-logo.png" />
       </head>
       <body className="min-h-screen bg-slate-100 text-slate-900">
         {children}
