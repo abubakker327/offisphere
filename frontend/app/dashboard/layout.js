@@ -31,6 +31,7 @@ const navGroups = [
       },
       { href: "/dashboard/leaves", label: "Leaves", permission: "hr:leaves" },
       { href: "/dashboard/tasks", label: "Tasks", permission: "hr:tasks" },
+      { href: "/dashboard/calendar", label: "Calendar", permission: "*" },
     ],
   },
   {
@@ -327,6 +328,10 @@ export default function DashboardLayout({ children }) {
 
   const goToNotifications = () => {
     router.push("/dashboard/notifications");
+  };
+
+  const goToCalendar = () => {
+    router.push("/dashboard/calendar");
   };
 
   const isActive = (href, exact = false) =>
@@ -662,28 +667,51 @@ export default function DashboardLayout({ children }) {
                   <div className="w-full md:max-w-md">
                     <GlobalSearch />
                   </div>
-                  <motion.button
-                    whileHover={{ scale: 1.05, y: -1 }}
-                    whileTap={{ scale: 0.95, y: 0 }}
-                    onClick={goToNotifications}
-                    className="relative flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-sm border border-slate-200 text-slate-500 hover:text-blue-600 hover:shadow-md transition"
-                    aria-label="Notifications"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                  <div className="flex items-center gap-2">
+                    <motion.button
+                      whileHover={{ scale: 1.05, y: -1 }}
+                      whileTap={{ scale: 0.95, y: 0 }}
+                      onClick={goToNotifications}
+                      className="relative flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-sm border border-slate-200 text-slate-500 hover:text-blue-600 hover:shadow-md transition"
+                      aria-label="Notifications"
                     >
-                      <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
-                      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                    </svg>
-                    <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-rose-500 rounded-full" />
-                  </motion.button>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                      </svg>
+                      <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-rose-500 rounded-full" />
+                    </motion.button>
+                    <button
+                      onClick={goToCalendar}
+                      className="relative flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-sm border border-slate-200 text-slate-500 hover:text-blue-600 hover:shadow-md transition"
+                      aria-label="Calendar"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                        <path d="M16 2v4" />
+                        <path d="M8 2v4" />
+                        <path d="M3 10h18" />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
