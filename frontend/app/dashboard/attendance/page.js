@@ -88,19 +88,59 @@ export default function AttendancePage() {
     }
   };
 
-  const formatDate = (value) =>
-    value ? new Date(value).toLocaleDateString() : "--";
-  const formatTime = (value) =>
-    value
-      ? new Date(value).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        })
-      : "--";
+  const formatDate = (value) => {
+    if (!value) return "--";
+    try {
+      const date = new Date(value);
+      return date.toLocaleDateString("en-IN", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      });
+    } catch {
+      return "--";
+    }
+  };
 
-  const todayKey = new Date().toDateString();
-  const isToday = (value) =>
-    value ? new Date(value).toDateString() === todayKey : false;
+  const formatTime = (value) => {
+    if (!value) return "--";
+    try {
+      const date = new Date(value);
+      return date.toLocaleTimeString("en-IN", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      });
+    } catch {
+      return "--";
+    }
+  };
+
+  const getTodayKey = () => {
+    const today = new Date();
+    return today.toLocaleDateString("en-IN", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+  };
+
+  const isToday = (value) => {
+    if (!value) return false;
+    try {
+      const date = new Date(value);
+      const dateStr = date.toLocaleDateString("en-IN", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      });
+      return dateStr === getTodayKey();
+    } catch {
+      return false;
+    }
+  };
+
+  const todayKey = getTodayKey();
   const todaysEntries = entries.filter((row) =>
     isToday(row.attendance_date || row.date),
   );

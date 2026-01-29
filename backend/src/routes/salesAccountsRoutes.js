@@ -145,7 +145,7 @@ router.post(
       default_warehouse_id: default_warehouse_id || null,
     };
 
-    const { error } = await supabase.from("products").insert([insertPayload]);
+    const { data: createdData, error } = await supabase.from("products").insert([insertPayload]).select();
     if (error) {
       console.error("Create product error:", error);
       if (error.code === "23505") {
@@ -155,7 +155,7 @@ router.post(
         .status(500)
         .json({ message: error.message || "Error creating product" });
     }
-    res.status(201).json({ message: "Product created" });
+    res.status(201).json({ message: "Product created", data: createdData[0] });
   },
 );
 
@@ -178,7 +178,14 @@ router.post(
   authenticate,
   authorize([]),
   async (req, res) => {
-    const { name, email } = req.body || {};
+    const {
+      name,
+      email,
+      gstin,
+      address,
+      contact_number,
+      contact_person_name,
+    } = req.body || {};
     if (!name) {
       return res.status(400).json({ message: "Name is required" });
     }
@@ -186,16 +193,20 @@ router.post(
     const insertPayload = {
       name,
       email: email || null,
+      gstin: gstin || null,
+      address: address || null,
+      contact_number: contact_number || null,
+      contact_person_name: contact_person_name || null,
     };
 
-    const { error } = await supabase.from("vendors").insert([insertPayload]);
+    const { data: createdData, error } = await supabase.from("vendors").insert([insertPayload]).select();
     if (error) {
       console.error("Create vendor error:", error);
       return res
         .status(500)
         .json({ message: error.message || "Error creating vendor" });
     }
-    res.status(201).json({ message: "Vendor created" });
+    res.status(201).json({ message: "Vendor created", data: createdData[0] });
   },
 );
 
@@ -218,7 +229,14 @@ router.post(
   authenticate,
   authorize([]),
   async (req, res) => {
-    const { name, email } = req.body || {};
+    const {
+      name,
+      email,
+      gstin,
+      address,
+      contact_number,
+      contact_person_name,
+    } = req.body || {};
     if (!name) {
       return res.status(400).json({ message: "Name is required" });
     }
@@ -226,16 +244,20 @@ router.post(
     const insertPayload = {
       name,
       email: email || null,
+      gstin: gstin || null,
+      address: address || null,
+      contact_number: contact_number || null,
+      contact_person_name: contact_person_name || null,
     };
 
-    const { error } = await supabase.from("customers").insert([insertPayload]);
+    const { data: createdData, error } = await supabase.from("customers").insert([insertPayload]).select();
     if (error) {
       console.error("Create customer error:", error);
       return res
         .status(500)
         .json({ message: error.message || "Error creating customer" });
     }
-    res.status(201).json({ message: "Customer created" });
+    res.status(201).json({ message: "Customer created", data: createdData[0] });
   },
 );
 

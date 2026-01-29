@@ -127,8 +127,21 @@ export default function EmailPage() {
     }
   };
 
-  const formatDate = (value) =>
-    value ? new Date(value).toLocaleString() : "-";
+  const formatDate = (value) => {
+    if (!value) return "-";
+    try {
+      const date = new Date(value);
+      return date.toLocaleDateString("en-IN", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } catch {
+      return "-";
+    }
+  };
 
   return (
     <motion.div

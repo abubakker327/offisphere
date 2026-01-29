@@ -69,19 +69,23 @@ const EntityCard = ({
         {saving ? "Saving..." : "Save"}
       </motion.button>
     </div>
-    <div className="overflow-x-auto pt-1">
-      <table className="min-w-full text-sm">
-        <thead className="bg-slate-50 text-xs text-slate-500 uppercase tracking-wider">
+    <div className="overflow-x-auto pt-1 -mx-6 px-6">
+      <table className="w-full text-sm">
+        <thead className="bg-slate-50 text-xs text-slate-500 uppercase tracking-wider sticky top-0">
           <tr>
-            <th className="text-left px-6 py-3 font-semibold">Name</th>
-            <th className="text-left px-6 py-3 font-semibold">Email / GSTIN</th>
+            <th className="text-left px-4 py-3 font-semibold whitespace-nowrap min-w-[150px]">Firm Name</th>
+            <th className="text-left px-4 py-3 font-semibold whitespace-nowrap min-w-[180px]">Email</th>
+            <th className="text-left px-4 py-3 font-semibold whitespace-nowrap min-w-[120px]">GSTIN</th>
+            <th className="text-left px-4 py-3 font-semibold whitespace-nowrap min-w-[200px]">Address</th>
+            <th className="text-left px-4 py-3 font-semibold whitespace-nowrap min-w-[120px]">Contact</th>
+            <th className="text-left px-4 py-3 font-semibold whitespace-nowrap min-w-[150px]">Contact Person</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-100">
           {loading ? (
             <tr>
               <td
-                colSpan={2}
+                colSpan={6}
                 className="px-6 py-6 text-slate-400 text-center text-xs"
               >
                 Loading...
@@ -90,7 +94,7 @@ const EntityCard = ({
           ) : list.length === 0 ? (
             <tr>
               <td
-                colSpan={2}
+                colSpan={6}
                 className="px-6 py-6 text-slate-400 text-center text-xs"
               >
                 No records.
@@ -99,11 +103,23 @@ const EntityCard = ({
           ) : (
             list.map((row) => (
               <tr key={row.id} className="hover:bg-slate-50">
-                <td className="px-6 py-4 text-slate-900 font-medium">
+                <td className="px-4 py-4 text-slate-900 font-medium whitespace-nowrap">
                   {row.name || row.full_name || "-"}
                 </td>
-                <td className="px-6 py-4 text-slate-600">
-                  {row.email || row.gstin || row.phone || "-"}
+                <td className="px-4 py-4 text-slate-600 text-sm truncate">
+                  {row.email || "-"}
+                </td>
+                <td className="px-4 py-4 text-slate-600 text-sm whitespace-nowrap">
+                  {row.gstin || "-"}
+                </td>
+                <td className="px-4 py-4 text-slate-600 text-sm truncate">
+                  {row.address || "-"}
+                </td>
+                <td className="px-4 py-4 text-slate-600 text-sm whitespace-nowrap">
+                  {row.contact_number || "-"}
+                </td>
+                <td className="px-4 py-4 text-slate-600 text-sm whitespace-nowrap">
+                  {row.contact_person_name || "-"}
                 </td>
               </tr>
             ))
@@ -124,6 +140,9 @@ export default function MastersPage() {
     name: "",
     email: "",
     gstin: "",
+    address: "",
+    contact_number: "",
+    contact_person_name: "",
   });
 
   // Customers
@@ -135,6 +154,9 @@ export default function MastersPage() {
     name: "",
     email: "",
     gstin: "",
+    address: "",
+    contact_number: "",
+    contact_person_name: "",
   });
 
   const loadVendors = async () => {
@@ -171,14 +193,38 @@ export default function MastersPage() {
   const saveVendor = async () => {
     try {
       setSavingVendor(true);
-      await fetchWithAuth("/api/sa/masters/vendors", {
+      setVendorError("");
+      const res = await fetch(`${API_BASE}/api/sa/masters/vendors`, {
+        credentials: "include",
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(vendorForm),
       });
-      setVendorForm({ name: "", email: "", gstin: "" });
-      loadVendors();
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.message || "Error saving vendor");
+      }
+      
+      setVendorForm({
+        name: "",
+        email: "",
+        gstin: "",
+        address: "",
+        contact_number: "",
+        contact_person_name: "",
+      });
+      // Update list directly from response
+      if (data.data) {
+        setVendors((prev) => [...prev, data.data]);
+      } else {
+        await loadVendors();
+      }
     } catch (err) {
-      setVendorError(err.message || "Error saving vendor");
+      const errorMsg = err.message || "Error saving vendor";
+      setVendorError(errorMsg);
     } finally {
       setSavingVendor(false);
     }
@@ -187,14 +233,38 @@ export default function MastersPage() {
   const saveCustomer = async () => {
     try {
       setSavingCustomer(true);
-      await fetchWithAuth("/api/sa/masters/customers", {
+      setCustomerError("");
+      const res = await fetch(`${API_BASE}/api/sa/masters/customers`, {
+        credentials: "include",
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(customerForm),
       });
-      setCustomerForm({ name: "", email: "", gstin: "" });
-      loadCustomers();
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.message || "Error saving customer");
+      }
+      
+      setCustomerForm({
+        name: "",
+        email: "",
+        gstin: "",
+        address: "",
+        contact_number: "",
+        contact_person_name: "",
+      });
+      // Update list directly from response
+      if (data.data) {
+        setCustomers((prev) => [...prev, data.data]);
+      } else {
+        await loadCustomers();
+      }
     } catch (err) {
-      setCustomerError(err.message || "Error saving customer");
+      const errorMsg = err.message || "Error saving customer";
+      setCustomerError(errorMsg);
     } finally {
       setSavingCustomer(false);
     }
@@ -232,9 +302,9 @@ export default function MastersPage() {
           fields={[
             {
               name: "name",
-              label: "Name",
+              label: "Firm name",
               value: vendorForm.name,
-              placeholder: "Vendor name",
+              placeholder: "Firm name",
               onChange: (v) => setVendorForm((p) => ({ ...p, name: v })),
             },
             {
@@ -251,6 +321,27 @@ export default function MastersPage() {
               placeholder: "GSTIN",
               onChange: (v) => setVendorForm((p) => ({ ...p, gstin: v })),
             },
+            {
+              name: "address",
+              label: "Address",
+              value: vendorForm.address,
+              placeholder: "Street address",
+              onChange: (v) => setVendorForm((p) => ({ ...p, address: v })),
+            },
+            {
+              name: "contact_number",
+              label: "Contact number",
+              value: vendorForm.contact_number,
+              placeholder: "Phone number",
+              onChange: (v) => setVendorForm((p) => ({ ...p, contact_number: v })),
+            },
+            {
+              name: "contact_person_name",
+              label: "Contact person name",
+              value: vendorForm.contact_person_name,
+              placeholder: "Contact person",
+              onChange: (v) => setVendorForm((p) => ({ ...p, contact_person_name: v })),
+            },
           ]}
           onSubmit={saveVendor}
         />
@@ -265,9 +356,9 @@ export default function MastersPage() {
           fields={[
             {
               name: "name",
-              label: "Name",
+              label: "Firm name",
               value: customerForm.name,
-              placeholder: "Customer name",
+              placeholder: "Firm name",
               onChange: (v) => setCustomerForm((p) => ({ ...p, name: v })),
             },
             {
@@ -283,6 +374,27 @@ export default function MastersPage() {
               value: customerForm.gstin,
               placeholder: "GSTIN",
               onChange: (v) => setCustomerForm((p) => ({ ...p, gstin: v })),
+            },
+            {
+              name: "address",
+              label: "Address",
+              value: customerForm.address,
+              placeholder: "Street address",
+              onChange: (v) => setCustomerForm((p) => ({ ...p, address: v })),
+            },
+            {
+              name: "contact_number",
+              label: "Contact number",
+              value: customerForm.contact_number,
+              placeholder: "Phone number",
+              onChange: (v) => setCustomerForm((p) => ({ ...p, contact_number: v })),
+            },
+            {
+              name: "contact_person_name",
+              label: "Contact person name",
+              value: customerForm.contact_person_name,
+              placeholder: "Contact person",
+              onChange: (v) => setCustomerForm((p) => ({ ...p, contact_person_name: v })),
             },
           ]}
           onSubmit={saveCustomer}

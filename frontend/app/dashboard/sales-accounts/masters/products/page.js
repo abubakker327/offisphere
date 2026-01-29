@@ -70,10 +70,14 @@ export default function ProductsPage() {
             ? null
             : Number(form.unit_price),
       };
-      await fetchWithAuth("/api/sa/masters/products", {
+      const res = await fetchWithAuth("/api/sa/masters/products", {
         method: "POST",
         body: JSON.stringify(payload),
       });
+      // Correctly handle response if fetchWithAuth returns the parsed JSON
+      // Note: fetchWithAuth in this file returns data directly, but we want to check if it has the new item
+      // Wait, fetchWithAuth returns data. If error, it throws.
+      
       setModalOpen(false);
       setForm({
         name: "",
@@ -84,7 +88,12 @@ export default function ProductsPage() {
         unit_price: "",
         has_serial: false,
       });
-      loadProducts();
+
+      if (res && res.data) {
+        setProducts(prev => [...prev, res.data]);
+      } else {
+        loadProducts();
+      }
     } catch (err) {
       console.error(err);
       setError(err.message || "Error saving product");

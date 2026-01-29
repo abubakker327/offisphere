@@ -182,7 +182,16 @@ export default function DocumentsPage() {
 
   const formatDate = (value) => {
     if (!value) return "--";
-    return new Date(value).toLocaleDateString();
+    try {
+      const date = new Date(value);
+      return date.toLocaleDateString("en-IN", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      });
+    } catch {
+      return "--";
+    }
   };
 
   return (
